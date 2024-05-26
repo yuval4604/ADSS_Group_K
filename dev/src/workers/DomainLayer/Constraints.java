@@ -1,4 +1,4 @@
-package DomainLayer;
+package workers.DomainLayer;
 
 public enum Constraints {
     want,

@@ -1,5 +1,5 @@
-package PresentationLayer;
-import DomainLayer.Connector;
+package workers.PresentationLayer;
+import workers.DomainLayer.Connector;
 
 import java.util.Scanner;
 

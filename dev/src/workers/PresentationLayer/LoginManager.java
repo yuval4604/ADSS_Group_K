@@ -1,7 +1,6 @@
-package PresentationLayer;
+package workers.PresentationLayer;
 
-import DomainLayer.Connector;
-import DomainLayer.Worker;
+import workers.DomainLayer.Connector;
 
 public class LoginManager {
     private Connector _connector;
