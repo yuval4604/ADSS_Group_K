@@ -1,7 +1,5 @@
 package workers.PresentationLayer;
-import java.util.List;
 import workers.DomainLayer.Connector;
-import workers.DomainLayer.Worker;
 
 import java.util.Scanner;
 
@@ -135,15 +133,8 @@ public class ActionManager {
     public void ShowAvailableWorkersOfRole() {
         System.out.println("Which role?: ");
         String res = scanner.nextLine();
-        List<Worker>[] list = _connector.getAvailableWorkersOfRole(res);
-        System.out.println("For the role, " + res + " , the workers who want to work this shift are: ");
-        for(Worker worker : list[0]) {
-            System.out.println(worker.getName() + ", " + worker.getID());
-        }
-        System.out.println("For the role, " + res + " , the workers who can work this shift are: ");
-        for(Worker worker : list[1]) {
-            System.out.println(worker.getName() + ", " + worker.getID());
-        }
+        String list = _connector.getAvailableWorkersOfRole(res);
+        System.out.println(list);
     }
     public void addWorkerToShift() {
         System.out.println("Enter Worker's id: ");

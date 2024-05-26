@@ -2,6 +2,7 @@ package workers.DomainLayer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 public class Connector {
     private Worker Worker;
     private HeadOfHR head;
@@ -66,8 +67,18 @@ public class Connector {
         return Worker.useVacationDays(days);
     }
 
-    public List<Worker>[] getAvailableWorkersOfRole(String role) {
-        return head.getAvailableWorkersOfRole(role);
+    public String getAvailableWorkersOfRole(String role) {
+        String res = "";
+        List<Worker>[] list = head.getAvailableWorkersOfRole(role);
+        res += "For the role, " + role + " , the workers who want to work this shift are: ";
+        for(Worker worker : list[0]) {
+            res += worker.getName() + ", " + worker.getID();
+        }
+        res += "For the role, " + role + " , the workers who can work this shift are: ";
+        for(Worker worker : list[1]) {
+            res += worker.getName() + ", " + worker.getID();
+        }
+        return res;
     }
     public boolean addWorkerToShift(int id,String role) {
         Worker worker = head.getWorker(id);
