@@ -6,17 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 public class Shift {
+    private boolean _active;
     private Worker shiftManager;
     private String _date; // dd-mm-yyyy
     private int _dayOfWeek;
     private boolean _dayShift; // true - morning / false - evening
     private Map<String, List<Worker>> workers; // map contains a role and a list of workers
-    public Shift(Worker smanager,String date, boolean dayShift,int dayOfWeek) {
+    public Shift(Worker smanager,String date, boolean dayShift,int dayOfWeek, boolean active) {
         shiftManager = smanager;
         _date = date;
         _dayShift = dayShift;
         workers = new HashMap<>();
         _dayOfWeek = dayOfWeek;
+        _active = active;
     }
 
     public String getDate() {

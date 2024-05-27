@@ -48,6 +48,30 @@ public class Worker {
     public Constraints getCons(int dayOfWeek,boolean dayShift) {
         return _prefrenceList[dayOfWeek][dayShift ? 0 : 1];
     }
+    public int getBankNum() {
+        return _bankNumber;
+    }
+    public String getDateOfStart() {
+        return _dateOfStart;
+    }
+    public Constraints[][] getCons() {
+        return _prefrenceList;
+    }
+    public int getGWage() {
+        return _globalWage;
+    }
+    public int getHWage() {
+        return _hourlyWage;
+    }
+    public boolean getFullTimeJob() {
+        return _FullTimeJob;
+    }
+    public int getTotalVacationDays() {
+        return _totalVacationDays;
+    }
+    public int getCurrVacationDays() {
+        return _currentVacationDays;
+    }
 
     public void setBankNum(int newBankNum) {
         _bankNumber = newBankNum;
@@ -68,19 +92,21 @@ public class Worker {
         _currentVacationDays = _totalVacationDays;
     }
 
-    public void addConstraints(int day,boolean dayShift, Constraints cons) {
+    public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
         if(dayShift) {
             _prefrenceList[day][0] = cons;
+
         }
         else {
             _prefrenceList[day][1] = cons;
         }
+        return true;
     }
     public boolean getIsHR() {
         return isHR;
     }
     public boolean useVacationDays(int days) {
-        if(days < _currentVacationDays) {
+        if (days < _currentVacationDays) {
             _currentVacationDays = _currentVacationDays - days;
             return true;
         }

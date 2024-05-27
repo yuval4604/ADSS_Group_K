@@ -1,5 +1,7 @@
 package workers.PresentationLayer;
 import workers.DomainLayer.Connector;
+import workers.DomainLayer.Constraints;
+import workers.DomainLayer.Worker;
 
 import java.util.Scanner;
 
@@ -194,13 +196,121 @@ public class ActionManager {
         System.out.println("day of week?: choose 1 to 7");
         int dayOfWeek = scanner.nextInt() - 1;
 
-        boolean res = _connector.createShift(id, date, dayShift, dayOfWeek);
+        System.out.println("Work day of holiday? : w/h");
+        String WorkDay = scanner.nextLine();
+        boolean workingDay;
+        if (WorkDay.equals("w")) {
+            workingDay = true;
+        } else if (WorkDay.equals("h")) {
+            workingDay = false;
+        } else {
+            System.out.println("Didnt choose one of the options");
+            return;
+        }
+        boolean res = _connector.createShift(id, date, dayShift, dayOfWeek, workingDay);
         if(res) {
             System.out.println("created successfully");
         }
         else {
             System.out.println("Error: shift already exists or wrong info");
         }
+    }
+    public void showWorkerInfo() {
+        System.out.println("Enter the worker's id: ");
+        int id = scanner.nextInt();
+
+        String res = _connector.showWorkerInfo(id);
+        System.out.println(res);
+    }
+    public void showWorkerConstraints() {
+        System.out.println("Enter the worker's id: ");
+        int id = scanner.nextInt();
+
+        String res = _connector.showWorkerConstraints(id);
+        System.out.println(res);
+    }
+    public void setHalfDayOff() {
+        System.out.println("Choose the shift's date: ");
+        String date = scanner.nextLine();
+        System.out.println("Day shift or night shift? : d/n");
+        String shiftTime = scanner.nextLine();
+        boolean dayShift;
+        if (shiftTime.equals("d")) {
+            dayShift = true;
+        } else if (shiftTime.equals("n")) {
+            dayShift = false;
+        } else {
+            System.out.println("Didnt choose one of the options");
+            return;
+        }
+        System.out.println("day of week?: choose 1 to 7");
+        int dayOfWeek = scanner.nextInt() - 1;
+        boolean res = _connector.setHalfDayShiftOff(date,dayShift,dayOfWeek);
+        if(res) {
+            System.out.println("updated successfully");
+        }
+        else {
+            System.out.println("Error: no permission to do that Or wrong information");
+        }
+    }
+    public void setAllDayOff() {
+        System.out.println("Choose the shift's date: ");
+        String date = scanner.nextLine();
+        System.out.println("day of week?: choose 1 to 7");
+        int dayOfWeek = scanner.nextInt() - 1;
+        boolean res = _connector.setAlldayOff(date,dayOfWeek);
+        if(res) {
+            System.out.println("updated successfully");
+        }
+        else {
+            System.out.println("Error: no permission to do that Or wrong information");
+        }
+    }
+    public void changePass() {
+        System.out.println("Enter the worker's id: ");
+        int id = scanner.nextInt();
+        System.out.println("Enter old password: ");
+        String oldPass = scanner.nextLine();
+        System.out.println("Enter new password: ");
+        String newPass = scanner.nextLine();
+        boolean res = _connector.changePassword(id,oldPass,newPass);
+        if(res) {
+            System.out.println("password changed successfully");
+        }
+        else {
+            System.out.println("Error: no permission to do that Or wrong password");
+        }
+    }
+    public void addConstraints() {
+        System.out.println("Enter the worker's id: ");
+        int id = scanner.nextInt();
+
+        System.out.println("Day shift or night shift? : d/n");
+        String shiftTime = scanner.nextLine();
+        boolean dayShift;
+        if (shiftTime.equals("d")) {
+            dayShift = true;
+        } else if (shiftTime.equals("n")) {
+            dayShift = false;
+        } else {
+            System.out.println("Didnt choose one of the options");
+            return;
+        }
+        System.out.println("Choose Constraint? Choose a number: 1/2/3 for want/can/cant");
+        int choice = scanner.nextInt();
+        Constraints cons;
+        if (choice == 1) {
+            cons = Constraints.want;
+        } else if (choice == 2) {
+            cons = Constraints.can;
+        } else if(choice == 3) {
+            cons = Constraints.cant;
+        }
+        else {
+            System.out.println("Didnt choose one of the options");
+            return;
+        }
+
     }
 
 }

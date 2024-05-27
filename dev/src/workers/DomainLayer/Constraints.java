@@ -3,5 +3,6 @@ package workers.DomainLayer;
 public enum Constraints {
     want,
     can,
-    cant
+    cant,
+    inactive
 }

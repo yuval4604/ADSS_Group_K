@@ -72,13 +72,30 @@ public class HeadOfHR {
         }
         return false;
     }
-    public boolean createShift(Worker shiftManager,String date,boolean dayShift,int dayOfWeek) {
+    public boolean createShift(Worker shiftManager,String date,boolean dayShift,int dayOfWeek,boolean active) {
         if(!selectShift(date,dayShift)) {
-            Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek);
+            Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek,active);
             allShifts.add(shift);
             currentShift = shift;
             return true;
         }
         return false;
     }
+
+    public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) { // shift manager is null, active is set to false
+        if(!selectShift(date,dayShift)) {
+            Shift shift = new Shift(null,date,dayShift,dayOfWeek,false);
+            allShifts.add(shift);
+            currentShift = shift;
+            for(Map.Entry<Integer,Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayshift as inactive
+                entry.getValue().addConstraints(dayOfWeek,dayShift,Constraints.inactive);
+            }
+            return true;
+        }
+        return false;
+    }
+    public boolean setAlldayOff(String date,int dayOfWeek) {
+        return setHalfDayShiftOff(date,true,dayOfWeek) && setHalfDayShiftOff(date,false,dayOfWeek);
+    }
+
 }

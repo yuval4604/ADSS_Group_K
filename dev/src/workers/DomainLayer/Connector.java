@@ -87,9 +87,65 @@ public class Connector {
     public boolean selectShift(String date,boolean dayShift) {
         return head.selectShift(date,dayShift);
     }
-    public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek) {
+    public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek,boolean active) {
         Worker shiftManager = head.getWorker(id);
-        return head.createShift(shiftManager,date,dayShift,dayOfWeek);
+        return head.createShift(shiftManager,date,dayShift,dayOfWeek,active);
+    }
+
+    public String showWorkerInfo(int id) {
+        Worker worker = head.getWorker(id);
+        String Gres = "Worker's info: \n" + "name" + worker.getName() + "\n"
+                + "Bank number:" + worker.getBankNum() + "\n"
+                + "Global wage:" + worker.getGWage() + "\n"
+                + "Date of start:" + worker.getDateOfStart() + "\n"
+                + "Total vacation days" + worker.getTotalVacationDays() + "\n"
+                + "Current vacation days:" + worker.getCurrVacationDays();
+        String Hres = "Worker's info: \n" + "name" + worker.getName() + "\n"
+                + "Bank number:" + worker.getBankNum() + "\n"
+                + "Hourly wage:" + worker.getHWage() + "\n"
+                + "Date of start:" + worker.getDateOfStart() + "\n"
+                + "Total vacation days" + worker.getTotalVacationDays() + "\n"
+                + "Current vacation days:" + worker.getCurrVacationDays();
+        String res = worker.getFullTimeJob() ? Gres : Hres;
+        return res;
+
+    }
+
+    public String showWorkerConstraints(int id) {
+        Worker worker = head.getWorker(id);
+        String morning = "||";
+        String evening = "||";
+        Constraints[][] cons = worker.getCons();
+        for (int i = 0; i < 6; i++) {
+            morning = morning + (cons[0][i]).toString() + "||";
+            evening = evening + (cons[1][i]).toString() + "||";
+        }
+        return morning + "\n" + evening;
+    }
+
+    public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) {
+        if(Worker.getIsHR())
+            return head.setHalfDayShiftOff(date,dayShift,dayOfWeek);
+        return false;
+    }
+    public boolean setAlldayOff(String date,int dayOfWeek) {
+        if(Worker.getIsHR()) {
+            return head.setAlldayOff(date,dayOfWeek);
+        }
+        return false;
+    }
+    public boolean changePassword(int id,String oldPass,String newPass) {
+        Worker worker = head.getWorker(id);
+        if(loginInfos.get(id).equals(oldPass) & worker.equals(Worker)) {
+            loginInfos.remove(id,oldPass);
+            loginInfos.put(id,newPass);
+            return true;
+        }
+        return false;
+    }
+    public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
+        boolean res = Worker.addConstraints(day,dayShift,cons);
+        return res;
     }
 
 }
