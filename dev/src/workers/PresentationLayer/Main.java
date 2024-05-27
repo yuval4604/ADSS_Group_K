@@ -17,11 +17,7 @@ public class Main {
 
         while(!terminated) {
             if(!isLoggedIn) {
-                System.out.println("Enter id");
-                int id= scanner.nextInt();
-                System.out.println("Enter password");
-                String password = scanner.nextLine();
-                isLoggedIn = lm.login(id,password);
+                isLoggedIn = lm.login();
                 if(isLoggedIn) {
                     System.out.println("Connected successfully");
                 }

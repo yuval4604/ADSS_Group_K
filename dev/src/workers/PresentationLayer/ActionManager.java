@@ -219,6 +219,7 @@ public class ActionManager {
         else if(choice.equals("s"))
         {
             selectShift();
+            //TODO: check if inactive shift
         }
         else
         {
@@ -278,7 +279,13 @@ public class ActionManager {
         int totalVacationDays = scanner.nextInt();
         System.out.println("Enter Worker's initial password: ");
         String password = scanner.nextLine();
-        _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays,password);
+        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays,password);
+        if(res) {
+            System.out.println("Worker has been added!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
     }
 
     public void changeWorkerRoles()
