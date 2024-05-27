@@ -161,4 +161,8 @@ public class HeadOfHR {
         }
         return roles;
     }
+
+    public boolean isInactive() {
+        return currentShift == null || !currentShift.getActive();
+    }
 }

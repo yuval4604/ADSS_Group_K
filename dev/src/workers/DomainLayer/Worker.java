@@ -10,7 +10,7 @@ public class Worker {
     private int _globalWage;
     private int _hourlyWage;
     private String _dateOfStart;
-    private boolean _FullTimeJob;
+    private boolean _fullTimeJob;
     private int _totalVacationDays;
     private int _currentVacationDays;
     private boolean isHR;
@@ -18,6 +18,7 @@ public class Worker {
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays) {
         _name = name;
+        _fullTimeJob = fullTimeJob;
         _id = id;
         _bankNumber = bankNum;
         _globalWage = globalWage;
@@ -64,7 +65,7 @@ public class Worker {
         return _hourlyWage;
     }
     public boolean getFullTimeJob() {
-        return _FullTimeJob;
+        return _fullTimeJob;
     }
     public int getTotalVacationDays() {
         return _totalVacationDays;
@@ -83,7 +84,7 @@ public class Worker {
         _hourlyWage = newHourly;
     }
     public void setFullTimeJob(boolean isFull) {
-        _FullTimeJob = isFull;
+        _fullTimeJob = isFull;
     }
     public void setVacationDays(int vic) {
         _totalVacationDays = vic;

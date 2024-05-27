@@ -41,4 +41,7 @@ public class Shift {
         return _dayOfWeek;
     }
 
+    public boolean getActive() {
+        return _active;
+    }
 }

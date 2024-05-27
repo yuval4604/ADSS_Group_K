@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Connector {
-    private Worker Worker;
+    private Worker _worker;
     private HeadOfHR head;
     private Map<Integer,String> loginInfos;
 
@@ -15,49 +15,49 @@ public class Connector {
     }
     public boolean login(int id,String password) {
         if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {
-            Worker = head.getWorker(id);
+            _worker = head.getWorker(id);
             return true;
         }
         return false;
     }
     public void logOut() {
-        Worker = null;
+        _worker = null;
     }
     public void setBank(int bank) {
-        Worker.setBankNum(bank);
+        _worker.setBankNum(bank);
     }
     public boolean setGlobalWage(int id,int wage){
-        if(Worker.getIsHR()) {
+        if(_worker.getIsHR()) {
             return head.setWorkerGlobal(id,wage);
         }
         return false;
     }
     public boolean setHourlyWage(int id,int wage){
-        if(Worker.getIsHR()) {
+        if(_worker.getIsHR()) {
             return head.setWorkerHourly(id,wage);
         }
         return false;
     }
     public boolean setFullTimeJob(int id,boolean full){
-        if(Worker.getIsHR()) {
+        if(_worker.getIsHR()) {
             return head.setFullTime(id,full);
         }
         return false;
     }
     public boolean setVacationDays(int id, int days){
-        if(Worker.getIsHR()) {
+        if(_worker.getIsHR()) {
             return head.setVacation(id,days);
         }
         return false;
     }
     public boolean ResetVacactionDays(int id){
-        if(Worker.getIsHR()) {
+        if(_worker.getIsHR()) {
             return head.ResetVacationDays(id);
         }
         return false;
     }
     public boolean useVacationDays(int days) {
-        return Worker.useVacationDays(days);
+        return _worker.useVacationDays(days);
     }
 
     public String getAvailableWorkersOfRole(String role) {
@@ -85,50 +85,48 @@ public class Connector {
         return head.createShift(shiftManager,date,dayShift,dayOfWeek);
     }
 
-    public String showWorkerInfo(int id) {
-        Worker worker = head.getWorker(id);
-        String Gres = "Worker's info: \n" + "name" + worker.getName() + "\n"
-                + "Bank number:" + worker.getBankNum() + "\n"
-                + "Global wage:" + worker.getGWage() + "\n"
-                + "Date of start:" + worker.getDateOfStart() + "\n"
-                + "Total vacation days" + worker.getTotalVacationDays() + "\n"
-                + "Current vacation days:" + worker.getCurrVacationDays();
-        String Hres = "Worker's info: \n" + "name" + worker.getName() + "\n"
-                + "Bank number:" + worker.getBankNum() + "\n"
-                + "Hourly wage:" + worker.getHWage() + "\n"
-                + "Date of start:" + worker.getDateOfStart() + "\n"
-                + "Total vacation days" + worker.getTotalVacationDays() + "\n"
-                + "Current vacation days:" + worker.getCurrVacationDays();
-        String res = worker.getFullTimeJob() ? Gres : Hres;
+    public String showWorkerInfo() {
+        String Gres = "Worker's info: \n" + "name" + _worker.getName() + "\n"
+                + "Bank number:" + _worker.getBankNum() + "\n"
+                + "Global wage:" + _worker.getGWage() + "\n"
+                + "Date of start:" + _worker.getDateOfStart() + "\n"
+                + "Total vacation days" + _worker.getTotalVacationDays() + "\n"
+                + "Current vacation days:" + _worker.getCurrVacationDays();
+        String Hres = "Worker's info: \n" + "name" + _worker.getName() + "\n"
+                + "Bank number:" + _worker.getBankNum() + "\n"
+                + "Hourly wage:" + _worker.getHWage() + "\n"
+                + "Date of start:" + _worker.getDateOfStart() + "\n"
+                + "Total vacation days" + _worker.getTotalVacationDays() + "\n"
+                + "Current vacation days:" + _worker.getCurrVacationDays();
+        String res = _worker.getFullTimeJob() ? Gres : Hres;
         return res;
 
     }
 
-    public String showWorkerConstraints(int id) {
-        Worker worker = head.getWorker(id);
+    public String showWorkerConstraints() {
         String morning = "||";
         String evening = "||";
-        Constraints[][] cons = worker.getCons();
+        Constraints[][] cons = _worker.getCons();
         for (int i = 0; i < 6; i++) {
-            morning += (cons[0][i]).toString() + "||";
-            evening += (cons[1][i]).toString() + "||";
+            morning += (cons[i][0]).toString() + "||";
+            evening += (cons[i][1]).toString() + "||";
         }
         return morning + "\n" + evening;
     }
 
     public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) {
-        if(Worker.getIsHR())
+        if(_worker.getIsHR())
             return head.setHalfDayShiftOff(date,dayShift,dayOfWeek);
         return false;
     }
     public boolean setAlldayOff(String date,int dayOfWeek) {
-        if(Worker.getIsHR()) {
+        if(_worker.getIsHR()) {
             return head.setAlldayOff(date,dayOfWeek);
         }
         return false;
     }
     public boolean changePassword(String oldPass,String newPass) {
-        int id = Worker.getID();
+        int id = _worker.getID();
         if(loginInfos.get(id).equals(oldPass)) {
             loginInfos.remove(id,oldPass);
             loginInfos.put(id,newPass);
@@ -137,7 +135,7 @@ public class Connector {
         return false;
     }
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
-        boolean res = Worker.addConstraints(day,dayShift,cons);
+        boolean res = _worker.addConstraints(day,dayShift,cons);
         return res;
     }
 
@@ -162,11 +160,19 @@ public class Connector {
 
     public String getRoles() {
         String res = "";
-        List<String> roles = head.getRoles(Worker);
+        List<String> roles = head.getRoles(_worker);
         for(String role : roles) {
             res += role + ", ";
         }
         res = res.substring(0,res.length()-2);
         return res;
+    }
+
+    public boolean isInactive() {
+        return head.isInactive();
+    }
+
+    public boolean getIsHR() {
+        return _worker.getIsHR();
     }
 }

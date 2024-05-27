@@ -14,6 +14,7 @@ public class LoginManager {
     public boolean login() {
         System.out.println("Enter id");
         int id= scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Enter password");
         String password = scanner.nextLine();
         return _connector.login(id,password);
@@ -21,5 +22,19 @@ public class LoginManager {
     }
     public void logOut() {
         _connector.logOut();
+    }
+
+    public void changePass() {
+        System.out.println("Enter old password: ");
+        String oldPass = scanner.nextLine();
+        System.out.println("Enter new password: ");
+        String newPass = scanner.nextLine();
+        boolean res = _connector.changePassword(oldPass,newPass);
+        if(res) {
+            System.out.println("password changed successfully");
+        }
+        else {
+            System.out.println("Error: no permission to do that Or wrong password");
+        }
     }
 }
