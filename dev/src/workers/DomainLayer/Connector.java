@@ -110,8 +110,8 @@ public class Connector {
         String evening = "||";
         Constraints[][] cons = worker.getCons();
         for (int i = 0; i < 6; i++) {
-            morning = morning + (cons[0][i]).toString() + "||";
-            evening = evening + (cons[1][i]).toString() + "||";
+            morning += (cons[0][i]).toString() + "||";
+            evening += (cons[1][i]).toString() + "||";
         }
         return morning + "\n" + evening;
     }
@@ -127,9 +127,9 @@ public class Connector {
         }
         return false;
     }
-    public boolean changePassword(int id,String oldPass,String newPass) {
-        Worker worker = head.getWorker(id);
-        if(loginInfos.get(id).equals(oldPass) & worker.equals(Worker)) {
+    public boolean changePassword(String oldPass,String newPass) {
+        int id = Worker.getID();
+        if(loginInfos.get(id).equals(oldPass)) {
             loginInfos.remove(id,oldPass);
             loginInfos.put(id,newPass);
             return true;

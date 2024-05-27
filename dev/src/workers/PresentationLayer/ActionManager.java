@@ -261,13 +261,11 @@ public class ActionManager {
         }
     }
     public void changePass() {
-        System.out.println("Enter the worker's id: ");
-        int id = scanner.nextInt();
         System.out.println("Enter old password: ");
         String oldPass = scanner.nextLine();
         System.out.println("Enter new password: ");
         String newPass = scanner.nextLine();
-        boolean res = _connector.changePassword(id,oldPass,newPass);
+        boolean res = _connector.changePassword(oldPass,newPass);
         if(res) {
             System.out.println("password changed successfully");
         }
@@ -276,8 +274,8 @@ public class ActionManager {
         }
     }
     public void addConstraints() {
-        System.out.println("Enter the worker's id: ");
-        int id = scanner.nextInt();
+        System.out.println("Enter the day: ");
+        int day = scanner.nextInt();
 
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
@@ -304,6 +302,7 @@ public class ActionManager {
             System.out.println("Didnt choose one of the options");
             return;
         }
+        _connector.addConstraints(day,dayShift,cons);
 
     }
 
