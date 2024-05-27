@@ -134,4 +134,14 @@ public class HeadOfHR {
         }
         return false;
     }
+
+    public List<String> getRoles(Worker worker) {
+        List<String> roles = new LinkedList<>();
+        for(Map.Entry<String,List<Worker>> entry : roleList.entrySet()) {
+            if(entry.getValue().contains(worker)) {
+                roles.add(entry.getKey());
+            }
+        }
+        return roles;
+    }
 }

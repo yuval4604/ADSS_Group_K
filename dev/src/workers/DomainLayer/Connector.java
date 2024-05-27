@@ -103,4 +103,14 @@ public class Connector {
     public boolean removeRole(int id, String role) {
         return head.removeRole(id,role);
     }
+
+    public String getRoles() {
+        String res = "";
+        List<String> roles = head.getRoles(Worker);
+        for(String role : roles) {
+            res += role + ", ";
+        }
+        res = res.substring(0,res.length()-2);
+        return res;
+    }
 }

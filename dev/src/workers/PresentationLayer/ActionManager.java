@@ -321,4 +321,10 @@ public class ActionManager {
 
     }
 
+    public void showWorkerRoles()
+    {
+        String roles = _connector.getRoles();
+        System.out.println(roles);
+    }
+
 }
