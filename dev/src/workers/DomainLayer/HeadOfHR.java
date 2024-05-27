@@ -22,20 +22,40 @@ public class HeadOfHR {
     public Worker getWorker(int id) {
         return allWorkers.get(id);
     }
-    public void setWorkerGlobal(int id,int wage) {
+    public boolean setWorkerGlobal(int id,int wage) {
+        if(allWorkers.get(id) == null) {
+            return false;
+        }
         allWorkers.get(id).setWage(wage);
+        return true;
     }
-    public void setFullTime(int id,boolean full) {
+    public boolean setFullTime(int id,boolean full) {
+        if(allWorkers.get(id) == null) {
+            return false;
+        }
         allWorkers.get(id).setFullTimeJob(full);
+        return true;
     }
-    public void setVacation(int id, int days) {
+    public boolean setVacation(int id, int days) {
+        if(allWorkers.get(id) == null) {
+            return false;
+        }
         allWorkers.get(id).setVacationDays(days);
+        return true;
     }
-    public void ResetVacationDays(int id) {
+    public boolean ResetVacationDays(int id) {
+        if(allWorkers.get(id) == null) {
+            return false;
+        }
         allWorkers.get(id).ResetVacationDays();
+        return true;
     }
-    public void setWorkerHourly(int id,int wage) {
+    public boolean setWorkerHourly(int id,int wage) {
+        if(allWorkers.get(id) == null) {
+            return false;
+        }
         allWorkers.get(id).setHWage(wage);
+        return true;
     }
     
     public List<Worker>[] getAvailableWorkersOfRole(String role) { // list of size 2, first list - want , second list - can
@@ -43,6 +63,9 @@ public class HeadOfHR {
         List<Worker>[] availableWorker = new List[2]; 
         availableWorker[0] = new LinkedList<>();
         availableWorker[1] = new LinkedList<>();
+        if(roleWorkerList == null) {
+            return availableWorker;
+        }
         for(Worker worker : roleWorkerList) {
             Constraints con = worker.getCons(currentShift.getDayOfWeek(), currentShift.getDayShift());
             if(con.equals(Constraints.want)) {
@@ -82,6 +105,7 @@ public class HeadOfHR {
         return false;
     }
 
+
     public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) { // shift manager is null, active is set to false
         if(!selectShift(date,dayShift)) {
             Shift shift = new Shift(null,date,dayShift,dayOfWeek,false);
@@ -89,13 +113,51 @@ public class HeadOfHR {
             currentShift = shift;
             for(Map.Entry<Integer,Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayshift as inactive
                 entry.getValue().addConstraints(dayOfWeek,dayShift,Constraints.inactive);
+
+    public void addWorker(Worker worker) {
+        allWorkers.put(worker.getID(),worker);
+    }
+
+    public boolean addRole(int id, String role) {
+        Worker worker = allWorkers.get(id);
+        if(worker != null) {
+            if(roleList.containsKey(role)) {
+                roleList.get(role).add(worker);
+            }
+            else {
+                roleList.put(role,new LinkedList<>());
+                roleList.get(role).add(worker);
+
             }
             return true;
         }
         return false;
     }
+
     public boolean setAlldayOff(String date,int dayOfWeek) {
         return setHalfDayShiftOff(date,true,dayOfWeek) && setHalfDayShiftOff(date,false,dayOfWeek);
     }
 
+
+
+    public boolean removeRole(int id, String role) {
+        Worker worker = allWorkers.get(id);
+        if(worker != null) {
+            if(roleList.containsKey(role)) {
+                roleList.get(role).remove(worker);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<String> getRoles(Worker worker) {
+        List<String> roles = new LinkedList<>();
+        for(Map.Entry<String,List<Worker>> entry : roleList.entrySet()) {
+            if(entry.getValue().contains(worker)) {
+                roles.add(entry.getKey());
+            }
+        }
+        return roles;
+    }
 }

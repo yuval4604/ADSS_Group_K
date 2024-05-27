@@ -41,6 +41,7 @@ public class ActionManager {
         }
         else {
             System.out.println("changed successfully");
+            _connector.setHourlyWage(id,0);
         }
     }
     public void setHWage() {
@@ -58,6 +59,7 @@ public class ActionManager {
         }
         else {
             System.out.println("changed successfully");
+            _connector.setGlobalWage(id,0);
         }
     }
 
@@ -69,14 +71,17 @@ public class ActionManager {
         boolean fullTime;
         if(charr.equals("t")) {
             fullTime = true;
+            System.out.println("update the global wage of this employee: ");
+            setWage();
         }
         else if(charr.equals("f")){
             fullTime = false;
+            System.out.println("update the hourly wage of this employee: ");
+            setHWage();
         }
         else {
             System.out.println("Didnt enter information correctly");
             return;
-            // TODO - add error
         }
 
         boolean res = _connector.setFullTimeJob(id,fullTime);
@@ -311,6 +316,125 @@ public class ActionManager {
             return;
         }
 
+    }
+
+    public void workOnShift()
+    {
+        System.out.println("create or select shift? : c/s");
+        String choice = scanner.nextLine();
+        if(choice.equals("c"))
+        {
+            createShift();
+        }
+        else if(choice.equals("s"))
+        {
+            selectShift();
+            //TODO: check if inactive shift
+        }
+        else
+        {
+            System.out.println("Didnt choose one of the options");
+        }
+        boolean keepWorking = true;
+        while (keepWorking)
+        {
+            System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) exit");
+            int result = scanner.nextInt();
+            switch (result)
+            {
+                case 1:
+                    addWorkerToShift();
+                    break;
+                case 2:
+                    ShowAvailableWorkersOfRole();
+                    break;
+                case 3:
+                    keepWorking = false;
+                    break;
+                default:
+                    System.out.println("Didnt choose one of the options");
+            }
+        }
+    }
+
+    public void addAWorker()
+    {
+        System.out.println("Enter Worker's name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter Worker's id: ");
+        int id = scanner.nextInt();
+        System.out.println("Enter Worker's bank number: ");
+        int bankNum = scanner.nextInt();
+        System.out.println("Is the worker full time job?: choose t/f");
+        String charr = scanner.nextLine();
+        boolean fullTime;
+        int globalWage = 0 ,hourlyWage = 0;
+        if(charr.equals("t")) {
+            fullTime = true;
+            System.out.println("Enter Worker's global wage: ");
+            globalWage = scanner.nextInt();
+        }
+        else if(charr.equals("f")){
+            fullTime = false;
+            System.out.println("Enter Worker's hourly wage: ");
+            hourlyWage = scanner.nextInt();
+        }
+        else {
+            System.out.println("Didnt enter information correctly");
+            return;
+        }
+        System.out.println("Enter Worker's date of start: ");
+        String dateOfStart = scanner.nextLine();
+        System.out.println("Enter Worker's total vacation days: ");
+        int totalVacationDays = scanner.nextInt();
+        System.out.println("Enter Worker's initial password: ");
+        String password = scanner.nextLine();
+        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays,password);
+        if(res) {
+            System.out.println("Worker has been added!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void changeWorkerRoles()
+    {
+        System.out.println("Enter Worker's id: ");
+        int id = scanner.nextInt();
+        System.out.println("do you want to add or remove a role from him? choose a/r ");
+        String aORr = scanner.nextLine();
+        if(aORr.equals("a")){
+            System.out.println("Enter Worker's new role: ");
+            String role = scanner.nextLine();
+            boolean res = _connector.addRole(id, role);
+            if(res) {
+                System.out.println("Worker's role has been changed!");
+            }
+            else {
+                System.out.println("Error: Something went wrong :(");
+            }
+        } else if (aORr.equals("r")) {
+            System.out.println("Enter Worker's role to remove: ");
+            String role = scanner.nextLine();
+            boolean res = _connector.removeRole(id, role);
+            if(res) {
+                System.out.println("Worker's role has been changed!");
+            }
+            else {
+                System.out.println("Error: Something went wrong :(");
+            }
+        } else {
+            System.out.println("Didnt choose one of the options");
+
+        }
+
+    }
+
+    public void showWorkerRoles()
+    {
+        String roles = _connector.getRoles();
+        System.out.println(roles);
     }
 
 }

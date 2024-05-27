@@ -12,11 +12,9 @@ public class Connector {
         loginInfos = new HashMap<>();
         head = new HeadOfHR();
         loginInfos.put(-1, password);
-
-
     }
     public boolean login(int id,String password) {
-        if(loginInfos.get(id).equals(password)) {
+        if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {
             Worker = head.getWorker(id);
             return true;
         }
@@ -30,36 +28,31 @@ public class Connector {
     }
     public boolean setGlobalWage(int id,int wage){
         if(Worker.getIsHR()) {
-            head.setWorkerGlobal(id,wage);
-            return true;
+            return head.setWorkerGlobal(id,wage);
         }
         return false;
     }
     public boolean setHourlyWage(int id,int wage){
         if(Worker.getIsHR()) {
-            head.setWorkerHourly(id,wage);
-            return true;
+            return head.setWorkerHourly(id,wage);
         }
         return false;
     }
     public boolean setFullTimeJob(int id,boolean full){
         if(Worker.getIsHR()) {
-            head.setFullTime(id,full);
-            return true;
+            return head.setFullTime(id,full);
         }
         return false;
     }
     public boolean setVacationDays(int id, int days){
         if(Worker.getIsHR()) {
-            head.setVacation(id,days);
-            return true;
+            return head.setVacation(id,days);
         }
         return false;
     }
     public boolean ResetVacactionDays(int id){
         if(Worker.getIsHR()) {
-            head.ResetVacationDays(id);
-            return true;
+            return head.ResetVacationDays(id);
         }
         return false;
     }
@@ -148,4 +141,32 @@ public class Connector {
         return res;
     }
 
+    public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays, String password) {
+        if(head.getWorker(id) != null) {
+            Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays);
+            head.addWorker(worker);
+            loginInfos.put(id,password);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean addRole(int id, String role) {
+        return head.addRole(id,role);
+    }
+
+    public boolean removeRole(int id, String role) {
+        return head.removeRole(id,role);
+    }
+
+    public String getRoles() {
+        String res = "";
+        List<String> roles = head.getRoles(Worker);
+        for(String role : roles) {
+            res += role + ", ";
+        }
+        res = res.substring(0,res.length()-2);
+        return res;
+    }
 }
