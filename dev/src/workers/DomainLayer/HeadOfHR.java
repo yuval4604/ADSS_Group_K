@@ -95,9 +95,9 @@ public class HeadOfHR {
         }
         return false;
     }
-    public boolean createShift(Worker shiftManager,String date,boolean dayShift,int dayOfWeek,boolean active) {
+    public boolean createShift(Worker shiftManager,String date,boolean dayShift,int dayOfWeek) {
         if(!selectShift(date,dayShift)) {
-            Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek,active);
+            Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek,true);
             allShifts.add(shift);
             currentShift = shift;
             return true;
@@ -108,24 +108,26 @@ public class HeadOfHR {
 
     public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) { // shift manager is null, active is set to false
         if(!selectShift(date,dayShift)) {
-            Shift shift = new Shift(null,date,dayShift,dayOfWeek,false);
+            Shift shift = new Shift(null, date, dayShift, dayOfWeek, false);
             allShifts.add(shift);
-            currentShift = shift;
-            for(Map.Entry<Integer,Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayshift as inactive
-                entry.getValue().addConstraints(dayOfWeek,dayShift,Constraints.inactive);
-
-    public void addWorker(Worker worker) {
-        allWorkers.put(worker.getID(),worker);
+            for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayshift as inactive
+                entry.getValue().addConstraints(dayOfWeek, dayShift, Constraints.inactive);
+            }
+            return true;
+        }
+        return false;
+    }
+    public void addWorker (Worker worker){
+        allWorkers.put(worker.getID(), worker);
     }
 
-    public boolean addRole(int id, String role) {
+    public boolean addRole ( int id, String role){
         Worker worker = allWorkers.get(id);
-        if(worker != null) {
-            if(roleList.containsKey(role)) {
+        if (worker != null) {
+            if (roleList.containsKey(role)) {
                 roleList.get(role).add(worker);
-            }
-            else {
-                roleList.put(role,new LinkedList<>());
+            } else {
+                roleList.put(role, new LinkedList<>());
                 roleList.get(role).add(worker);
 
             }
@@ -134,16 +136,15 @@ public class HeadOfHR {
         return false;
     }
 
-    public boolean setAlldayOff(String date,int dayOfWeek) {
-        return setHalfDayShiftOff(date,true,dayOfWeek) && setHalfDayShiftOff(date,false,dayOfWeek);
+    public boolean setAlldayOff (String date,int dayOfWeek){
+        return setHalfDayShiftOff(date, true, dayOfWeek) && setHalfDayShiftOff(date, false, dayOfWeek);
     }
 
 
-
-    public boolean removeRole(int id, String role) {
+    public boolean removeRole ( int id, String role){
         Worker worker = allWorkers.get(id);
-        if(worker != null) {
-            if(roleList.containsKey(role)) {
+        if (worker != null) {
+            if (roleList.containsKey(role)) {
                 roleList.get(role).remove(worker);
                 return true;
             }
@@ -151,10 +152,10 @@ public class HeadOfHR {
         return false;
     }
 
-    public List<String> getRoles(Worker worker) {
+    public List<String> getRoles (Worker worker){
         List<String> roles = new LinkedList<>();
-        for(Map.Entry<String,List<Worker>> entry : roleList.entrySet()) {
-            if(entry.getValue().contains(worker)) {
+        for (Map.Entry<String, List<Worker>> entry : roleList.entrySet()) {
+            if (entry.getValue().contains(worker)) {
                 roles.add(entry.getKey());
             }
         }

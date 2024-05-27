@@ -201,18 +201,7 @@ public class ActionManager {
         System.out.println("day of week?: choose 1 to 7");
         int dayOfWeek = scanner.nextInt() - 1;
 
-        System.out.println("Work day of holiday? : w/h");
-        String WorkDay = scanner.nextLine();
-        boolean workingDay;
-        if (WorkDay.equals("w")) {
-            workingDay = true;
-        } else if (WorkDay.equals("h")) {
-            workingDay = false;
-        } else {
-            System.out.println("Didnt choose one of the options");
-            return;
-        }
-        boolean res = _connector.createShift(id, date, dayShift, dayOfWeek, workingDay);
+        boolean res = _connector.createShift(id, date, dayShift, dayOfWeek);
         if(res) {
             System.out.println("created successfully");
         }

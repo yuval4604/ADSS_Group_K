@@ -80,9 +80,9 @@ public class Connector {
     public boolean selectShift(String date,boolean dayShift) {
         return head.selectShift(date,dayShift);
     }
-    public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek,boolean active) {
+    public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek) {
         Worker shiftManager = head.getWorker(id);
-        return head.createShift(shiftManager,date,dayShift,dayOfWeek,active);
+        return head.createShift(shiftManager,date,dayShift,dayOfWeek);
     }
 
     public String showWorkerInfo(int id) {
