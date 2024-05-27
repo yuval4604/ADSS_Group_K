@@ -92,4 +92,14 @@ public class Connector {
         return head.createShift(shiftManager,date,dayShift,dayOfWeek);
     }
 
+    public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays, String password) {
+        if(head.getWorker(id) != null) {
+            Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays);
+            head.addWorker(worker);
+            loginInfos.put(id,password);
+            return true;
+        }
+
+        return false;
+    }
 }

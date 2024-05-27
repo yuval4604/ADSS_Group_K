@@ -81,4 +81,8 @@ public class HeadOfHR {
         }
         return false;
     }
+
+    public void addWorker(Worker worker) {
+        allWorkers.put(worker.getID(),worker);
+    }
 }
