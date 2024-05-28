@@ -31,6 +31,10 @@ public class ActionManager {
         System.out.println("Enter Worker's id:");
         int id = scanner.nextInt();
         scanner.nextLine();
+        if(!_connector.isFullTime(id)) {
+            System.out.println("Can't do that...\nWorker is not full time");
+            return;
+        }
         System.out.println("Enter new global wage:");
         int wage = scanner.nextInt();
         scanner.nextLine();
@@ -51,6 +55,10 @@ public class ActionManager {
         System.out.println("Enter Worker's id: ");
         int id = scanner.nextInt();
         scanner.nextLine();
+        if(_connector.isFullTime(id)) {
+            System.out.println("Can't do that...\nWorker is full time");
+            return;
+        }
         System.out.println("Enter new hourly wage: ");
         int wage = scanner.nextInt();
         scanner.nextLine();
@@ -77,11 +85,13 @@ public class ActionManager {
         boolean fullTime;
         if(charr.equals("t")) {
             fullTime = true;
+            _connector.setFullTimeJob(id,fullTime);
             System.out.println("update the global wage of this employee: ");
             setWage();
         }
         else if(charr.equals("f")){
             fullTime = false;
+            _connector.setFullTimeJob(id,fullTime);
             System.out.println("update the hourly wage of this employee: ");
             setHWage();
         }
@@ -115,7 +125,11 @@ public class ActionManager {
             System.out.println("User does not exist");
         }
         else {
-            System.out.println("changed successfully");
+            System.out.println("changed successfully\nDo you want to reset the vacation days too? : y/n");
+            String choice = scanner.nextLine();
+            if(choice.equals("y")) {
+                _connector.ResetVacactionDays(id);
+            }
         }
     }
     public void ResetVacationDays() {
@@ -271,8 +285,8 @@ public class ActionManager {
     }
 
     public void addConstraints() {
-        System.out.println("Enter the day: ");
-        int day = scanner.nextInt();
+        System.out.println("Enter the day: 1-7");
+        int day = scanner.nextInt() - 1;
         scanner.nextLine();
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
@@ -287,7 +301,6 @@ public class ActionManager {
         }
         System.out.println("Choose Constraint? Choose a number: 1/2/3 for want/can/cant");
         int choice = scanner.nextInt();
-        scanner.nextLine();
         scanner.nextLine();
         Constraints cons;
         if (choice == 1) {
@@ -329,7 +342,7 @@ public class ActionManager {
         boolean keepWorking = true;
         while (keepWorking)
         {
-            System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) exit");
+            System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) back");
             int result = scanner.nextInt();
             scanner.nextLine();
             switch (result)

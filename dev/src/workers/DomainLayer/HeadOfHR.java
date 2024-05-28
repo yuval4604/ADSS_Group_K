@@ -17,41 +17,46 @@ public class HeadOfHR {
         worker = new Worker("Admin",-1,0,0,0,"",true,0,0);
         allWorkers.put(-1,worker);
         currentShift = null;
+        roleList = new HashMap<>();
+        roleList.put("Shift-Manager",new LinkedList<>());
+        roleList.get("Shift-Manager").add(worker);
     }
 
     public Worker getWorker(int id) {
+        if(!allWorkers.containsKey(id))
+            return null;
         return allWorkers.get(id);
     }
     public boolean setWorkerGlobal(int id,int wage) {
-        if(allWorkers.get(id) == null) {
+        if(!allWorkers.containsKey(id)) {
             return false;
         }
         allWorkers.get(id).setWage(wage);
         return true;
     }
     public boolean setFullTime(int id,boolean full) {
-        if(allWorkers.get(id) == null) {
+        if(!allWorkers.containsKey(id)) {
             return false;
         }
         allWorkers.get(id).setFullTimeJob(full);
         return true;
     }
     public boolean setVacation(int id, int days) {
-        if(allWorkers.get(id) == null) {
+        if(!allWorkers.containsKey(id)) {
             return false;
         }
         allWorkers.get(id).setVacationDays(days);
         return true;
     }
     public boolean ResetVacationDays(int id) {
-        if(allWorkers.get(id) == null) {
+        if(!allWorkers.containsKey(id)) {
             return false;
         }
         allWorkers.get(id).ResetVacationDays();
         return true;
     }
     public boolean setWorkerHourly(int id,int wage) {
-        if(allWorkers.get(id) == null) {
+        if(!allWorkers.containsKey(id)) {
             return false;
         }
         allWorkers.get(id).setHWage(wage);
@@ -164,5 +169,13 @@ public class HeadOfHR {
 
     public boolean isInactive() {
         return currentShift == null || !currentShift.getActive();
+    }
+
+    public boolean contains(int id) {
+        return allWorkers.containsKey(id);
+    }
+
+    public boolean hasRole(String role) {
+        return roleList.containsKey(role);
     }
 }

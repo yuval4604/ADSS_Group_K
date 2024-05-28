@@ -6,10 +6,10 @@ import java.util.Scanner;
 public class Main {
     public static void printCommands(boolean ishr) {
         if(ishr) {
-            System.out.println("commands:\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\nHR Only Commands:\n8) Set a worker's global wage\n9) Set a worker's hourly wage\n10) Set if a worker is full time job employee or not\n11) Set a worker's vacation days\n12) Reset a worker's vacation days\n13) add a worker\n14) work on shift\n15) change a worker's optional roles\n16) set half a day off\n17) set a full day off\n-1) Exit");
+            System.out.println("commands:\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\n8) show your roles\nHR Only Commands:\n9) Set a worker's global wage\n10) Set a worker's hourly wage\n11) Set if a worker is full time job employee or not\n12) Set a worker's vacation days\n13) Reset a worker's vacation days\n14) add a worker\n15) work on shift\n16) change a worker's optional roles\n17) set half a day off\n18) set a full day off\n-1) Exit");
         }
         else {
-            System.out.println("commands:\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\n-1) Exit");
+            System.out.println("commands:\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\n8) show your roles\n-1) Exit");
         }
     }
     public static void main(String[] args) {
@@ -67,6 +67,9 @@ public class Main {
                         ac.addConstraints();
                         break;
                     case 8:
+                        ac.showWorkerRoles();
+                        break;
+                    case 9:
                         if(ishr) {
                             ac.setWage();
                         }
@@ -74,7 +77,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 9:
+                    case 10:
                         if(ishr) {
                             ac.setHWage();
                         }
@@ -82,7 +85,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 10:
+                    case 11:
                         if(ishr) {
                             ac.setFullTimeJob();
                         }
@@ -90,7 +93,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 11:
+                    case 12:
                         if(ishr) {
                             ac.setVacationDays();
                         }
@@ -98,7 +101,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 12:
+                    case 13:
                         if(ishr) {
                             ac.ResetVacationDays();
                         }
@@ -106,7 +109,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 13:
+                    case 14:
                         if(ishr) {
                             ac.addAWorker();
                         }
@@ -114,7 +117,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 14:
+                    case 15:
                         if(ishr) {
                             ac.workOnShift();
                         }
@@ -122,7 +125,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 15:
+                    case 16:
                         if(ishr) {
                             ac.changeWorkerRoles();
                         }
@@ -130,7 +133,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 16:
+                    case 17:
                         if(ishr) {
                             ac.setHalfDayOff();
                         }
@@ -138,7 +141,7 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                         }
                         break;
-                    case 17:
+                    case 18:
                         if(ishr) {
                             ac.setAllDayOff();
                         }

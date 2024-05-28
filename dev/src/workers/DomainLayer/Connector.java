@@ -63,17 +63,20 @@ public class Connector {
     public String getAvailableWorkersOfRole(String role) {
         String res = "";
         List<Worker>[] list = head.getAvailableWorkersOfRole(role);
-        res += "For the role, " + role + " , the workers who want to work this shift are: ";
+        res += "For the role, " + role + " , the workers who want to work this shift are: \n";
         for(Worker worker : list[0]) {
-            res += worker.getName() + ", " + worker.getID();
+            res += worker.getName() + ", " + worker.getID() + "\n";
         }
-        res += "For the role, " + role + " , the workers who can work this shift are: ";
+        res += "For the role, " + role + " , the workers who can work this shift are: \n";
         for(Worker worker : list[1]) {
             res += worker.getName() + ", " + worker.getID();
         }
         return res;
     }
     public boolean addWorkerToShift(int id,String role) {
+        if(!head.hasRole(role)) {
+            return false;
+        }
         Worker worker = head.getWorker(id);
         return head.addWorkerToShift(worker,role);
     }
@@ -140,7 +143,7 @@ public class Connector {
     }
 
     public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays, String password) {
-        if(head.getWorker(id) != null) {
+        if(!head.contains(id)) {
             Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays);
             head.addWorker(worker);
             loginInfos.put(id,password);
@@ -174,5 +177,9 @@ public class Connector {
 
     public boolean getIsHR() {
         return _worker.getIsHR();
+    }
+
+    public boolean isFullTime(int id) {
+        return _worker.getFullTimeJob();
     }
 }
