@@ -13,7 +13,14 @@ public class LoginManager {
     }
     public boolean login() {
         System.out.println("Enter id");
-        int id= scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return false;
+        }
         scanner.nextLine();
         System.out.println("Enter password");
         String password = scanner.nextLine();

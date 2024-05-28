@@ -18,7 +18,15 @@ public class ActionManager {
     public void setBankNumber() {
 
         System.out.println("Enter new bank number:");
-        int bankNum = scanner.nextInt();
+        int bankNum;
+        try {
+             bankNum = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid bank number");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(bankNum < 0) {
             System.out.println("Can't have negative bank number");
@@ -29,14 +37,30 @@ public class ActionManager {
     }
     public void setWage() {
         System.out.println("Enter Worker's id:");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(!_connector.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is not full time");
             return;
         }
         System.out.println("Enter new global wage:");
-        int wage = scanner.nextInt();
+        int wage;
+        try {
+            wage = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid wage");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(wage <= 0) {
             System.out.println("Can't have negative global wage");
@@ -53,14 +77,30 @@ public class ActionManager {
     }
     public void setHWage() {
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(_connector.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is full time");
             return;
         }
         System.out.println("Enter new hourly wage: ");
-        int wage = scanner.nextInt();
+        int wage;
+        try {
+            wage = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid wage");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(wage <= 0) {
             System.out.println("Can't have negative hourly wage");
@@ -78,7 +118,15 @@ public class ActionManager {
 
     public void setFullTimeJob() {
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("full time job?: choose t/f");
         String charr = scanner.nextLine();
@@ -111,10 +159,26 @@ public class ActionManager {
     }
     public void setVacationDays() {
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("How many vication days?: ");
-        int days = scanner.nextInt();
+        int days;
+        try {
+            days = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(days < 0) {
             System.out.println("Can't have negative vacation days");
@@ -134,7 +198,15 @@ public class ActionManager {
     }
     public void ResetVacationDays() {
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         boolean res = _connector.ResetVacactionDays(id);
         if(!res) {
@@ -146,7 +218,15 @@ public class ActionManager {
     }
     public void useVacationDays() {
         System.out.println("How many vication days?: ");
-        int days = scanner.nextInt();
+        int days;
+        try {
+            days = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         if(days < 0) {
             System.out.println("Can't use negative vacation days");
@@ -169,7 +249,15 @@ public class ActionManager {
     }
     public void addWorkerToShift() {
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("Which role?: ");
         String role = scanner.nextLine();
@@ -209,7 +297,15 @@ public class ActionManager {
 
     public void createShift() {
         System.out.println("Enter the shift manager's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("Choose the shift's date: ");
         String date = scanner.nextLine();
@@ -225,7 +321,18 @@ public class ActionManager {
             return;
         }
         System.out.println("day of week?: choose 1 to 7");
-        int dayOfWeek = scanner.nextInt() - 1;
+        int dayOfWeek;
+        try {
+            dayOfWeek = scanner.nextInt() - 1;
+            if(dayOfWeek < 0 || dayOfWeek > 6) {
+                throw new Exception();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Invalid day of week");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
 
         boolean res = _connector.createShift(id, date, dayShift, dayOfWeek);
@@ -259,7 +366,18 @@ public class ActionManager {
             return;
         }
         System.out.println("day of week?: choose 1 to 7");
-        int dayOfWeek = scanner.nextInt() - 1;
+        int dayOfWeek;
+        try {
+            dayOfWeek = scanner.nextInt() - 1;
+            if(dayOfWeek < 0 || dayOfWeek > 6) {
+                throw new Exception();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Invalid day of week");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         boolean res = _connector.setHalfDayShiftOff(date,dayShift,dayOfWeek);
         if(res) {
@@ -273,7 +391,18 @@ public class ActionManager {
         System.out.println("Choose the shift's date: ");
         String date = scanner.nextLine();
         System.out.println("day of week?: choose 1 to 7");
-        int dayOfWeek = scanner.nextInt() - 1;
+        int dayOfWeek;
+        try {
+            dayOfWeek = scanner.nextInt() - 1;
+            if(dayOfWeek < 0 || dayOfWeek > 6) {
+                throw new Exception();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Invalid day of week");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         boolean res = _connector.setAlldayOff(date,dayOfWeek);
         if(res) {
@@ -286,7 +415,15 @@ public class ActionManager {
 
     public void addConstraints() {
         System.out.println("Enter the day: 1-7");
-        int day = scanner.nextInt() - 1;
+        int day;
+        try {
+            day = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
@@ -300,7 +437,19 @@ public class ActionManager {
             return;
         }
         System.out.println("Choose Constraint? Choose a number: 1/2/3 for want/can/cant");
-        int choice = scanner.nextInt();
+        int choice;
+        try {
+            choice = scanner.nextInt();
+            if(choice < 1 || choice > 3) {
+                throw new Exception();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
+
         scanner.nextLine();
         Constraints cons;
         if (choice == 1) {
@@ -343,7 +492,18 @@ public class ActionManager {
         while (keepWorking)
         {
             System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) back");
-            int result = scanner.nextInt();
+            int result;
+            try {
+                result = scanner.nextInt();
+                if(result < 1 || result > 3) {
+                    throw new Exception();
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Invalid command");
+                scanner.nextLine();
+                continue;
+            }
             scanner.nextLine();
             switch (result)
             {
@@ -367,10 +527,26 @@ public class ActionManager {
         System.out.println("Enter Worker's name: ");
         String name = scanner.nextLine();
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("Enter Worker's bank number: ");
-        int bankNum = scanner.nextInt();
+        int bankNum;
+        try {
+            bankNum = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid bank number");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("Is the worker full time job?: choose t/f");
         String charr = scanner.nextLine();
@@ -379,13 +555,27 @@ public class ActionManager {
         if(charr.equals("t")) {
             fullTime = true;
             System.out.println("Enter Worker's global wage: ");
-            globalWage = scanner.nextInt();
+            try{
+                globalWage = scanner.nextInt();
+            }
+            catch (Exception e) {
+                System.out.println("Invalid wage");
+                scanner.nextLine();
+                return;
+            }
             scanner.nextLine();
         }
         else if(charr.equals("f")){
             fullTime = false;
             System.out.println("Enter Worker's hourly wage: ");
-            hourlyWage = scanner.nextInt();
+            try{
+                hourlyWage = scanner.nextInt();
+            }
+            catch (Exception e) {
+                System.out.println("Invalid wage");
+                scanner.nextLine();
+                return;
+            }
             scanner.nextLine();
         }
         else {
@@ -395,7 +585,15 @@ public class ActionManager {
         System.out.println("Enter Worker's date of start: ");
         String dateOfStart = scanner.nextLine();
         System.out.println("Enter Worker's total vacation days: ");
-        int totalVacationDays = scanner.nextInt();
+        int totalVacationDays;
+        try {
+            totalVacationDays = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("Enter Worker's initial password: ");
         String password = scanner.nextLine();
@@ -411,7 +609,15 @@ public class ActionManager {
     public void changeWorkerRoles()
     {
         System.out.println("Enter Worker's id: ");
-        int id = scanner.nextInt();
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
         scanner.nextLine();
         System.out.println("do you want to add or remove a role from him? choose a/r ");
         String aORr = scanner.nextLine();

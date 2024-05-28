@@ -37,7 +37,14 @@ public class Main {
             }
             else{
                 System.out.println("\nchoose command:");
-                int result = scanner.nextInt(); // TODO try & catch
+                int result;
+                try {
+                     result = scanner.nextInt(); // TODO try & catch
+                } catch (Exception e) {
+                    System.out.println("Invalid command");
+                    scanner.nextLine();
+                    continue;
+                }
                 scanner.nextLine();
                 switch(result) {
                     case 0:
