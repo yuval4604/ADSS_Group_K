@@ -203,21 +203,21 @@ public class Connector {
         loginInfos.put(13,"1234");
         loginInfos.put(14,"1234");
         loginInfos.put(15,"1234");
-        head.addWorker(new Worker("a",1,1,1,1,"1",true,1,1));
-        head.addWorker(new Worker("b",2,2,2,2,"2",true,2,2));
-        head.addWorker(new Worker("c",3,3,3,3,"3",true,3,3));
-        head.addWorker(new Worker("d",4,4,4,4,"4",true,4,4));
-        head.addWorker(new Worker("e",5,5,5,5,"5",true,5,5));
-        head.addWorker(new Worker("f",6,6,6,6,"6",true,6,6));
-        head.addWorker(new Worker("g",7,7,7,7,"7",true,7,7));
-        head.addWorker(new Worker("h",8,8,8,8,"8",true,8,8));
-        head.addWorker(new Worker("i",9,9,9,9,"9",true,9,9));
-        head.addWorker(new Worker("j",10,10,10,10,"10",true,10,10));
-        head.addWorker(new Worker("k",11,11,11,11,"11",true,11,11));
-        head.addWorker(new Worker("l",12,12,12,12,"12",true,12,12));
-        head.addWorker(new Worker("m",13,13,13,13,"13",true,13,13));
-        head.addWorker(new Worker("n",14,14,14,14,"14",true,14,14));
-        head.addWorker(new Worker("o",15,15,15,15,"15",true,15,15));
+        head.addWorker(new Worker("Alfred",1,1,1,1,"1",true,1,1));
+        head.addWorker(new Worker("Benjamin",2,2,2,2,"2",true,2,2));
+        head.addWorker(new Worker("Casey",3,3,3,3,"3",true,3,3));
+        head.addWorker(new Worker("Daniel",4,4,4,4,"4",true,4,4));
+        head.addWorker(new Worker("Emily",5,5,5,5,"5",true,5,5));
+        head.addWorker(new Worker("Francis",6,6,6,6,"6",true,6,6));
+        head.addWorker(new Worker("George",7,7,7,7,"7",true,7,7));
+        head.addWorker(new Worker("Hanna",8,8,8,8,"8",true,8,8));
+        head.addWorker(new Worker("Ian",9,9,9,9,"9",true,9,9));
+        head.addWorker(new Worker("John",10,10,10,10,"10",true,10,10));
+        head.addWorker(new Worker("Kelly",11,11,11,11,"11",true,11,11));
+        head.addWorker(new Worker("Louis",12,12,12,12,"12",true,12,12));
+        head.addWorker(new Worker("Margo",13,13,13,13,"13",true,13,13));
+        head.addWorker(new Worker("Nathan",14,14,14,14,"14",true,14,14));
+        head.addWorker(new Worker("Oliver",15,15,15,15,"15",true,15,15));
         head.addRole(1,"Cashier");
         head.addRole(2,"Cashier");
         head.addRole(3,"Delivery");
@@ -267,5 +267,9 @@ public class Connector {
         head.addWorkerToShift(head.getWorker(13),"Delly-Man");
         head.addWorkerToShift(head.getWorker(14),"Guard");
         head.addWorkerToShift(head.getWorker(15),"Guard");
+    }
+
+    public boolean removeWorkerFromShift(int id, String role) {
+        return head.removeWorkerFromShift(id,role);
     }
 }

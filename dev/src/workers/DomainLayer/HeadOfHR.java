@@ -185,7 +185,7 @@ public class HeadOfHR {
         }
         String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         String res = "";
-        res += "Shift Manager: " + currentShift.getShiftManager().getName() + "\n";
+        res += "Shift Manager: " + currentShift.getShiftManager().getName() + "-" + currentShift.getShiftManager().getID() + "\n";
         res += "Date: " + currentShift.getDate() + "\n";
         res += "Day Shift: " + currentShift.getDayShift() + "\n";
         res += "Day of Week: " + days[currentShift.getDayOfWeek()] + "\n";
@@ -200,5 +200,19 @@ public class HeadOfHR {
             res += "\n";
         }
         return res;
+    }
+
+    public boolean removeWorkerFromShift(int id, String role) {
+        if (currentShift != null) {
+            Worker worker = allWorkers.get(id);
+            if (worker != null) {
+                if(currentShift.getWorkers().get(role).contains(worker))
+                    currentShift.getWorkers().get(role).remove(worker);
+                else
+                    return false;
+                return true;
+            }
+        }
+        return false;
     }
 }

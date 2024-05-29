@@ -495,11 +495,11 @@ public class ActionManager {
         boolean keepWorking = true;
         while (keepWorking)
         {
-            System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) show shift\n4) back");
+            System.out.println("choose command:\n1) add worker to shift\n2) remove a worker from the shift\n3) show available workers of role\n4) show shift\n5) back");
             int result;
             try {
                 result = scanner.nextInt();
-                if(result < 1 || result > 3) {
+                if(result < 1 || result > 5) {
                     throw new Exception();
                 }
             }
@@ -515,17 +515,44 @@ public class ActionManager {
                     addWorkerToShift();
                     break;
                 case 2:
-                    ShowAvailableWorkersOfRole();
+                    removeWorkerFromShift();
                     break;
                 case 3:
-                    System.out.println(_connector.showShift());
+                    ShowAvailableWorkersOfRole();
                     break;
                 case 4:
+                    System.out.println(_connector.showShift());
+                    break;
+                case 5:
                     keepWorking = false;
                     break;
                 default:
                     System.out.println("Didnt choose one of the options");
             }
+        }
+    }
+
+    private void removeWorkerFromShift() {
+        System.out.println("Enter Worker's id: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
+        scanner.nextLine();
+        System.out.println("Which role?: ");
+        String role = scanner.nextLine();
+
+        boolean res = _connector.removeWorkerFromShift(id,role);
+        if(res) {
+            System.out.println("Worker has been added!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
         }
     }
 
