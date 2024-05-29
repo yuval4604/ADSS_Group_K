@@ -124,7 +124,7 @@ public class Connector {
     }
     public boolean setAlldayOff(String date,int dayOfWeek) {
         if(_worker.getIsHR()) {
-            return head.setAlldayOff(date,dayOfWeek);
+            return head.setAllDayOff(date,dayOfWeek);
         }
         return false;
     }
@@ -236,7 +236,7 @@ public class Connector {
         head.createShift(head.getWorker(11),"01.01.2021",false,1);
         head.setHalfDayShiftOff("01.01.2021",true,1);
         head.createShift(head.getWorker(11),"02.01.2021",true,2);
-        head.setAlldayOff("03.01.2021",3);
+        head.setAllDayOff("03.01.2021",3);
         head.selectShift("01.01.2021",false);
         head.addWorkerToShift(head.getWorker(1),"Cashier");
         head.addWorkerToShift(head.getWorker(2),"Cashier");

@@ -12,8 +12,8 @@ public class Shift {
     private int _dayOfWeek;
     private boolean _dayShift; // true - morning / false - evening
     private Map<String, List<Worker>> workers; // map contains a role and a list of workers
-    public Shift(Worker smanager,String date, boolean dayShift,int dayOfWeek, boolean active) {
-        shiftManager = smanager;
+    public Shift(Worker sManager,String date, boolean dayShift,int dayOfWeek, boolean active) {
+        shiftManager = sManager;
         _date = date;
         _dayShift = dayShift;
         workers = new HashMap<>();

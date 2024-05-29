@@ -1,13 +1,12 @@
 package workers.PresentationLayer;
 import workers.DomainLayer.Connector;
 import workers.DomainLayer.Constraints;
-import workers.DomainLayer.Worker;
 
 import java.util.Scanner;
 
 public class ActionManager {
-    private Connector _connector;
-    private Scanner scanner;
+    private final Connector _connector;
+    private final Scanner scanner;
 
     public ActionManager(Connector connector) {
         _connector = connector;
@@ -129,17 +128,15 @@ public class ActionManager {
         }
         scanner.nextLine();
         System.out.println("full time job?: choose t/f");
-        String charr = scanner.nextLine();
-        boolean fullTime;
-        if(charr.equals("t")) {
-            fullTime = true;
-            _connector.setFullTimeJob(id,fullTime);
+        String c = scanner.nextLine();
+        boolean res;
+        if(c.equals("t")) {
+            res = _connector.setFullTimeJob(id,true);
             System.out.println("update the global wage of this employee: ");
             setWage();
         }
-        else if(charr.equals("f")){
-            fullTime = false;
-            _connector.setFullTimeJob(id,fullTime);
+        else if(c.equals("f")){
+            res = _connector.setFullTimeJob(id,false);
             System.out.println("update the hourly wage of this employee: ");
             setHWage();
         }
@@ -148,7 +145,7 @@ public class ActionManager {
             return;
         }
 
-        boolean res = _connector.setFullTimeJob(id,fullTime);
+
         if(!res) {
             System.out.println("User does not exist");
         }
@@ -169,7 +166,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        System.out.println("How many vication days?: ");
+        System.out.println("How many vacation days?: ");
         int days;
         try {
             days = scanner.nextInt();
@@ -217,7 +214,7 @@ public class ActionManager {
         }
     }
     public void useVacationDays() {
-        System.out.println("How many vication days?: ");
+        System.out.println("How many vacation days?: ");
         int days;
         try {
             days = scanner.nextInt();
@@ -449,7 +446,7 @@ public class ActionManager {
             }
         }
         catch (Exception e) {
-            System.out.println("Invalid days");
+            System.out.println("Invalid option");
             scanner.nextLine();
             return;
         }
@@ -460,12 +457,8 @@ public class ActionManager {
             cons = Constraints.want;
         } else if (choice == 2) {
             cons = Constraints.can;
-        } else if(choice == 3) {
+        } else{
             cons = Constraints.cant;
-        }
-        else {
-            System.out.println("Didnt choose one of the options");
-            return;
         }
         _connector.addConstraints(day,dayShift,cons);
 
@@ -509,25 +502,13 @@ public class ActionManager {
                 continue;
             }
             scanner.nextLine();
-            switch (result)
-            {
-                case 1:
-                    addWorkerToShift();
-                    break;
-                case 2:
-                    removeWorkerFromShift();
-                    break;
-                case 3:
-                    ShowAvailableWorkersOfRole();
-                    break;
-                case 4:
-                    System.out.println(_connector.showShift());
-                    break;
-                case 5:
-                    keepWorking = false;
-                    break;
-                default:
-                    System.out.println("Didnt choose one of the options");
+            switch (result) {
+                case 1 -> addWorkerToShift();
+                case 2 -> removeWorkerFromShift();
+                case 3 -> ShowAvailableWorkersOfRole();
+                case 4 -> System.out.println(_connector.showShift());
+                case 5 -> keepWorking = false;
+                default -> System.out.println("Didnt choose one of the options");
             }
         }
     }
@@ -583,10 +564,10 @@ public class ActionManager {
         }
         scanner.nextLine();
         System.out.println("Is the worker full time job?: choose t/f");
-        String charr = scanner.nextLine();
+        String c = scanner.nextLine();
         boolean fullTime;
         int globalWage = 0 ,hourlyWage = 0;
-        if(charr.equals("t")) {
+        if(c.equals("t")) {
             fullTime = true;
             System.out.println("Enter Worker's global wage: ");
             try{
@@ -599,7 +580,7 @@ public class ActionManager {
             }
             scanner.nextLine();
         }
-        else if(charr.equals("f")){
+        else if(c.equals("f")){
             fullTime = false;
             System.out.println("Enter Worker's hourly wage: ");
             try{
