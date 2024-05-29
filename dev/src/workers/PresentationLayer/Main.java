@@ -19,12 +19,18 @@ public class Main {
         Connector connector = new Connector(pass);
         LoginManager lm = new LoginManager(connector);
         ActionManager ac = new ActionManager(connector);
+        System.out.println("do you want to load the system with data? (y/n)");
+        String ans = scanner.nextLine();
+        if(ans.equals("y")) {
+            ac.load();
+        }
         boolean isLoggedIn = false;
         boolean terminated = false;
 
         boolean ishr = false;
         while(!terminated) {
             if(!isLoggedIn) {
+                System.out.println("Welcome to the workers system");
                 isLoggedIn = lm.login();
                 if(isLoggedIn) {
                     System.out.println("Connected successfully");
@@ -39,7 +45,7 @@ public class Main {
                 System.out.println("\nchoose command:");
                 int result;
                 try {
-                     result = scanner.nextInt(); // TODO try & catch
+                     result = scanner.nextInt();
                 } catch (Exception e) {
                     System.out.println("Invalid command");
                     scanner.nextLine();

@@ -182,4 +182,90 @@ public class Connector {
     public boolean isFullTime(int id) {
         return _worker.getFullTimeJob();
     }
+
+    public String showShift() {
+        return head.showShift();
+    }
+
+    public void load() {
+        loginInfos.put(1,"1234");
+        loginInfos.put(2,"1234");
+        loginInfos.put(3,"1234");
+        loginInfos.put(4,"1234");
+        loginInfos.put(5,"1234");
+        loginInfos.put(6,"1234");
+        loginInfos.put(7,"1234");
+        loginInfos.put(8,"1234");
+        loginInfos.put(9,"1234");
+        loginInfos.put(10,"1234");
+        loginInfos.put(11,"1234");
+        loginInfos.put(12,"1234");
+        loginInfos.put(13,"1234");
+        loginInfos.put(14,"1234");
+        loginInfos.put(15,"1234");
+        head.addWorker(new Worker("a",1,1,1,1,"1",true,1,1));
+        head.addWorker(new Worker("b",2,2,2,2,"2",true,2,2));
+        head.addWorker(new Worker("c",3,3,3,3,"3",true,3,3));
+        head.addWorker(new Worker("d",4,4,4,4,"4",true,4,4));
+        head.addWorker(new Worker("e",5,5,5,5,"5",true,5,5));
+        head.addWorker(new Worker("f",6,6,6,6,"6",true,6,6));
+        head.addWorker(new Worker("g",7,7,7,7,"7",true,7,7));
+        head.addWorker(new Worker("h",8,8,8,8,"8",true,8,8));
+        head.addWorker(new Worker("i",9,9,9,9,"9",true,9,9));
+        head.addWorker(new Worker("j",10,10,10,10,"10",true,10,10));
+        head.addWorker(new Worker("k",11,11,11,11,"11",true,11,11));
+        head.addWorker(new Worker("l",12,12,12,12,"12",true,12,12));
+        head.addWorker(new Worker("m",13,13,13,13,"13",true,13,13));
+        head.addWorker(new Worker("n",14,14,14,14,"14",true,14,14));
+        head.addWorker(new Worker("o",15,15,15,15,"15",true,15,15));
+        head.addRole(1,"Cashier");
+        head.addRole(2,"Cashier");
+        head.addRole(3,"Delivery");
+        head.addRole(4,"Cleaner");
+        head.addRole(5,"Cleaner");
+        head.addRole(6,"Quartermaster");
+        head.addRole(7,"Quartermaster");
+        head.addRole(8,"Packer");
+        head.addRole(9,"Packer");
+        head.addRole(10,"Delivery");
+        head.addRole(11,"Shift-Manager");
+        head.addRole(12,"Butcher");
+        head.addRole(13,"Delly-Man");
+        head.addRole(14, "Guard");
+        head.addRole(15, "Guard");
+        head.createShift(head.getWorker(11),"01.01.2021",false,1);
+        head.setHalfDayShiftOff("01.01.2021",true,1);
+        head.createShift(head.getWorker(11),"02.01.2021",true,2);
+        head.setAlldayOff("03.01.2021",3);
+        head.selectShift("01.01.2021",false);
+        head.addWorkerToShift(head.getWorker(1),"Cashier");
+        head.addWorkerToShift(head.getWorker(2),"Cashier");
+        head.addWorkerToShift(head.getWorker(3),"Delivery");
+        head.addWorkerToShift(head.getWorker(4),"Cleaner");
+        head.addWorkerToShift(head.getWorker(5),"Cleaner");
+        head.addWorkerToShift(head.getWorker(6),"Quartermaster");
+        head.addWorkerToShift(head.getWorker(7),"Quartermaster");
+        head.addWorkerToShift(head.getWorker(8),"Packer");
+        head.addWorkerToShift(head.getWorker(9),"Packer");
+        head.addWorkerToShift(head.getWorker(10),"Delivery");
+        head.addWorkerToShift(head.getWorker(12),"Butcher");
+        head.addWorkerToShift(head.getWorker(13),"Delly-Man");
+        head.addWorkerToShift(head.getWorker(14),"Guard");
+        head.addWorkerToShift(head.getWorker(15),"Guard");
+        head.selectShift("02.01.2021",true);
+        head.addWorkerToShift(head.getWorker(1),"Cashier");
+        head.addWorkerToShift(head.getWorker(2),"Cashier");
+        head.addWorkerToShift(head.getWorker(3),"Delivery");
+        head.addWorkerToShift(head.getWorker(4),"Cleaner");
+        head.addWorkerToShift(head.getWorker(5),"Cleaner");
+        head.addWorkerToShift(head.getWorker(6),"Quartermaster");
+        head.addWorkerToShift(head.getWorker(7),"Quartermaster");
+        head.addWorkerToShift(head.getWorker(8),"Packer");
+        head.addWorkerToShift(head.getWorker(9),"Packer");
+        head.addWorkerToShift(head.getWorker(10),"Delivery");
+        head.addWorkerToShift(head.getWorker(12),"Butcher");
+        head.addWorkerToShift(head.getWorker(13),"Delly-Man");
+        head.addWorkerToShift(head.getWorker(14),"Guard");
+        head.addWorkerToShift(head.getWorker(15),"Guard");
+    }
 }

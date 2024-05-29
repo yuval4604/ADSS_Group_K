@@ -178,4 +178,27 @@ public class HeadOfHR {
     public boolean hasRole(String role) {
         return roleList.containsKey(role);
     }
+
+    public String showShift() {
+        if (currentShift == null) {
+            return "No shift selected";
+        }
+        String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        String res = "";
+        res += "Shift Manager: " + currentShift.getShiftManager().getName() + "\n";
+        res += "Date: " + currentShift.getDate() + "\n";
+        res += "Day Shift: " + currentShift.getDayShift() + "\n";
+        res += "Day of Week: " + days[currentShift.getDayOfWeek()] + "\n";
+        res += "Active: " + currentShift.getActive() + "\n";
+        res += "Workers: \n";
+        for (Map.Entry<String, List<Worker>> entry : currentShift.getWorkers().entrySet()) {
+            res += entry.getKey() + ": ";
+            for (Worker worker : entry.getValue()) {
+                res += worker.getName() + "-" + worker.getID() + ", ";
+            }
+            res = res.substring(0, res.length() - 2);
+            res += "\n";
+        }
+        return res;
+    }
 }

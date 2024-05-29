@@ -44,4 +44,12 @@ public class Shift {
     public boolean getActive() {
         return _active;
     }
+
+    public Worker getShiftManager() {
+        return shiftManager;
+    }
+
+    public Map<String, List<Worker>> getWorkers() {
+        return workers;
+    }
 }

@@ -309,6 +309,10 @@ public class ActionManager {
         scanner.nextLine();
         System.out.println("Choose the shift's date: ");
         String date = scanner.nextLine();
+        if(date.length() != 10 || date.charAt(2) != '.' || date.charAt(5) != '.'){
+            System.out.println("date not at format dd.mm.yyyy");
+            return;
+        }
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
         boolean dayShift;
@@ -491,7 +495,7 @@ public class ActionManager {
         boolean keepWorking = true;
         while (keepWorking)
         {
-            System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) back");
+            System.out.println("choose command:\n1) add worker to shift\n2) show available workers of role\n3) show shift\n4) back");
             int result;
             try {
                 result = scanner.nextInt();
@@ -514,6 +518,9 @@ public class ActionManager {
                     ShowAvailableWorkersOfRole();
                     break;
                 case 3:
+                    System.out.println(_connector.showShift());
+                    break;
+                case 4:
                     keepWorking = false;
                     break;
                 default:
@@ -656,5 +663,9 @@ public class ActionManager {
 
     public boolean isHR() {
         return _connector.getIsHR();
+    }
+
+    public void load() {
+        _connector.load();
     }
 }
