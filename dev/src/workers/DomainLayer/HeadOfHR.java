@@ -115,7 +115,7 @@ public class HeadOfHR {
         if(!selectShift(date,dayShift)) {
             Shift shift = new Shift(null, date, dayShift, dayOfWeek, false);
             allShifts.add(shift);
-            for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayshift as inactive
+            for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayShift as inactive
                 entry.getValue().addConstraints(dayOfWeek, dayShift, Constraints.inactive);
             }
             return true;
@@ -141,7 +141,7 @@ public class HeadOfHR {
         return false;
     }
 
-    public boolean setAlldayOff (String date,int dayOfWeek){
+    public boolean setAllDayOff(String date, int dayOfWeek){
         return setHalfDayShiftOff(date, true, dayOfWeek) && setHalfDayShiftOff(date, false, dayOfWeek);
     }
 

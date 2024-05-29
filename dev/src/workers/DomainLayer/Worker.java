@@ -1,8 +1,5 @@
 package workers.DomainLayer;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class Worker {
     private String _name;
     private int _id;
@@ -14,7 +11,7 @@ public class Worker {
     private int _totalVacationDays;
     private int _currentVacationDays;
     private boolean isHR;
-    private Constraints[][] _prefrenceList;
+    private Constraints[][] _prefList;
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays) {
         _name = name;
@@ -26,19 +23,14 @@ public class Worker {
         _dateOfStart = dateOfStart;
         _totalVacationDays = totalVacationDays;
         _currentVacationDays = currentVacationDays;
-        _prefrenceList = new Constraints[7][2];
+        _prefList = new Constraints[7][2];
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 2; j++) {
-                _prefrenceList[i][j] = Constraints.can;
+                _prefList[i][j] = Constraints.can;
             }
 
         }
-        if(name.equals("Admin")) {
-            isHR = true;
-        }
-        else {
-            isHR = false;
-        }
+        isHR = name.equals("Admin");
     }
     public String getName() {
         return _name;
@@ -47,7 +39,7 @@ public class Worker {
         return _id;
     }
     public Constraints getCons(int dayOfWeek,boolean dayShift) {
-        return _prefrenceList[dayOfWeek][dayShift ? 0 : 1];
+        return _prefList[dayOfWeek][dayShift ? 0 : 1];
     }
     public int getBankNum() {
         return _bankNumber;
@@ -56,7 +48,7 @@ public class Worker {
         return _dateOfStart;
     }
     public Constraints[][] getCons() {
-        return _prefrenceList;
+        return _prefList;
     }
     public int getGWage() {
         return _globalWage;
@@ -95,11 +87,11 @@ public class Worker {
 
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
         if(dayShift) {
-            _prefrenceList[day][0] = cons;
+            _prefList[day][0] = cons;
 
         }
         else {
-            _prefrenceList[day][1] = cons;
+            _prefList[day][1] = cons;
         }
         return true;
     }
