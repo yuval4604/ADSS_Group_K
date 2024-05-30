@@ -32,16 +32,52 @@ public class headOfHRTest {
         Assertions.assertTrue(connector.createShift(1,"12/12/21",true,1),"Shift added successfully");
         Assertions.assertFalse(connector.createShift(1,"12/12/21",true,1),"Shift already exist");
     }
+    @Test
     void selectShiftTest() {
         connector.createShift(1,"12/12/21",true,1);
         Assertions.assertTrue(connector.selectShift("12/12/21",true),"Does exist");
         Assertions.assertFalse(connector.selectShift("11/12/21",true),"Does not exist");
     }
+    @Test
     void setHourlyWage() {
         connector.setHourlyWage(4,1000);
         Assertions.assertEquals(worker1.getHWage(),1000);
         connector.setHourlyWage(1,100);
         Assertions.assertEquals(worker1.getHWage(),100);
+    }
+
+    @Test
+    void setFullTimeJob() {
+        connector.setFullTimeJob(4,true);
+        Assertions.assertTrue(worker4.getFullTimeJob());
+        connector.setFullTimeJob(1,false);
+        Assertions.assertTrue(worker1.getFullTimeJob());
+    }
+
+    @Test
+    void setVacationDays() {
+        connector.setVacationDays(4,5);
+        Assertions.assertEquals(worker4.getTotalVacationDays(),5);
+        connector.setVacationDays(1,5);
+        Assertions.assertEquals(worker1.getTotalVacationDays(),5);
+    }
+
+    @Test
+    void resetVacationDays() {
+        connector.setVacationDays(4,5);
+        connector.ResetVacationDays(4);
+        Assertions.assertEquals(worker4.getCurrVacationDays(),10);
+        connector.setVacationDays(1,5);
+        connector.ResetVacationDays(1);
+        Assertions.assertEquals(worker1.getCurrVacationDays(),10);
+    }
+
+    @Test
+    void setWorkerGlobal() {
+        connector.setGlobalWage(4,1000);
+        Assertions.assertEquals(worker4.getGWage(),1000);
+        connector.setGlobalWage(1,100);
+        Assertions.assertEquals(worker1.getGWage(),100);
     }
 
 }
