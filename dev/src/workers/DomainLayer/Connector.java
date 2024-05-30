@@ -93,13 +93,13 @@ public class Connector {
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Global wage:" + _worker.getGWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
-                + "Total vacation days" + _worker.getTotalVacationDays() + "\n"
+                + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays();
         String HRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Hourly wage:" + _worker.getHWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
-                + "Total vacation days" + _worker.getTotalVacationDays() + "\n"
+                + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays();
         String res = _worker.getFullTimeJob() ? GRes : HRes;
         return res;
@@ -271,5 +271,9 @@ public class Connector {
 
     public boolean removeWorkerFromShift(int id, String role) {
         return head.removeWorkerFromShift(id,role);
+    }
+
+    public Object getCons(int i, boolean b) {
+        return _worker.getCons(i,b);
     }
 }

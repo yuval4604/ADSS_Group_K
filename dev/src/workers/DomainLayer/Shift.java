@@ -52,4 +52,13 @@ public class Shift {
     public Map<String, List<Worker>> getWorkers() {
         return workers;
     }
+
+    public boolean notIn(Worker worker) {
+        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
+            if(entry.getValue().contains(worker)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

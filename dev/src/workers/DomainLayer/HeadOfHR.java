@@ -88,7 +88,7 @@ public class HeadOfHR {
         return availableWorker;
     }
     public boolean addWorkerToShift(Worker worker,String role) {
-        if(currentShift != null && currentShift.getActive() &&  roleList.containsValue(worker)){
+        if(currentShift != null && currentShift.getActive() &&  currentShift.notIn(worker)){
             currentShift.addWorker(worker,role);
             return true;
         }
@@ -172,7 +172,10 @@ public class HeadOfHR {
     }
 
     public boolean isInactive() {
-        return currentShift == null || !currentShift.getActive();
+        if (currentShift == null) {
+            return true;
+        }
+        return !currentShift.getActive();
     }
 
     public boolean contains(int id) {
@@ -210,7 +213,9 @@ public class HeadOfHR {
         if (currentShift != null) {
             Worker worker = allWorkers.get(id);
             if (worker != null) {
-                if(currentShift.getWorkers().get(role).contains(worker))
+                Map<String,List<Worker>> workers = currentShift.getWorkers();
+                List<Worker> workersList = workers.get(role);
+                if(workersList.contains(worker))
                     currentShift.getWorkers().get(role).remove(worker);
                 else
                     return false;
