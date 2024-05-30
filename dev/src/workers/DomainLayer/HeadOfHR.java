@@ -31,6 +31,8 @@ public class HeadOfHR {
         if(!allWorkers.containsKey(id)) {
             return false;
         }
+        if(!allWorkers.get(id).getFullTimeJob())
+            return false;
         allWorkers.get(id).setWage(wage);
         return true;
     }
@@ -59,6 +61,8 @@ public class HeadOfHR {
         if(!allWorkers.containsKey(id)) {
             return false;
         }
+        if(allWorkers.get(id).getFullTimeJob())
+            return false;
         allWorkers.get(id).setHWage(wage);
         return true;
     }
@@ -84,7 +88,7 @@ public class HeadOfHR {
         return availableWorker;
     }
     public boolean addWorkerToShift(Worker worker,String role) {
-        if(currentShift != null) {
+        if(currentShift != null && currentShift.getActive() &&  roleList.containsValue(worker)){
             currentShift.addWorker(worker,role);
             return true;
         }

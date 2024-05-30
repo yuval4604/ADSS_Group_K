@@ -30,6 +30,8 @@ public class Worker {
             }
 
         }
+        _prefList[6][0] = Constraints.inactive;
+        _prefList[6][1] = Constraints.inactive;
         isHR = name.equals("Admin");
     }
     public String getName() {
@@ -86,6 +88,8 @@ public class Worker {
     }
 
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
+        if(day == 6)
+            return false;
         if(dayShift) {
             _prefList[day][0] = cons;
 

@@ -21,8 +21,10 @@ public class headOfHRTest {
         hr.addWorker(worker2);
         hr.addWorker(worker3);
         hr.addWorker(worker4);
-
-
+        hr.addRole(1,"Shift-Manager");
+        hr.addRole(2,"c");
+        hr.addRole(3,"b");
+        hr.addRole(4,"a");
 
     }
 
@@ -80,4 +82,62 @@ public class headOfHRTest {
         Assertions.assertEquals(worker1.getGWage(),100);
     }
 
+    @Test
+    void addWorkerToShift() {
+        connector.createShift(1,"12/12/21",true,1);
+        Assertions.assertTrue(connector.showShift().contains(worker1.getName()));
+        connector.addWorkerToShift(1,"b");
+        Assertions.assertTrue(connector.showShift().contains(worker2.getName()));
+        connector.addWorkerToShift(1,"c");
+        Assertions.assertTrue(connector.showShift().contains(worker3.getName()));
+        connector.addWorkerToShift(1,"a");
+        Assertions.assertTrue(connector.showShift().contains(worker4.getName()));
+    }
+
+    @Test
+    void setHalfDayShiftOff() {
+        connector.setHalfDayShiftOff("01.01.2021",true,1);
+        connector.selectShift("01.01.2021",true);
+        Assertions.assertTrue(connector.isInactive());
+        Assertions.assertFalse(worker1.getCons(1,true).equals(Constraints.inactive));
+        Assertions.assertFalse(worker2.getCons(1,true).equals(Constraints.inactive));
+        Assertions.assertFalse(worker3.getCons(1,true).equals(Constraints.inactive));
+        Assertions.assertFalse(worker4.getCons(1,true).equals(Constraints.inactive));
+    }
+
+    @Test
+    void addWorker() {
+        connector.addWorker("worker5",5,5,true,0,0,"11/11/11",10,10,"a");
+        Assertions.assertTrue(connector.login(5,"a"));
+    }
+
+    @Test
+    void addRole() {
+        connector.addRole(1,"d");
+        Assertions.assertTrue(connector.getAvailableWorkersOfRole("d").contains("worker1"));
+    }
+
+    @Test
+    void setAllDayShiftOff() {
+        connector.setAllDayOff("01.01.2021",1);
+        connector.selectShift("01.01.2021",true);
+        Assertions.assertTrue(connector.isInactive());
+        connector.selectShift("01.01.2021",false);
+        Assertions.assertTrue(connector.isInactive());
+    }
+
+    @Test
+    void removeRole() {
+        connector.addRole(1,"d");
+        connector.removeRole(1,"d");
+        Assertions.assertFalse(connector.getAvailableWorkersOfRole("d").contains("worker1"));
+    }
+
+    @Test
+    void removeWorkerFromShift() {
+        connector.createShift(1,"12/12/21",true,1);
+        connector.addWorkerToShift(1,"b");
+        connector.removeWorkerFromShift(1,"worker2");
+        Assertions.assertFalse(connector.showShift().contains(worker2.getName()));
+    }
 }
