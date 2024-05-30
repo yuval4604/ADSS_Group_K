@@ -189,7 +189,7 @@ public class ActionManager {
             System.out.println("changed successfully\nDo you want to reset the vacation days too? : y/n");
             String choice = scanner.nextLine();
             if(choice.equals("y")) {
-                _connector.ResetVacactionDays(id);
+                _connector.ResetVacationDays(id);
             }
         }
     }
@@ -205,7 +205,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.ResetVacactionDays(id);
+        boolean res = _connector.ResetVacationDays(id);
         if(!res) {
             System.out.println("User does not exist");
         }
@@ -405,7 +405,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.setAlldayOff(date,dayOfWeek);
+        boolean res = _connector.setAllDayOff(date,dayOfWeek);
         if(res) {
             System.out.println("updated successfully");
         }

@@ -50,7 +50,7 @@ public class Connector {
         }
         return false;
     }
-    public boolean ResetVacactionDays(int id){
+    public boolean ResetVacationDays(int id){
         if(_worker.getIsHR()) {
             return head.ResetVacationDays(id);
         }
@@ -89,19 +89,19 @@ public class Connector {
     }
 
     public String showWorkerInfo() {
-        String Gres = "Worker's info: \n" + "name" + _worker.getName() + "\n"
+        String GRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Global wage:" + _worker.getGWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays();
-        String Hres = "Worker's info: \n" + "name" + _worker.getName() + "\n"
+        String HRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Hourly wage:" + _worker.getHWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays();
-        String res = _worker.getFullTimeJob() ? Gres : Hres;
+        String res = _worker.getFullTimeJob() ? GRes : HRes;
         return res;
 
     }
@@ -122,7 +122,7 @@ public class Connector {
             return head.setHalfDayShiftOff(date,dayShift,dayOfWeek);
         return false;
     }
-    public boolean setAlldayOff(String date,int dayOfWeek) {
+    public boolean setAllDayOff(String date, int dayOfWeek) {
         if(_worker.getIsHR()) {
             return head.setAllDayOff(date,dayOfWeek);
         }
