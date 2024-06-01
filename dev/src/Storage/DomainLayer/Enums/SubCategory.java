@@ -29,5 +29,16 @@ public enum SubCategory {
     Pants,
     Shoes,
     Hat,
-    Other
+    Other;
+
+    public static boolean contains(String subCategory) {
+
+        for (SubCategory c : SubCategory.values()) {
+            if (c.name().equals(subCategory)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

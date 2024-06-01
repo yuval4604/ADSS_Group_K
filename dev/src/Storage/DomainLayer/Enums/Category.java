@@ -8,5 +8,16 @@ public enum Category {
     Cleaning,
     Electronics,
     Clothing,
-    Other
+    Other;
+
+    public static boolean contains(String category) {
+
+        for (Category c : Category.values()) {
+            if (c.name().equals(category)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
