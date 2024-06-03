@@ -23,7 +23,11 @@ public class Product {
     private int storeQuantity;
     private int damageQuantity;
     private String manufacturer;
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer) {
+
+    private int minimalQuantity;
+
+    private String aisle;
+    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         this.catalogNumber = catalogNumber;
         this.name = name;
         this.category = category;
@@ -37,21 +41,8 @@ public class Product {
         this.storeQuantity = storeQuantity;
         this.damageQuantity = damageQuantity;
         this.manufacturer = manufacturer;
-    }
-
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount) {
-        this.catalogNumber = catalogNumber;
-        this.name = name;
-        this.category = category;
-        this.subCategory = subCategory;
-        this.size = size;
-        this.expirationDates = expirationDates;
-        this.buyPrice = buyPrice;
-        this.salePrice = salePrice;
-        this.discount = discount;
-        this.storageQuantity = 0;
-        this.storeQuantity = 0;
-        this.damageQuantity = 0;
+        this.aisle = aisle;
+        this.minimalQuantity = minimalQuantity;
     }
 
     public int getCatalogNumber() {
@@ -106,6 +97,8 @@ public class Product {
         return manufacturer;
     }
 
+    public String getAisle() { return aisle; }
+
     public void setBuyPrice(double buyPrice) {
         this.buyPrice = buyPrice;
     }
@@ -117,6 +110,8 @@ public class Product {
     public void setDiscount(double discount) {
         this.discount = discount;
     }
+
+    public void setAisle(String aisle) { this.aisle = aisle; }
 
     public void addOne(boolean isStorage, Date expirationDate) {
         if (isStorage) {
@@ -152,5 +147,47 @@ public class Product {
             this.damageQuantity += inStore + inStorage;
         }
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
+    }
+
+    public String toString(){
+        return "Catalog number: " + catalogNumber + "\n" +
+                "Name: " + name + "\n" +
+                "Category: " + category + "\n" +
+                "Sub category: " + subCategory + "\n" +
+                "Size: " + size + "\n" +
+                "Buy price: " + buyPrice + "\n" +
+                "Sale price: " + salePrice + "\n" +
+                "Discount: " + discount + "\n" +
+                "Storage quantity: " + storageQuantity + "\n" +
+                "Store quantity: " + storeQuantity + "\n" +
+                "Manufacturer: " + manufacturer + "\n" +
+                "Aisle: " + aisle + "\n" +
+                "Minimal quantity: " + minimalQuantity + "\n";
+    }
+
+    public String productReportToString(){
+        return "Catalog number: " + catalogNumber + "\n" +
+                "Name: " + name + "\n" +
+                "Category: " + category + "\n" +
+                "Sub category: " + subCategory + "\n" +
+                "Size: " + size + "\n" +
+                "Buy price: " + buyPrice + "\n" +
+                "Sale price: " + salePrice + "\n" +
+                "Discount: " + discount + "\n" +
+                "Storage quantity: " + storageQuantity + "\n" +
+                "Store quantity: " + storeQuantity + "\n" +
+                "Manufacturer: " + manufacturer + "\n" +
+                "Aisle: " + aisle + "\n" +
+                "Minimal quantity: " + minimalQuantity + "\n";
+    }
+
+    public String damagedReportToString(){
+        return "Catalog number: " + catalogNumber + "\n" +
+                "Name: " + name + "\n" +
+                "Category: " + category + "\n" +
+                "Sub category: " + subCategory + "\n" +
+                "Size: " + size + "\n" +
+                "Aisle: " + aisle + "\n" +
+                "Damaged quantity: " + damageQuantity + "\n";
     }
 }
