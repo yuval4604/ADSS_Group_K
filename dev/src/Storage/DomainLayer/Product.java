@@ -113,13 +113,18 @@ public class Product {
 
     public void setAisle(String aisle) { this.aisle = aisle; }
 
-    public void addOne(boolean isStorage, Date expirationDate) {
-        if (isStorage) {
-            storageQuantity++;
-        } else {
-            storeQuantity++;
-        }
-        expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, 0) + 1);
+    public int getMinimalQuantity() {
+        return minimalQuantity;
+    }
+
+    public void setMinimalQuantity(int minimalQuantity) {
+        this.minimalQuantity = minimalQuantity;
+    }
+
+    public void addByExpirationDate(int amountForStore, int amountForStorage, Date expirationDate) {
+        this.storeQuantity += amountForStore;
+        this.storageQuantity += amountForStorage;
+        expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, 0) + amountForStore + amountForStorage);
     }
 
     public void removeOne(boolean isStorage, Date expirationDate) {
