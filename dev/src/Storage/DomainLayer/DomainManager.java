@@ -77,4 +77,16 @@ public class DomainManager {
         }
         return products;
     }
+
+    public void moveProductToStore(int catalogNumber, int quantity) {
+        Product product = this.productMap.get(catalogNumber);
+        product.moveProductToStore(quantity);
+    }
+
+    public void substractFromStore(int catalogNumber, int quantity) {
+        Product product = this.productMap.get(catalogNumber);
+        if(product.getStoreQuantity() < quantity)
+            throw new IllegalArgumentException("Not enough products in store");
+        product.setStoreQuantity(product.getStoreQuantity() - quantity);
+    }
 }
