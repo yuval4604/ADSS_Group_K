@@ -18,6 +18,8 @@ public class Product {
     private double buyPrice;
     private double salePrice;
     private double discount; // [0,1]
+
+    private double supplierDiscount; // [0,1]
     private int storageQuantity;
     private int storeQuantity;
     private int damageQuantity;
@@ -26,7 +28,7 @@ public class Product {
     private int minimalQuantity;
 
     private String aisle;
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         this.catalogNumber = catalogNumber;
         this.name = name;
         this.category = category;
@@ -36,6 +38,7 @@ public class Product {
         this.buyPrice = buyPrice;
         this.salePrice = salePrice;
         this.discount = discount;
+        this.supplierDiscount = supplierDiscount;
         this.storageQuantity = storageQuantity;
         this.storeQuantity = storeQuantity;
         this.damageQuantity = damageQuantity;
@@ -80,6 +83,8 @@ public class Product {
     public double getDiscount() {
         return discount;
     }
+
+    public double getSupplierDiscount() { return supplierDiscount; }
 
     public int getStorageQuantity() {
         return storageQuantity;
