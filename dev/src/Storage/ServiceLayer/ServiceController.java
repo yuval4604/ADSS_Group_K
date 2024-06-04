@@ -27,7 +27,7 @@ public class ServiceController {
         this.manager.addProduct(product);
     }
 
-    public Product getProduct(int catalogNumber) { return this.manager.getProduct(catalogNumber); }
+    public String getProduct(int catalogNumber) { return this.manager.getProduct(catalogNumber).toString(); }
 
     // returns a string with the properties of the products in the given categories
     public String produceProductReport(List<String> categories){

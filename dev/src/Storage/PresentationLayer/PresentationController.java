@@ -39,11 +39,11 @@ public class PresentationController {
         return this.serviceController.alertOnMinimalQuantity();
     }
 
-    public Product getProduct(int catalogNumber) {
+    public String getProduct(int catalogNumber) {
         return this.serviceController.getProduct(catalogNumber);
     }
 
-    public void updateDiscount(int catalogNumber, double discount) {
+    public void updateDiscountForProduct(int catalogNumber, double discount) {
         this.serviceController.updateDiscountForProduct(catalogNumber, discount);
     }
 
@@ -55,15 +55,55 @@ public class PresentationController {
         this.serviceController.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
-    public void parse(String str){
-        String[] commands = str.split(" ");
-        switch (commands[0]){
-            case "addProduct":
-                this.addProduct(Integer.parseInt(commands[1]), commands[2], commands[3], commands[4], commands[5], null, Double.parseDouble(commands[6]), Double.parseDouble(commands[7]), Double.parseDouble(commands[8]), Integer.parseInt(commands[9]), Integer.parseInt(commands[10]), Integer.parseInt(commands[11]), commands[12], commands[13], Integer.parseInt(commands[14]));
-                break;
-
-            default:
-                break;
+    public void parseAddProductMessage(String str){
+        String[] parts = str.split(",");
+        int catalogNumber = Integer.parseInt(parts[0]);
+        String name = parts[1];
+        String category = parts[2];
+        String subCategory = parts[3];
+        String size = parts[4];
+        double buyPrice = Double.parseDouble(parts[5]);
+        double salePrice = Double.parseDouble(parts[6]);
+        double discount = Double.parseDouble(parts[7]);
+        int storageQuantity = Integer.parseInt(parts[8]);
+        int storeQuantity = Integer.parseInt(parts[9]);
+        int damageQuantity = Integer.parseInt(parts[10]);
+        String manufacturer = parts[11];
+        String aisle = parts[12];
+        int minimalQuantity = Integer.parseInt(parts[13]);
+        Map<Date, Integer> expirationDates = null;
+        if(parts.length > 14){
+            expirationDates = new java.util.HashMap<Date, Integer>();
+            for(int i = 14; i < parts.length; i+=2){
+                expirationDates.put(new Date(Long.parseLong(parts[i])), Integer.parseInt(parts[i+1]));
+            }
         }
+        this.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+    }
+
+    public void parseRemoveProductMessage(String str){
+        int catalogNumber = Integer.parseInt(str);
+        this.removeProduct(catalogNumber);
+    }
+
+    public void parseUpdateDiscountForProductMessage(String str){
+        String[] parts = str.split(",");
+        int catalogNumber = Integer.parseInt(parts[0]);
+        double discount = Double.parseDouble(parts[1]);
+        this.updateDiscountForProduct(catalogNumber, discount);
+    }
+
+    public void parseUpdateDamageForProductMessage(String str){
+        String[] parts = str.split(",");
+        int catalogNumber = Integer.parseInt(parts[0]);
+        int inStore = Integer.parseInt(parts[1]);
+        int inStorage = Integer.parseInt(parts[2]);
+        Date expirationDate = new Date(Long.parseLong(parts[3]));
+        this.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
+    }
+
+    public void parseGetProductMessage(String str){
+        int catalogNumber = Integer.parseInt(str);
+        this.getProduct(catalogNumber);
     }
 }
