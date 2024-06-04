@@ -4,9 +4,7 @@ import Storage.DomainLayer.Enums.Category;
 import Storage.DomainLayer.Enums.SubCategory;
 import Storage.DomainLayer.Enums.SubSubCategory;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 public class Product {
 
@@ -16,6 +14,7 @@ public class Product {
     private SubCategory subCategory;
     private SubSubCategory size;
     private Map<Date, Integer> expirationDates;
+    private Map<Date, Integer> expiredProducts;
     private double buyPrice;
     private double salePrice;
     private double discount; // [0,1]
@@ -43,6 +42,7 @@ public class Product {
         this.manufacturer = manufacturer;
         this.aisle = aisle;
         this.minimalQuantity = minimalQuantity;
+        this.expirationDates = new HashMap<>();
     }
 
     public int getCatalogNumber() {
@@ -117,6 +117,10 @@ public class Product {
         return minimalQuantity;
     }
 
+    public double getDiscountedPrice(){
+        return salePrice * (1 - discount);
+    }
+
     public void setMinimalQuantity(int minimalQuantity) {
         this.minimalQuantity = minimalQuantity;
     }
@@ -145,12 +149,28 @@ public class Product {
         }
     }
 
-    public void moveToDamage(int inStore, int inStorage){
+    public void moveToDamage(int inStore, int inStorage, List<Date> expirationDates){
         if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
             this.damageQuantity += inStore + inStorage;
+            for(Date expiration : expirationDates){
+                int quantity = this.expirationDates.remove(expiration) - inStorage - inStore;
+                this.expirationDates.put(expiration, quantity);
+            }
         }
+        else throw new IllegalArgumentException("Not enough quantity to move to damage");
+    }
+
+    public void moveToExpired(int inStore, int inStorage, List<Date> expirationDates){
+        if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
+            this.storeQuantity -= inStore;
+            this.storageQuantity -= inStorage;
+            for(Date expiration : expirationDates){
+                int quantity = this.expirationDates.remove(expiration) - inStorage - inStore;
+                this.expirationDates.put(expiration, quantity);
+                this.expiredProducts.put(expiration, inStorage + inStorage);
+            }        }
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
     }
 
@@ -176,23 +196,26 @@ public class Product {
                 "Category: " + category + "\n" +
                 "Sub category: " + subCategory + "\n" +
                 "Size: " + size + "\n" +
-                "Buy price: " + buyPrice + "\n" +
-                "Sale price: " + salePrice + "\n" +
-                "Discount: " + discount + "\n" +
                 "Storage quantity: " + storageQuantity + "\n" +
                 "Store quantity: " + storeQuantity + "\n" +
                 "Manufacturer: " + manufacturer + "\n" +
+                "Discount: " + discount * 100 + "% " + "\n" +
                 "Aisle: " + aisle + "\n" +
                 "Minimal quantity: " + minimalQuantity + "\n";
     }
 
     public String damagedReportToString(){
+        int expiredSum = 0;
+        for(Date expiredDate : this.expiredProducts.keySet())
+            expiredSum += this.expiredProducts.get(expiredDate);
         return "Catalog number: " + catalogNumber + "\n" +
                 "Name: " + name + "\n" +
                 "Category: " + category + "\n" +
                 "Sub category: " + subCategory + "\n" +
                 "Size: " + size + "\n" +
                 "Aisle: " + aisle + "\n" +
-                "Damaged quantity: " + damageQuantity + "\n";
+                "Expired quantity: " + expiredSum + "\n" +
+                "Damaged quantity: " + damageQuantity  + "\n";
     }
+
 }

@@ -20,7 +20,7 @@ public class Controller {
 
     public void addProduct(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         if(this.manager.getProduct(catalogNumber) != null)
-            throw new IllegalArgumentException("Product with this catalog number already exists";
+            throw new IllegalArgumentException("Product with this catalog number already exists");
         if(!(Category.contains(category.toString()) && SubCategory.contains(subCategory.toString()) && SubSubCategory.contains(size.toString())))
             throw new IllegalArgumentException("Invalid category");
         Product product = new Product(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
@@ -86,7 +86,7 @@ public class Controller {
     }
 
     // updates the damage amount of the given product
-    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage){
-        this.getProduct(catalogNumber).moveToDamage(inStore, inStorage);
+    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, List<Date> expirationDates){
+        this.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDates);
     }
 }
