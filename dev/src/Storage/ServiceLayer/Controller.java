@@ -1,4 +1,4 @@
-package Storage.Service;
+package Storage.ServiceLayer;
 
 import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Enums.Category;
@@ -86,7 +86,7 @@ public class Controller {
     }
 
     // updates the damage amount of the given product
-    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, List<Date> expirationDates){
-        this.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDates);
+    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, Date expirationDate){
+        this.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDate);
     }
 }

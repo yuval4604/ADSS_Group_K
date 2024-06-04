@@ -149,28 +149,25 @@ public class Product {
         }
     }
 
-    public void moveToDamage(int inStore, int inStorage, List<Date> expirationDates){
+    public void moveToDamage(int inStore, int inStorage, Date expirationDate){
         if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
             this.damageQuantity += inStore + inStorage;
-            for(Date expiration : expirationDates){
-                int quantity = this.expirationDates.remove(expiration) - inStorage - inStore;
-                this.expirationDates.put(expiration, quantity);
-            }
+            int quantity = this.expirationDates.remove(expirationDate) - inStorage - inStore;
+            this.expirationDates.put(expirationDate, quantity);
         }
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
     }
 
-    public void moveToExpired(int inStore, int inStorage, List<Date> expirationDates){
+    public void moveToExpired(int inStore, int inStorage, Date expirationDate){
         if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
-            for(Date expiration : expirationDates){
-                int quantity = this.expirationDates.remove(expiration) - inStorage - inStore;
-                this.expirationDates.put(expiration, quantity);
-                this.expiredProducts.put(expiration, inStorage + inStorage);
-            }        }
+            int quantity = this.expirationDates.remove(expirationDate) - inStorage - inStore;
+            this.expirationDates.put(expirationDate, quantity);
+            this.expiredProducts.put(expirationDate, inStorage + inStorage);
+        }
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
     }
 
