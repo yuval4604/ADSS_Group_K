@@ -19,6 +19,7 @@ public class Product {
     private double salePrice;
     private double discount; // [0,1]
     private int storageQuantity;
+
     private int storeQuantity;
     private int damageQuantity;
     private String manufacturer;
@@ -121,6 +122,10 @@ public class Product {
         return salePrice * (1 - discount);
     }
 
+    public void setStoreQuantity(int storeQuantity) {
+        this.storeQuantity = storeQuantity;
+    }
+
     public void setMinimalQuantity(int minimalQuantity) {
         this.minimalQuantity = minimalQuantity;
     }
@@ -215,4 +220,11 @@ public class Product {
                 "Damaged quantity: " + damageQuantity  + "\n";
     }
 
+    public void moveProductToStore(int quantity) {
+        if (this.storageQuantity < quantity) {
+            throw new IllegalArgumentException("Not enough quantity to move to store");
+        }
+        this.storageQuantity -= quantity;
+        this.storeQuantity += quantity;
+    }
 }

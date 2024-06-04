@@ -55,6 +55,14 @@ public class PresentationController {
         this.serviceController.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
+    public void moveProductToStore(int catalogNumber, int quantity) {
+        this.serviceController.moveProductToStore(catalogNumber, quantity);
+    }
+
+    public void substractFromStore(int catalogNumber, int quantity) {
+        this.serviceController.substractFromStore(catalogNumber, quantity);
+    }
+
     public void parseAddProductMessage(String str){
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
@@ -105,5 +113,40 @@ public class PresentationController {
     public void parseGetProductMessage(String str){
         int catalogNumber = Integer.parseInt(str);
         this.getProduct(catalogNumber);
+    }
+
+    public void parseProduceProductReportMessage(String str){
+        String[] parts = str.split("|");
+        List<String> categories = new java.util.LinkedList<String>();
+        for(String category : parts){
+            categories.add(category);
+        }
+        this.produceProductReport(categories);
+    }
+
+    public void parseProduceDamageReportMessage(String str){
+        String[] parts = str.split("|");
+        List<String> categories = new java.util.LinkedList<String>();
+        for(String category : parts){
+            categories.add(category);
+        }
+        this.produceDamageReport(categories);
+    }
+
+    public void parseUpdateDiscountForCategory(String str){
+        String[] parts = str.split("|");
+        double discount = Double.parseDouble(parts[0]);
+        List<String> categories = new java.util.LinkedList<String>();
+        for(int i = 1; i < parts.length; i++){
+            categories.add(parts[i]);
+        }
+        this.updateDiscountForCategory(categories, discount);
+    }
+
+    public void parseMoveProductToStore(String str){
+        String[] parts = str.split(",");
+        int catalogNumber = Integer.parseInt(parts[0]);
+        int quantity = Integer.parseInt(parts[1]);
+        this.moveProductToStore(catalogNumber, quantity);
     }
 }

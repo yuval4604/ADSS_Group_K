@@ -7,9 +7,7 @@ import Storage.DomainLayer.Enums.SubSubCategory;
 import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ServiceController {
     private DomainManager manager;
@@ -23,6 +21,12 @@ public class ServiceController {
             throw new IllegalArgumentException("Product with this catalog number already exists");
         if(!(Category.contains(category) && SubCategory.contains(subCategory) && SubSubCategory.contains(size)))
             throw new IllegalArgumentException("Invalid category");
+        Date d = new Date(System.currentTimeMillis());
+        Date now = new Date(d.getYear(), d.getMonth(), d.getDate());
+        for(Map.Entry<Date, Integer> entry : expirationDates.entrySet()){
+            if(entry.getKey().before(now))
+                throw new IllegalArgumentException("Invalid expiration date");
+        }
         Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), expirationDates, buyPrice, salePrice, discount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
         this.manager.addProduct(product);
     }
@@ -51,7 +55,7 @@ public class ServiceController {
 
     // removes the product from the system
     public void removeProduct(int catalogNumber) {
-        Product p = this.getProduct(catalogNumber);
+        Product p = this.manager.getProduct(catalogNumber);
         this.manager.removeProduct(p);
     }
 
@@ -74,7 +78,7 @@ public class ServiceController {
 
     // updates the discount of the given product
     public void updateDiscountForProduct(int catalogNumber, double discount){
-        this.getProduct(catalogNumber).setDiscount(discount);
+        this.manager.getProduct(catalogNumber).setDiscount(discount);
     }
 
     // updates the discount of all products in the given categories (the strings are like in getProductByCategories)
@@ -87,6 +91,14 @@ public class ServiceController {
 
     // updates the damage amount of the given product
     public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, Date expirationDate){
-        this.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDate);
+        this.manager.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDate);
+    }
+
+    public void moveProductToStore(int catalogNumber, int quantity) {
+        this.manager.moveProductToStore(catalogNumber, quantity);
+    }
+
+    public void substractFromStore(int catalogNumber, int quantity) {
+        this.manager.substractFromStore(catalogNumber, quantity);
     }
 }
