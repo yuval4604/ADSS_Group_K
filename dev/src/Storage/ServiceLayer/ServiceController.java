@@ -16,7 +16,7 @@ public class ServiceController {
         this.manager = new DomainManager(productMap, facade);
     }
 
-    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         if(this.manager.getProduct(catalogNumber) != null)
             throw new IllegalArgumentException("Product with this catalog number already exists");
         if(!(Category.contains(category) && SubCategory.contains(subCategory) && SubSubCategory.contains(size)))
@@ -27,7 +27,7 @@ public class ServiceController {
             if(entry.getKey().before(now))
                 throw new IllegalArgumentException("Invalid expiration date");
         }
-        Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), expirationDates, buyPrice, salePrice, discount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+        Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
         this.manager.addProduct(product);
     }
 

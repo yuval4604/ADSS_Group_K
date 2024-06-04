@@ -19,19 +19,19 @@ public class PresentationController {
         this.serviceController = serviceController;
     }
 
-    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
-        this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+    private void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+        this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
     }
 
-    public String produceProductReport(List<String> categories) {
+    private String produceProductReport(List<String> categories) {
         return this.serviceController.produceProductReport(categories);
     }
 
-    public String produceDamageReport(List<String> categories) {
+    private String produceDamageReport(List<String> categories) {
         return this.serviceController.produceDamageReport(categories);
     }
 
-    public void removeProduct(int catalogNumber) {
+    private void removeProduct(int catalogNumber) {
         this.serviceController.removeProduct(catalogNumber);
     }
 
@@ -39,27 +39,27 @@ public class PresentationController {
         return this.serviceController.alertOnMinimalQuantity();
     }
 
-    public String getProduct(int catalogNumber) {
+    private String getProduct(int catalogNumber) {
         return this.serviceController.getProduct(catalogNumber);
     }
 
-    public void updateDiscountForProduct(int catalogNumber, double discount) {
+    private void updateDiscountForProduct(int catalogNumber, double discount) {
         this.serviceController.updateDiscountForProduct(catalogNumber, discount);
     }
 
-    public void updateDiscountForCategory(List<String> categories, double discount) {
+    private void updateDiscountForCategory(List<String> categories, double discount) {
         this.serviceController.updateDiscountForCategory(categories, discount);
     }
 
-    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, Date expirationDate) {
+    private void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, Date expirationDate) {
         this.serviceController.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
-    public void moveProductToStore(int catalogNumber, int quantity) {
+    private void moveProductToStore(int catalogNumber, int quantity) {
         this.serviceController.moveProductToStore(catalogNumber, quantity);
     }
 
-    public void substractFromStore(int catalogNumber, int quantity) {
+    private void subtractFromStore(int catalogNumber, int quantity) {
         this.serviceController.substractFromStore(catalogNumber, quantity);
     }
 
@@ -73,20 +73,21 @@ public class PresentationController {
         double buyPrice = Double.parseDouble(parts[5]);
         double salePrice = Double.parseDouble(parts[6]);
         double discount = Double.parseDouble(parts[7]);
-        int storageQuantity = Integer.parseInt(parts[8]);
-        int storeQuantity = Integer.parseInt(parts[9]);
-        int damageQuantity = Integer.parseInt(parts[10]);
-        String manufacturer = parts[11];
-        String aisle = parts[12];
-        int minimalQuantity = Integer.parseInt(parts[13]);
+        double supplierDiscount = Double.parseDouble(parts[8]);
+        int storageQuantity = Integer.parseInt(parts[9]);
+        int storeQuantity = Integer.parseInt(parts[10]);
+        int damageQuantity = Integer.parseInt(parts[11]);
+        String manufacturer = parts[12];
+        String aisle = parts[13];
+        int minimalQuantity = Integer.parseInt(parts[14]);
         Map<Date, Integer> expirationDates = null;
-        if(parts.length > 14){
+        if(parts.length > 15){
             expirationDates = new java.util.HashMap<Date, Integer>();
-            for(int i = 14; i < parts.length; i+=2){
+            for(int i = 15; i < parts.length; i+=2){
                 expirationDates.put(new Date(Long.parseLong(parts[i])), Integer.parseInt(parts[i+1]));
             }
         }
-        this.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+        this.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
     }
 
     public void parseRemoveProductMessage(String str){
