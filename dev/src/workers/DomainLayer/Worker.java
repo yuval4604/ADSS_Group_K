@@ -1,5 +1,7 @@
 package workers.DomainLayer;
 
+import java.util.List;
+
 public class Worker {
     private String _name;
     private int _id;
@@ -12,6 +14,8 @@ public class Worker {
     private int _currentVacationDays;
     private boolean isHR;
     private Constraints[][] _prefList;
+    private List<Constraints[][]> _constraints;
+    private boolean _changedPassword;
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays) {
         _name = name;
@@ -33,6 +37,7 @@ public class Worker {
         _prefList[6][0] = Constraints.inactive;
         _prefList[6][1] = Constraints.inactive;
         isHR = name.equals("Admin");
+        _changedPassword = false;
     }
     public String getName() {
         return _name;
@@ -111,5 +116,18 @@ public class Worker {
     }
 
 
+    public boolean hasChangedPassword() {
+        return _changedPassword;
+    }
 
+    public void checkUpdateDay() {
+        _constraints.add(_prefList);
+        _prefList = new Constraints[7][2];
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 2; j++) {
+                _prefList[i][j] = (i == 6) ? Constraints.inactive : Constraints.can;
+            }
+
+        }
+    }
 }

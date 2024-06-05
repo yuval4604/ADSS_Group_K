@@ -10,7 +10,10 @@ public class Connector {
     private HeadOfHR head;
     private Map<Integer,String> loginInfos;
 
+    private LocalDate _lastUpdate;
+
     public Connector(String password) {
+        _lastUpdate = LocalDate.now();
         loginInfos = new HashMap<>();
         head = new HeadOfHR();
         loginInfos.put(-1, password);
@@ -144,11 +147,11 @@ public class Connector {
         return res;
     }
 
-    public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays, String password) {
+    public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {
         if(!head.contains(id)) {
             Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays);
             head.addWorker(worker);
-            loginInfos.put(id,password);
+            loginInfos.put(id,name);
             return true;
         }
 
@@ -292,6 +295,23 @@ public class Connector {
         }
         return Shifts.toString();
 
+    public boolean hasChangedPassword() {
+        return _worker.hasChangedPassword();
+    }
+
+    public int lastDayToSetConstraints() {
+        return head.lastDayToSetConstraints();
+    }
+
+    public boolean setLastDayForConstraints(int day) {
+        return head.setLastDayForConstraints(day);
+    }
+
+    public void checkUpdateDay() {
+        if(_lastUpdate.isBefore(LocalDate.now())) {
+            head.checkUpdateDay();
+            _lastUpdate = LocalDate.now();
+        }
     }
 }
 

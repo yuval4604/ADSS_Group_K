@@ -271,6 +271,17 @@ public class ActionManager {
     public void selectShift() {
         System.out.println("Enter the desired date: ");
         String date = scanner.nextLine();
+        try{
+            LocalDate ld = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
+            if(ld.isBefore(LocalDate.now())){
+                System.out.println("date is in the past");
+                return;
+            }
+        }
+        catch (Exception e){
+            System.out.println("Invalid date try dd.mm.yyyy");
+            return;
+        }
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
         boolean dayShift;
@@ -309,6 +320,17 @@ public class ActionManager {
         String date = scanner.nextLine();
         if(date.length() != 10 || date.charAt(2) != '.' || date.charAt(5) != '.'){
             System.out.println("date not at format dd.mm.yyyy");
+            return;
+        }
+        try{
+            LocalDate ld = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
+            if(ld.isBefore(LocalDate.now())){
+                System.out.println("date is in the past");
+                return;
+            }
+        }
+        catch (Exception e){
+            System.out.println("Invalid date");
             return;
         }
         System.out.println("Day shift or night shift? : d/n");
@@ -416,6 +438,10 @@ public class ActionManager {
     }
 
     public void addConstraints() {
+        if(_connector.lastDayToSetConstraints() < LocalDate.now().getDayOfWeek().getValue()) {
+            System.out.println("Can't set constraints for past days");
+            return;
+        }
         System.out.println("Enter the day: 1-7");
         int day;
         try {
@@ -611,9 +637,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        System.out.println("Enter Worker's initial password: ");
-        String password = scanner.nextLine();
-        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays,password);
+        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
         if(res) {
             System.out.println("Worker has been added!");
         }
@@ -672,6 +696,27 @@ public class ActionManager {
 
     public boolean isHR() {
         return _connector.getIsHR();
+    }
+
+    public void setLastDayForConstraints() {
+        System.out.println("Enter the day: 1-7");
+        int day;
+        try {
+            day = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
+        scanner.nextLine();
+        boolean res = _connector.setLastDayForConstraints(day);
+        if(res) {
+            System.out.println("updated successfully");
+        }
+        else {
+            System.out.println("Error: no permission to do that Or wrong information");
+        }
     }
 
     public void load() {
