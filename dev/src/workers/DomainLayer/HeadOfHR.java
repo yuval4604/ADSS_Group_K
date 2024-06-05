@@ -283,7 +283,24 @@ public class HeadOfHR {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
             entry.getValue().checkUpdateDay();
         }
-        //todo fire workers that are not working
+        for(Map.Entry<LocalDate,List<Worker>> entry:firedWorkers.entrySet()) {
+            if(entry.getKey().isBefore(LocalDate.now())||entry.getKey().isEqual(LocalDate.now()) ){
+                for(Worker worker : entry.getValue()) {
+                    fireWorker(worker.getID());
+                }
+                firedWorkers.remove(entry.getKey());
+            }
+        }
+
+    }
+
+    public Shift getOnGoingShift() {
+        for (Shift shift : allShifts) {
+            if(shift.getLocalDate() == LocalDate.now()) {
+                return shift;
+            }
+        }
+        return null;
     }
     public boolean setMinimalWorkers(String role,int num) {
         if(currentShift == null)

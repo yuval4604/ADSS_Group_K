@@ -75,7 +75,21 @@ public class Shift {
     public LocalDate getLocalDate() {
         return _localDate;
     }
+
     public Map<String,Integer> getMinimalWorkers() {
         return minimalWorkers;
+    }
+
+
+    public void altarRole(int id, String role) {
+        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
+            for (Worker worker : entry.getValue()) {
+                if(worker.getID() == id) {
+                    entry.getValue().remove(worker);
+                    workers.get(role).add(worker);
+                    return;
+                }
+            }
+        }
     }
 }

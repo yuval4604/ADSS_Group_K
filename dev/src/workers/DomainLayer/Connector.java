@@ -314,6 +314,7 @@ public class Connector {
                 _lastUpdate = LocalDate.now();
             }
         }
+
         public boolean fireWorker( int id){
 
             if(_worker.getIsHR()) {
@@ -338,6 +339,17 @@ public class Connector {
         public boolean checkIfRoleHasMinimalWorkers() {
             if(_worker.getIsHR()) {
                 return head.checkIfRoleHasMinimalWorkers();
+            }
+            return false;
+        }
+
+        public boolean altarOnGoingShift (int id, String role){
+            Shift shift = head.getOnGoingShift();
+            if(shift == null) {
+                return false;
+            }
+            if(shift.getShiftManager().getID() == _worker.getID()) {
+                shift.altarRole(id,role);
             }
             return false;
         }
