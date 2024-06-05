@@ -89,10 +89,9 @@ public class DomainManager {
     public void substractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
         Product product = this.productMap.get(catalogNumber);
         for(Map.Entry<LocalDate,Integer> entry : products.entrySet()){
-
+            if(product.getStoreQuantity() < entry.getValue())
+                throw new IllegalArgumentException("Not enough products in store");
+            product.removeOne(false,entry.getKey());
         }
-        if(product.getStoreQuantity() < quantity)
-            throw new IllegalArgumentException("Not enough products in store");
-        product.setStoreQuantity(product.getStoreQuantity() - quantity);
     }
 }

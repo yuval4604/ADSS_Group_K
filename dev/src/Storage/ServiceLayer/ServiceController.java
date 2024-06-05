@@ -8,6 +8,7 @@ import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class ServiceController {
@@ -22,10 +23,10 @@ public class ServiceController {
             throw new IllegalArgumentException("Product with this catalog number already exists");
         if(!(Category.contains(category) && SubCategory.contains(subCategory) && SubSubCategory.contains(size)))
             throw new IllegalArgumentException("Invalid category");
-        Date d = new Date(System.currentTimeMillis());
-        Date now = new Date(d.getYear(), d.getMonth(), d.getDate());
+        LocalDate d = LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
+        LocalDate now =  LocalDate.parse(d.getYear() + "-" + d.getMonthValue() + "-" + d.getDayOfMonth());
         for(Map.Entry<LocalDate, Integer> entry : expirationDates.entrySet()){
-            if(entry.getKey().before(now))
+            if(entry.getKey().isBefore(now))
                 throw new IllegalArgumentException("Invalid expiration date");
         }
         Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
