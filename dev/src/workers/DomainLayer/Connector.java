@@ -1,4 +1,5 @@
 package workers.DomainLayer;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,10 @@ public class Connector {
     private HeadOfHR head;
     private Map<Integer,String> loginInfos;
 
+    private LocalDate _lastUpdate;
+
     public Connector(String password) {
+        _lastUpdate = LocalDate.now();
         loginInfos = new HashMap<>();
         head = new HeadOfHR();
         loginInfos.put(-1, password);
@@ -279,5 +283,20 @@ public class Connector {
 
     public boolean hasChangedPassword() {
         return _worker.hasChangedPassword();
+    }
+
+    public int lastDayToSetConstraints() {
+        return head.lastDayToSetConstraints();
+    }
+
+    public boolean setLastDayForConstraints(int day) {
+        return head.setLastDayForConstraints(day);
+    }
+
+    public void checkUpdateDay() {
+        if(_lastUpdate.isBefore(LocalDate.now())) {
+            head.checkUpdateDay();
+            _lastUpdate = LocalDate.now();
+        }
     }
 }

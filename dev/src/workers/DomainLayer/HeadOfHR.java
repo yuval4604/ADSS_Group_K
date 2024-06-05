@@ -10,8 +10,10 @@ public class HeadOfHR {
     private List<Shift> allShifts;
     private Map<String,List<Worker>> roleList; // a list of qualified workers for each role
     private Shift currentShift; // the current shift that the HR is working on
+    private int _lastdaytoSetConstraints;
 
     public HeadOfHR() {
+        _lastdaytoSetConstraints = 6;
         allWorkers = new HashMap<>();
         allShifts = new LinkedList<>();
         worker = new Worker("Admin",-1,0,0,0,"",true,0,0);
@@ -223,5 +225,23 @@ public class HeadOfHR {
             }
         }
         return false;
+    }
+
+    public int lastDayToSetConstraints() {
+        return _lastdaytoSetConstraints;
+    }
+
+    public boolean setLastDayForConstraints(int day) {
+        if(day < 0 || day > 6)
+            return false;
+        _lastdaytoSetConstraints = day;
+        return true;
+    }
+
+    public void checkUpdateDay() {
+        for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
+            entry.getValue().checkUpdateDay();
+        }
+        //todo fire workers that are not working
     }
 }

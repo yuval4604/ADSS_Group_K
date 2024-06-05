@@ -17,6 +17,7 @@ public class Main {
         System.out.println("Choose the password of the admin");
         String pass = scanner.nextLine();
         Connector connector = new Connector(pass);
+        connector.checkUpdateDay();
         LoginManager lm = new LoginManager(connector);
         ActionManager ac = new ActionManager(connector);
         System.out.println("do you want to load the system with data? (y/n)");
