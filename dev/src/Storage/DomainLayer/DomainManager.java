@@ -54,26 +54,28 @@ public class DomainManager {
         List<Product> products = new LinkedList<>();
         for(String category : categories){
             String[] divided = category.split(",");
-            if(divided == null || divided.length == 0 || divided.length > 3 )
+            if(divided.length == 0 || divided.length > 3 )
                 throw new IllegalArgumentException("invalid entry");
             if(Category.contains(divided[0])){
                 if(divided.length == 1)
-                    domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getAllProducts();
+                    products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getAllProducts());
                 else if(SubCategory.contains(divided[1])){
-                    if(divided.length == 2)
-                        domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getAllProducts();
-                    else if(SubSubCategory.contains(divided[2])){
-                        domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).
-                                getSubSubCategoryFacade(SubSubCategory.valueOf(divided[2])).getAllProducts();
+                    if(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategories().containsKey(SubCategory.valueOf(divided[1]))) {
+                        if (divided.length == 2)
+                            products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getAllProducts());
+                        else if (SubSubCategory.contains(divided[2])) {
+                            if (domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getSubSubCategories().containsKey(SubSubCategory.valueOf(divided[2])))
+                                products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).
+                                        getSubSubCategoryFacade(SubSubCategory.valueOf(divided[2])).getAllProducts());
+                            else throw new NoSuchElementException("sub category does not have this size");
+                        }
+                        else throw new NoSuchElementException("Size doesn't exist");
                     }
-                    else
-                        throw new NoSuchElementException("Size doesn't exist");
+                    else throw new NoSuchElementException("category does not have this sub category");
                 }
-                else
-                    throw new NoSuchElementException("Sub Category doesn't exist");
+                else throw new NoSuchElementException("Sub Category doesn't exist");
             }
-            else
-                throw new NoSuchElementException("Category doesn't exist");
+            else throw new NoSuchElementException("Category doesn't exist");
         }
         return products;
     }
