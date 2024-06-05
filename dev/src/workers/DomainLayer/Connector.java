@@ -314,5 +314,32 @@ public class Connector {
                 _lastUpdate = LocalDate.now();
             }
         }
+        public boolean fireWorker( int id){
+
+            if(_worker.getIsHR()) {
+                head.fireWorker(id);
+                return true;
+            }
+            return false;
+        }
+        public boolean endContranct30DaysFromNow( int id){
+            if(_worker.getIsHR()) {
+                head.endContranct30DaysFromNow(id);
+                return true;
+            }
+            return false;
+        }
+        public boolean setMinimalWorkers(String role,int num){
+            if(_worker.getIsHR()) {
+                return head.setMinimalWorkers(role, num);
+            }
+            return false;
+        }
+        public boolean checkIfRoleHasMinimalWorkers() {
+            if(_worker.getIsHR()) {
+                return head.checkIfRoleHasMinimalWorkers();
+            }
+            return false;
+        }
 }
 

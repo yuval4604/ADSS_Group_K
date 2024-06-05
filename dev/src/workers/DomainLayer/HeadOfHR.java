@@ -285,4 +285,24 @@ public class HeadOfHR {
         }
         //todo fire workers that are not working
     }
+    public boolean setMinimalWorkers(String role,int num) {
+        if(currentShift == null)
+            return false;
+        if(!currentShift.getMinimalWorkers().containsKey(role)) {
+            currentShift.getMinimalWorkers().put(role, num);
+            return true;
+        }
+        else {
+            currentShift.getMinimalWorkers().replace(role,num);
+            return true;
+        }
+    }
+    public boolean checkIfRoleHasMinimalWorkers() {
+        Map<String,Integer> minimal = currentShift.getMinimalWorkers();
+        for (Map.Entry<String,Integer> entry : minimal.entrySet()) {
+            if(currentShift.getWorkers().get(entry.getKey()).size() < entry.getValue())
+                return false;
+        }
+        return true;
+    }
 }

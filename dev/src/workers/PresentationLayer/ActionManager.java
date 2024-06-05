@@ -728,10 +728,10 @@ public class ActionManager {
         int id;
         try {
             id = scanner.nextInt();
+            scanner.nextLine();
         }
         catch (Exception e) {
             System.out.println("Invalid id");
-            scanner.nextLine();
             return;
         }
         scanner.nextLine();
@@ -746,5 +746,97 @@ public class ActionManager {
             System.out.println("Invalid information");
             return;
         }
+
     }
+    public void fireWorker() {
+        System.out.println("Enter Worker's id: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
+        try {
+            boolean res = _connector.fireWorker(id);
+            if(res) {
+                System.out.println("Worker has been fired!");
+            }
+            else {
+                System.out.println("Error: Something went wrong :(");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+    }
+    public void endContranct30DaysFromNow() {
+        System.out.println("Enter Worker's id: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        try {
+            boolean res = _connector.endContranct30DaysFromNow(id);
+            if(res) {
+                System.out.println("Worker's contract has been ended!");
+            }
+            else {
+                System.out.println("Error: Something went wrong :(");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+    }
+    public void setMinimalWorkers() {
+        System.out.println("Enter Role: ");
+        String role;
+        try {
+            role = scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        System.out.println("Enter number of minimal worker in said role: ");
+        int num;
+        try {
+            num = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        boolean res = _connector.setMinimalWorkers(role,num);
+        if(res) {
+            System.out.println("Minimal workers has been set!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void checkIfRoleHasMinimalWorkers() {
+        boolean res = _connector.checkIfRoleHasMinimalWorkers();
+        if(res) {
+            System.out.println("All roles have reached the mimnimal requirement of workers");
+        }
+        else {
+            System.out.println("Error: some roles did not reached the mimnimal requirement of workers");
+        }
+    }
+
+
 }
