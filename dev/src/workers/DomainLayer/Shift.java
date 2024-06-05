@@ -1,14 +1,20 @@
 package workers.DomainLayer;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
+
 
 public class Shift {
     private boolean _active;
     private Worker shiftManager;
     private String _date; // dd-mm-yyyy
+    private LocalDate _localDate;
+
     private int _dayOfWeek;
     private boolean _dayShift; // true - morning / false - evening
     private Map<String, List<Worker>> workers; // map contains a role and a list of workers
@@ -19,6 +25,8 @@ public class Shift {
         workers = new HashMap<>();
         _dayOfWeek = dayOfWeek;
         _active = active;
+        _localDate = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
+
     }
 
     public String getDate() {
@@ -60,5 +68,9 @@ public class Shift {
             }
         }
         return true;
+    }
+
+    public LocalDate getLocalDate() {
+        return _localDate;
     }
 }

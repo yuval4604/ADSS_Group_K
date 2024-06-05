@@ -1,5 +1,7 @@
 package workers.DomainLayer;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -276,4 +278,20 @@ public class Connector {
     public Object getCons(int i, boolean b) {
         return _worker.getCons(i,b);
     }
+
+    public String showWorkerShifts(String fromDate,String ToDate,int id) {
+        List Shifts = new LinkedList<>();
+        LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.split(".")[2]),Integer.parseInt(fromDate.split(".")[1]),Integer.parseInt(fromDate.split(".")[0]));
+        LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.split(".")[2]),Integer.parseInt(ToDate.split(".")[1]),Integer.parseInt(ToDate.split(".")[0]));
+        for(Shift shift : head.getAllShifts()) {
+            if(shift.getLocalDate().isAfter(fromLocalDate) && shift.getLocalDate().isBefore(toLocalDate)) {
+                if (shift.getWorkers().containsKey(id)) {
+                    Shifts.add(shift);
+                }
+            }
+        }
+        return Shifts.toString();
+
+    }
 }
+

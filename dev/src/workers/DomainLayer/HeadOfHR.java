@@ -1,8 +1,6 @@
 package workers.DomainLayer;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 public class HeadOfHR {
     private Worker worker;
@@ -10,6 +8,8 @@ public class HeadOfHR {
     private List<Shift> allShifts;
     private Map<String,List<Worker>> roleList; // a list of qualified workers for each role
     private Shift currentShift; // the current shift that the HR is working on
+
+    private Map<LocalDate,List<Worker>> firedWorkers;
 
     public HeadOfHR() {
         allWorkers = new HashMap<>();
@@ -20,6 +20,7 @@ public class HeadOfHR {
         roleList = new HashMap<>();
         roleList.put("Shift-Manager",new LinkedList<>());
         roleList.get("Shift-Manager").add(worker);
+        firedWorkers = new HashMap<>();
     }
 
     public Worker getWorker(int id) {
@@ -223,5 +224,48 @@ public class HeadOfHR {
             }
         }
         return false;
+    }
+    public Shift getShiftFromCertainDay(LocalDate date, boolean dayShift) {
+        for (Shift shift : allShifts) {
+            if(shift.getDayShift() == dayShift && shift.getLocalDate().equals(date)) {
+                return shift;
+            }
+        }
+        return null;
+    }
+    public List<Shift> getAllShifts() {
+        return allShifts;
+    }
+
+    public boolean fireWorker(int id) {
+        if(allWorkers.containsKey(id)) {
+            allWorkers.remove(id);
+            return true;
+        }
+        for(Map.Entry<String,List<Worker>> entry : roleList.entrySet()) {
+            if(entry.getValue().contains(allWorkers.get(id))) {
+                entry.getValue().remove(allWorkers.get(id));
+            }
+        }
+        return false;
+    }
+
+    public boolean endContranct30DaysFromNow(int id) {
+        if(allWorkers.containsKey(id)) {
+            Worker worker = allWorkers.get(id);
+            LocalDate _30DaysFromNow = LocalDate.now().plusDays(30);
+            if(!firedWorkers.containsKey(_30DaysFromNow)) {
+                firedWorkers.put(_30DaysFromNow,new LinkedList<>());
+                firedWorkers.get(_30DaysFromNow).add(worker);
+                return true;
+            }
+            else {
+                firedWorkers.get(_30DaysFromNow).add(worker);
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
     }
 }
