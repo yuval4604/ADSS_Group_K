@@ -284,34 +284,35 @@ public class Connector {
 
     public String showWorkerShifts(String fromDate,String ToDate,int id) {
         List Shifts = new LinkedList<>();
-        LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.split(".")[2]),Integer.parseInt(fromDate.split(".")[1]),Integer.parseInt(fromDate.split(".")[0]));
-        LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.split(".")[2]),Integer.parseInt(ToDate.split(".")[1]),Integer.parseInt(ToDate.split(".")[0]));
-        for(Shift shift : head.getAllShifts()) {
-            if(shift.getLocalDate().isAfter(fromLocalDate) && shift.getLocalDate().isBefore(toLocalDate)) {
+        LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.split(".")[2]), Integer.parseInt(fromDate.split(".")[1]), Integer.parseInt(fromDate.split(".")[0]));
+        LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.split(".")[2]), Integer.parseInt(ToDate.split(".")[1]), Integer.parseInt(ToDate.split(".")[0]));
+        for (Shift shift : head.getAllShifts()) {
+            if (shift.getLocalDate().isAfter(fromLocalDate) && shift.getLocalDate().isBefore(toLocalDate)) {
                 if (shift.getWorkers().containsKey(id)) {
                     Shifts.add(shift);
                 }
             }
         }
         return Shifts.toString();
-
-    public boolean hasChangedPassword() {
-        return _worker.hasChangedPassword();
     }
 
-    public int lastDayToSetConstraints() {
-        return head.lastDayToSetConstraints();
-    }
-
-    public boolean setLastDayForConstraints(int day) {
-        return head.setLastDayForConstraints(day);
-    }
-
-    public void checkUpdateDay() {
-        if(_lastUpdate.isBefore(LocalDate.now())) {
-            head.checkUpdateDay();
-            _lastUpdate = LocalDate.now();
+        public boolean hasChangedPassword () {
+            return _worker.hasChangedPassword();
         }
-    }
+
+        public int lastDayToSetConstraints () {
+            return head.lastDayToSetConstraints();
+        }
+
+        public boolean setLastDayForConstraints ( int day){
+            return head.setLastDayForConstraints(day);
+        }
+
+        public void checkUpdateDay () {
+            if (_lastUpdate.isBefore(LocalDate.now())) {
+                head.checkUpdateDay();
+                _lastUpdate = LocalDate.now();
+            }
+        }
 }
 

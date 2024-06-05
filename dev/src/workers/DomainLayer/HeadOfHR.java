@@ -253,23 +253,21 @@ public class HeadOfHR {
     }
 
     public boolean endContranct30DaysFromNow(int id) {
-        if(allWorkers.containsKey(id)) {
+        if (allWorkers.containsKey(id)) {
             Worker worker = allWorkers.get(id);
             LocalDate _30DaysFromNow = LocalDate.now().plusDays(30);
-            if(!firedWorkers.containsKey(_30DaysFromNow)) {
-                firedWorkers.put(_30DaysFromNow,new LinkedList<>());
+            if (!firedWorkers.containsKey(_30DaysFromNow)) {
+                firedWorkers.put(_30DaysFromNow, new LinkedList<>());
+                firedWorkers.get(_30DaysFromNow).add(worker);
+                return true;
+            } else {
                 firedWorkers.get(_30DaysFromNow).add(worker);
                 return true;
             }
-            else {
-                firedWorkers.get(_30DaysFromNow).add(worker);
-                return true;
-            }
-        }
-        else {
+        } else {
             return false;
         }
-
+    }
     public int lastDayToSetConstraints() {
         return _lastdaytoSetConstraints;
     }
