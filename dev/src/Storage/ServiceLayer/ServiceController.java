@@ -23,8 +23,7 @@ public class ServiceController {
             throw new IllegalArgumentException("Product with this catalog number already exists");
         if(!(Category.contains(category) && SubCategory.contains(subCategory) && SubSubCategory.contains(size)))
             throw new IllegalArgumentException("Invalid category");
-        LocalDate d = LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
-        LocalDate now =  LocalDate.parse(d.getYear() + "-" + d.getMonthValue() + "-" + d.getDayOfMonth());
+        LocalDate now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
         for(Map.Entry<LocalDate, Integer> entry : expirationDates.entrySet()){
             if(entry.getKey().isBefore(now))
                 throw new IllegalArgumentException("Invalid expiration date");
@@ -102,5 +101,9 @@ public class ServiceController {
 
     public void substractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
         this.manager.substractFromStore(catalogNumber, products);
+    }
+
+    public Map<Integer,Integer> expiredCount(){
+        return this.manager.expiredCount();
     }
 }

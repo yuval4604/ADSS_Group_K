@@ -94,4 +94,12 @@ public class DomainManager {
             product.removeOne(false,entry.getKey());
         }
     }
+
+    public Map<Integer,Integer> expiredCount(){
+        Map<Integer, Integer> expiredProducts = new HashMap<>();
+        for(Integer catalogNumber : productMap.keySet()){
+            expiredProducts.put(catalogNumber,productMap.get(catalogNumber).expiredCount());
+        }
+        return expiredProducts;
+    }
 }

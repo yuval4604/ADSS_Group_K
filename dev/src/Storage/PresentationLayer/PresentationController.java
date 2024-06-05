@@ -39,6 +39,8 @@ public class PresentationController {
         return this.serviceController.alertOnMinimalQuantity();
     }
 
+    public Map<Integer,Integer> expiredCount() { return this.serviceController.expiredCount(); }
+
     private String getProduct(int catalogNumber) {
         return this.serviceController.getProduct(catalogNumber);
     }

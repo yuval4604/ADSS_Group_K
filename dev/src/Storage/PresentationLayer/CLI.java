@@ -1,5 +1,6 @@
 package Storage.PresentationLayer;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class CLI {
@@ -94,10 +95,15 @@ public class CLI {
                     break;
                 }
                 case "7":{
+                    System.out.println("The products that need to be ordered are:");
                     presentationController.alertOnMinimalQuantity();
                     break;
                 }
                 case "8":{
+                    System.out.println("The expired products are: ");
+                    Map<Integer,Integer> expired = presentationController.expiredCount();
+                    for(Map.Entry<Integer,Integer> entry : expired.entrySet())
+                        System.out.println("Catalog number: " + entry.getKey() + ", quantity: " + entry.getValue());
                     break;
                 }
                 case "9":{

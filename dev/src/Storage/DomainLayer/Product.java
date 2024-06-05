@@ -5,6 +5,7 @@ import Storage.DomainLayer.Enums.SubCategory;
 import Storage.DomainLayer.Enums.SubSubCategory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Product {
@@ -232,5 +233,15 @@ public class Product {
         }
         this.storageQuantity -= quantity;
         this.storeQuantity += quantity;
+    }
+
+    public int expiredCount(){
+        int count = 0;
+        LocalDate now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
+        for(Map.Entry<LocalDate, Integer> entry : expirationDates.entrySet()){
+            if(entry.getKey().isBefore(now))
+                count+= entry.getValue();
+        }
+        return count;
     }
 }
