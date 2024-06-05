@@ -24,8 +24,16 @@ public class LoginManager {
         scanner.nextLine();
         System.out.println("Enter password");
         String password = scanner.nextLine();
-        return _connector.login(id,password);
-
+        boolean ans = _connector.login(id,password);
+        if (ans)
+        {
+            if(_connector.hasChangedPassword())
+            {
+                System.out.println("You must change your password");
+                changePass();
+            }
+        }
+        return ans;
     }
     public void logOut() {
         _connector.logOut();

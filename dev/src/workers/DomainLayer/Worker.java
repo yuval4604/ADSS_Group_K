@@ -12,6 +12,7 @@ public class Worker {
     private int _currentVacationDays;
     private boolean isHR;
     private Constraints[][] _prefList;
+    private boolean _changedPassword;
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays) {
         _name = name;
@@ -33,6 +34,7 @@ public class Worker {
         _prefList[6][0] = Constraints.inactive;
         _prefList[6][1] = Constraints.inactive;
         isHR = name.equals("Admin");
+        _changedPassword = false;
     }
     public String getName() {
         return _name;
@@ -111,5 +113,7 @@ public class Worker {
     }
 
 
-
+    public boolean hasChangedPassword() {
+        return _changedPassword;
+    }
 }

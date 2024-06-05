@@ -142,11 +142,11 @@ public class Connector {
         return res;
     }
 
-    public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays, String password) {
+    public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {
         if(!head.contains(id)) {
             Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays);
             head.addWorker(worker);
-            loginInfos.put(id,password);
+            loginInfos.put(id,name);
             return true;
         }
 
@@ -275,5 +275,9 @@ public class Connector {
 
     public Object getCons(int i, boolean b) {
         return _worker.getCons(i,b);
+    }
+
+    public boolean hasChangedPassword() {
+        return _worker.hasChangedPassword();
     }
 }

@@ -7,10 +7,10 @@ public class headOfHRTest {
     @BeforeEach
     void setUp() {
         connector = new Connector("1234");
-        connector.addWorker("worker1",1,1,true,10000,0,"11/11/11",10,10,"a");
-        connector.addWorker("worker2",2,2,false,10000,0,"11/11/11",10,10,"b");
-        connector.addWorker("worker3",3,3,false,10000,0,"11/11/11",10,10,"c");
-        connector.addWorker("worker4",4,4,true,10000,0,"11/11/11",10,10,"a");
+        connector.addWorker("worker1",1,1,true,10000,0,"11/11/11",10,10);
+        connector.addWorker("worker2",2,2,false,10000,0,"11/11/11",10,10);
+        connector.addWorker("worker3",3,3,false,10000,0,"11/11/11",10,10);
+        connector.addWorker("worker4",4,4,true,10000,0,"11/11/11",10,10);
 
         connector.addRole(1,"Shift-Manager");
         connector.addRole(2,"c");
@@ -115,7 +115,7 @@ public class headOfHRTest {
 
     @Test
     void addWorker() {
-        connector.addWorker("worker5",5,5,true,0,0,"11/11/11",10,10,"a");
+        connector.addWorker("worker5",5,5,true,0,0,"11/11/11",10,10);
         Assertions.assertTrue(connector.login(5,"a"));
     }
 

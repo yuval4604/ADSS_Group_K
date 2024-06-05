@@ -610,9 +610,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        System.out.println("Enter Worker's initial password: ");
-        String password = scanner.nextLine();
-        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays,password);
+        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
         if(res) {
             System.out.println("Worker has been added!");
         }
