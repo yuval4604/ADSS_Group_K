@@ -7,6 +7,7 @@ import Storage.DomainLayer.Enums.SubSubCategory;
 import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class ServiceController {
@@ -16,14 +17,14 @@ public class ServiceController {
         this.manager = new DomainManager(productMap, facade);
     }
 
-    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         if(this.manager.getProduct(catalogNumber) != null)
             throw new IllegalArgumentException("Product with this catalog number already exists");
         if(!(Category.contains(category) && SubCategory.contains(subCategory) && SubSubCategory.contains(size)))
             throw new IllegalArgumentException("Invalid category");
         Date d = new Date(System.currentTimeMillis());
         Date now = new Date(d.getYear(), d.getMonth(), d.getDate());
-        for(Map.Entry<Date, Integer> entry : expirationDates.entrySet()){
+        for(Map.Entry<LocalDate, Integer> entry : expirationDates.entrySet()){
             if(entry.getKey().before(now))
                 throw new IllegalArgumentException("Invalid expiration date");
         }
@@ -90,7 +91,7 @@ public class ServiceController {
     }
 
     // updates the damage amount of the given product
-    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, Date expirationDate){
+    public void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, LocalDate expirationDate){
         this.manager.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDate);
     }
 
@@ -98,7 +99,7 @@ public class ServiceController {
         this.manager.moveProductToStore(catalogNumber, quantity);
     }
 
-    public void substractFromStore(int catalogNumber, int quantity) {
-        this.manager.substractFromStore(catalogNumber, quantity);
+    public void substractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
+        this.manager.substractFromStore(catalogNumber, products);
     }
 }

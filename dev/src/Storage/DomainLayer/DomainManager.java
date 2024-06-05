@@ -5,6 +5,7 @@ import Storage.DomainLayer.Enums.SubCategory;
 import Storage.DomainLayer.Enums.SubSubCategory;
 import Storage.DomainLayer.Facades.DomainFacade;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class DomainManager {
@@ -83,8 +84,11 @@ public class DomainManager {
         product.moveProductToStore(quantity);
     }
 
-    public void substractFromStore(int catalogNumber, int quantity) {
+    public void substractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
         Product product = this.productMap.get(catalogNumber);
+        for(Map.Entry<LocalDate,Integer> entry : products.entrySet()){
+
+        }
         if(product.getStoreQuantity() < quantity)
             throw new IllegalArgumentException("Not enough products in store");
         product.setStoreQuantity(product.getStoreQuantity() - quantity);

@@ -4,6 +4,7 @@ import Storage.DomainLayer.Enums.Category;
 import Storage.DomainLayer.Enums.SubCategory;
 import Storage.DomainLayer.Enums.SubSubCategory;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Product {
@@ -13,8 +14,8 @@ public class Product {
     private Category category;
     private SubCategory subCategory;
     private SubSubCategory size;
-    private Map<Date, Integer> expirationDates;
-    private Map<Date, Integer> expiredProducts;
+    private Map<LocalDate, Integer> expirationDates;
+    private Map<LocalDate, Integer> expiredProducts;
     private double buyPrice;
     private double salePrice;
     private double discount; // [0,1]
@@ -29,7 +30,7 @@ public class Product {
     private int minimalQuantity;
 
     private String aisle;
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         this.catalogNumber = catalogNumber;
         this.name = name;
         this.category = category;
@@ -46,7 +47,7 @@ public class Product {
         this.manufacturer = manufacturer;
         this.aisle = aisle;
         this.minimalQuantity = minimalQuantity;
-        this.expirationDates = new HashMap<>();
+        this.expirationDates = new HashMap<LocalDate, Integer>();
     }
 
     public int getCatalogNumber() {
@@ -69,7 +70,7 @@ public class Product {
         return size;
     }
 
-    public Map<Date, Integer> getExpirationDates() {
+    public Map<LocalDate, Integer> getExpirationDates() {
         return Collections.unmodifiableMap(expirationDates);
     }
 
@@ -135,13 +136,13 @@ public class Product {
         this.minimalQuantity = minimalQuantity;
     }
 
-    public void addByExpirationDate(int amountForStore, int amountForStorage, Date expirationDate) {
+    public void addByExpirationDate(int amountForStore, int amountForStorage, LocalDate expirationDate) {
         this.storeQuantity += amountForStore;
         this.storageQuantity += amountForStorage;
         expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, 0) + amountForStore + amountForStorage);
     }
 
-    public void removeOne(boolean isStorage, Date expirationDate) {
+    public void removeOne(boolean isStorage, LocalDate expirationDate) {
         if (!expirationDates.containsKey(expirationDate)) {
             throw new IllegalArgumentException("No such expiration date");
         }
@@ -159,7 +160,7 @@ public class Product {
         }
     }
 
-    public void moveToDamage(int inStore, int inStorage, Date expirationDate){
+    public void moveToDamage(int inStore, int inStorage, LocalDate expirationDate){
         if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
@@ -170,7 +171,7 @@ public class Product {
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
     }
 
-    public void moveToExpired(int inStore, int inStorage, Date expirationDate){
+    public void moveToExpired(int inStore, int inStorage, LocalDate expirationDate){
         if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
@@ -213,7 +214,7 @@ public class Product {
 
     public String damagedReportToString(){
         int expiredSum = 0;
-        for(Date expiredDate : this.expiredProducts.keySet())
+        for(LocalDate expiredDate : this.expiredProducts.keySet())
             expiredSum += this.expiredProducts.get(expiredDate);
         return "Catalog number: " + catalogNumber + "\n" +
                 "Name: " + name + "\n" +

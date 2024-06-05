@@ -4,9 +4,9 @@ import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 import Storage.ServiceLayer.ServiceController;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class PresentationController {
     private ServiceController serviceController;
@@ -19,7 +19,7 @@ public class PresentationController {
         this.serviceController = serviceController;
     }
 
-    private void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<Date, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    private void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
     }
 
@@ -51,7 +51,7 @@ public class PresentationController {
         this.serviceController.updateDiscountForCategory(categories, discount);
     }
 
-    private void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, Date expirationDate) {
+    private void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, LocalDate expirationDate) {
         this.serviceController.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
@@ -59,8 +59,8 @@ public class PresentationController {
         this.serviceController.moveProductToStore(catalogNumber, quantity);
     }
 
-    private void subtractFromStore(int catalogNumber, int quantity) {
-        this.serviceController.substractFromStore(catalogNumber, quantity);
+    private void subtractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
+        this.serviceController.substractFromStore(catalogNumber, products);
     }
 
     public void parseAddProductMessage(String str){
@@ -80,11 +80,11 @@ public class PresentationController {
         String manufacturer = parts[12];
         String aisle = parts[13];
         int minimalQuantity = Integer.parseInt(parts[14]);
-        Map<Date, Integer> expirationDates = null;
+        Map<LocalDate, Integer> expirationDates = null;
         if(parts.length > 15){
-            expirationDates = new java.util.HashMap<Date, Integer>();
+            expirationDates = new HashMap<>();
             for(int i = 15; i < parts.length; i+=2){
-                expirationDates.put(new Date(Long.parseLong(parts[i])), Integer.parseInt(parts[i+1]));
+                expirationDates.put(LocalDate.parse(parts[i]), Integer.parseInt(parts[i+1]));
             }
         }
         this.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
@@ -107,7 +107,7 @@ public class PresentationController {
         int catalogNumber = Integer.parseInt(parts[0]);
         int inStore = Integer.parseInt(parts[1]);
         int inStorage = Integer.parseInt(parts[2]);
-        Date expirationDate = new Date(Long.parseLong(parts[3]));
+        LocalDate expirationDate = LocalDate.parse(parts[3]);
         this.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
@@ -149,5 +149,20 @@ public class PresentationController {
         int catalogNumber = Integer.parseInt(parts[0]);
         int quantity = Integer.parseInt(parts[1]);
         this.moveProductToStore(catalogNumber, quantity);
+    }
+
+    public void parseSubtractFromStore(String str){
+        String[] parts = str.split(",");
+        int catalogNumber = Integer.parseInt(parts[0]);
+        Map<LocalDate, Integer> products = new HashMap<>();
+        LocalDate date;
+        int quantity;
+        for(int i = 1; i < parts.length; i+=2){
+            date = LocalDate.parse(parts[i]);
+            quantity = Integer.parseInt(parts[i+1]);
+            products.put(date,quantity);
+        }
+        this.subtractFromStore(catalogNumber,products);
+
     }
 }
