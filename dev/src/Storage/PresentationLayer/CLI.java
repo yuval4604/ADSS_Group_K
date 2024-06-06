@@ -207,23 +207,23 @@ public class CLI {
     }
 
     public static void addProducts() throws Exception{
-        presentationController.addProduct(1, "beef number 1 100g", "Meat", "Beef", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
-        presentationController.addProduct(2, "beef number 2 200g", "Meat", "Beef", "Medium", 20, 40, 0, 0, "Tnuva", "1", 10);
-        presentationController.addProduct(3, "beef number 3 300g", "Meat", "Beef", "Large",  30, 60, 0, 0, "Tnuva", "1", 10);
-        presentationController.addProduct(4, "chicken number 1 100g", "Meat", "Chicken", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
-        presentationController.addProduct(5, "chicken number 2 200g", "Meat", "Chicken", "Medium", 20, 40, 0, 0, "Tnuva", "1", 10);
-        presentationController.addProduct(6, "chicken number 3 300g", "Meat", "Chicken", "Large", 30, 60, 0, 0, "Tnuva", "1", 10);
-        presentationController.addProduct(7, "fish number 1 100g", "Meat", "Pork", "Small", 15, 30, 0, 0.15, "Tnuva", "1", 10);
-        presentationController.addProduct(8, "fish number 2 200g", "Meat", "Pork", "Medium", 30, 60, 0, 0.15, "Tnuva", "1", 10);
-        presentationController.addProduct(9, "fish number 3 300g", "Meat", "Pork", "Large", 45, 90, 0, 0.15, "Tnuva", "1", 10);
-        presentationController.addProduct(10, "grapes number 1 100g", "Fruits", "Grapes", "Small", 5, 10, 0, 0, "Tnuva", "7", 10);
-        presentationController.addProduct(11, "grapes number 2 200g", "Fruits", "Grapes", "Medium", 10, 20, 0, 0, "Tnuva", "7", 10);
-        presentationController.addProduct(12, "grapes number 3 300g", "Fruits", "Grapes", "Large", 15, 30, 0, 0, "Tnuva", "7", 10);
-        presentationController.addProduct(13, "apples number 1 100g", "Fruits", "Apples", "Small", 3, 7, 0, 0, "Tnuva", "8", 10);
-        presentationController.addProduct(14, "apples number 2 200g", "Fruits", "Apples", "Medium", 6, 14, 0, 0, "Tnuva", "8", 10);
-        presentationController.addProduct(15, "apples number 3 300g", "Fruits", "Apples", "Large", 9, 21, 0, 0, "Tnuva", "8", 10);
-        presentationController.addProduct(16, "bananas number 1 100g", "Fruits", "Bananas", "Small", 5, 10, 0, 0, "Tnuva", "8", 10);
-        presentationController.addProduct(17, "bananas number 2 200g", "Fruits", "Bananas", "Medium", 10, 20, 0, 0, "Tnuva", "8", 10);
-        presentationController.addProduct(18, "bananas number 3 300g", "Fruits", "Bananas", "Large", 15, 30, 0, 0, "Tnuva", "8", 10);
+        presentationController.parseAddProductMessage("1,beef number,1 100g,Meat,Beef,Small,10,20,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("2,beef number 2 200g,Meat,Beef,Medium,20,40,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("3,beef number 3 300g,Meat,Beef,Large,30,60,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("4,chicken number 1 100g,Meat,Chicken,Small,10,20,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("5,chicken number 2 200g,Meat,Chicken,Medium,20,40,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("6,chicken number 3 300g,Meat,Chicken,Large,30,60,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("7,fish number 1 100g,Meat,Pork,Small,15,30,0,0.15,Tnuva,1,10");
+        presentationController.parseAddProductMessage("8,fish number 2 200g,Meat,Pork,Medium,30,60,0,0.15,Tnuva,1,10");
+        presentationController.parseAddProductMessage("9,fish number 3 300g,Meat,Pork,Large,45,90,0,0.15,Tnuva,1,10");
+        presentationController.parseAddProductMessage("10,grapes number 1 100g,Fruits,Grapes,Small,5,10,0,0,Tnuva,7,10");
+        presentationController.parseAddProductMessage("11,grapes number 2 200g,Fruits,Grapes,Medium,10,20,0,0,Tnuva,7,10");
+        presentationController.parseAddProductMessage("12,grapes number 3 300g,Fruits,Grapes,Large,15,30,0,0,Tnuva,7,10");
+        presentationController.parseAddProductMessage("13,apples number 1 100g,Fruits,Apples,Small,3,7,0,0,Tnuva,8,10");
+        presentationController.parseAddProductMessage("14,apples number 2 200g,Fruits,Apples,Medium,6,14,0,0,Tnuva,8,10");
+        presentationController.parseAddProductMessage("15,apples number 3 300g,Fruits,Apples,Large,9,21,0,0,Tnuva,8,10");
+        presentationController.parseAddProductMessage("16,bananas number 1 100g,Fruits,Bananas,Small,5,10,0,0,Tnuva,8,10");
+        presentationController.parseAddProductMessage("17,bananas number 2 200g,Fruits,Bananas,Medium,10,20,0,0,Tnuva,8,10");
+        presentationController.parseAddProductMessage("18,bananas number 3 300g,Fruits,Bananas,Large,15,30,0,0,Tnuva,8,10");
     }
 }

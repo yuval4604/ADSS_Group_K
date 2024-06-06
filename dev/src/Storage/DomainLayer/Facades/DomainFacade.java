@@ -3,6 +3,7 @@ package Storage.DomainLayer.Facades;
 import Storage.DomainLayer.Enums.Category;
 import Storage.DomainLayer.Product;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DomainFacade {
@@ -10,18 +11,21 @@ public class DomainFacade {
     private Map<Category, CategoryFacade> categories;
 
     public DomainFacade() {
-        this.categories = null;
+        this.categories = new HashMap<>();
     }
 
     public void addProduct(Product product) throws Exception{
+        if(!this.categories.containsKey(product.getCategory())) throw new IllegalArgumentException("Category does not exist");
         this.getCategoryFacade(product.getCategory()).addProduct(product);
     }
 
     public void removeProduct(Product product) throws Exception{
+        if(!this.categories.containsKey(product.getCategory())) throw new IllegalArgumentException("Category does not exist");
         this.getCategoryFacade(product.getCategory()).removeProduct(product);
     }
 
     public CategoryFacade getCategoryFacade(Category category) throws Exception {
+        if(!this.categories.containsKey(category)) throw new IllegalArgumentException("Category does not exist");
         return this.categories.get(category);
     }
 

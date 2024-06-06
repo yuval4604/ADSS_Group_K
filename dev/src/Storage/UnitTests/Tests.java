@@ -1,15 +1,15 @@
 package Storage.UnitTests;
 
 
+import Storage.DomainLayer.Enums.Category;
+import Storage.DomainLayer.Enums.SubCategory;
+import Storage.DomainLayer.Enums.SubSubCategory;
+import Storage.DomainLayer.Product;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Before;
-
-import Storage.DomainLayer.Enums.*;
-import Storage.DomainLayer.*;
+import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 
 public class Tests {
     private Product milk;
@@ -99,11 +99,11 @@ public class Tests {
         Assert.assertEquals(10,soap.getStoreQuantity());
     }
 
-   /* @Test
+    @Test
     public void CheckExpirationTest(){
         milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
         beef.addByExpirationDate(3,14, LocalDate.parse("2024-06-20"));
         beef.addByExpirationDate(2,20, LocalDate.parse("2024-06-24"));
         soap.addByExpirationDate(10,0, LocalDate.parse("2024-12-12"));
-    }*/
+    }
 }
