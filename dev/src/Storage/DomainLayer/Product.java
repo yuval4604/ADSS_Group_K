@@ -15,7 +15,7 @@ public class Product {
     private Category category;
     private SubCategory subCategory;
     private SubSubCategory size;
-    private Map<LocalDate, Integer> expirationDates;
+    private Map<LocalDate, Map.Entry<Integer,Integer>> expirationDates;//First in pair is storage, Second is store
     private Map<LocalDate, Integer> expiredProducts;
     private double buyPrice;
     private double salePrice;
@@ -38,6 +38,7 @@ public class Product {
         this.subCategory = subCategory;
         this.size = size;
         this.expirationDates = new HashMap<>();
+        this.expiredProducts = new HashMap<>();
         this.buyPrice = buyPrice;
         this.salePrice = salePrice;
         this.discount = discount;
@@ -70,7 +71,7 @@ public class Product {
         return size;
     }
 
-    public Map<LocalDate, Integer> getExpirationDates() {
+    public Map<LocalDate, Map.Entry<Integer,Integer>> getExpirationDates() {
         return Collections.unmodifiableMap(expirationDates);
     }
 
@@ -115,6 +116,7 @@ public class Product {
     }
 
     public void setDiscount(double discount) {
+        if(discount > 1 || discount < 0) throw new IllegalArgumentException("Discount is out of bounds");
         this.discount = discount;
     }
 
@@ -137,47 +139,52 @@ public class Product {
     }
 
     public void addByExpirationDate(int amountForStore, int amountForStorage, LocalDate expirationDate) {
-        //if(expirationDate.isBefore(LocalDate.now())) throw new IllegalArgumentException("Expiration date is in the past");
+        if(expirationDate.isBefore(LocalDate.now())) throw new IllegalArgumentException("Expiration date is in the past");
         this.storeQuantity += amountForStore;
         this.storageQuantity += amountForStorage;
-        expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, 0) + amountForStore + amountForStorage);
+        expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, new AbstractMap.SimpleEntry<Integer, Integer>(0, 0)));
+        Map.Entry<Integer,Integer> baseValues = expirationDates.remove(expirationDate);
+        Map.Entry<Integer,Integer> newValues = new AbstractMap.SimpleEntry(baseValues.getKey()+ amountForStorage, baseValues.getValue() + amountForStore);
+        expirationDates.put(expirationDate,newValues);
     }
 
     public void removeOne(boolean isStorage, LocalDate expirationDate) {
         if (!expirationDates.containsKey(expirationDate)) {
             throw new IllegalArgumentException("No such expiration date");
         }
-        if(expirationDates.get(expirationDate) == 0) throw new IllegalArgumentException("Not enough quantity to remove");
         if (isStorage) {
+            if(expirationDates.get(expirationDate).getKey() == 0) throw new IllegalArgumentException("Not enough quantity to remove");
             if(storageQuantity == 0) throw new IllegalArgumentException("Not enough quantity to remove from storage");
             storageQuantity--;
+            expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<>(expirationDates.get(expirationDate).getKey() - 1,expirationDates.get(expirationDate).getValue()));
         } else {
+            if(expirationDates.get(expirationDate).getValue() == 0) throw new IllegalArgumentException("Not enough quantity to remove");
             if(storeQuantity == 0) throw new IllegalArgumentException("Not enough quantity to remove from store");
             storeQuantity--;
+            expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<>(expirationDates.get(expirationDate).getKey(),expirationDates.get(expirationDate).getValue() - 1));
         }
-        expirationDates.put(expirationDate, expirationDates.get(expirationDate) - 1);
-        if (expirationDates.get(expirationDate) == 0) {
+        if (expirationDates.get(expirationDate).getKey() == 0 && expirationDates.get(expirationDate).getValue() == 0) {
             expirationDates.remove(expirationDate);
         }
     }
 
     public void moveToDamage(int inStore, int inStorage, LocalDate expirationDate){
-        if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
+        if(this.expirationDates.get(expirationDate).getKey() >= inStorage && this.expirationDates.get(expirationDate).getValue() >= inStore){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
             this.damageQuantity += inStore + inStorage;
-            int quantity = this.expirationDates.remove(expirationDate) - inStorage - inStore;
-            this.expirationDates.put(expirationDate, quantity);
+            Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate);
+            this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - inStorage, oldValues.getValue() - inStore));
         }
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
     }
 
     public void moveToExpired(int inStore, int inStorage, LocalDate expirationDate){
-        if(this.storeQuantity >= inStore && this.storageQuantity >= inStorage){
+        if(this.expirationDates.get(expirationDate).getKey() >= inStorage && this.expirationDates.get(expirationDate).getValue() >= inStore){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
-            int quantity = this.expirationDates.remove(expirationDate) - inStorage - inStore;
-            this.expirationDates.put(expirationDate, quantity);
+            Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate);
+            this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - inStorage, oldValues.getValue() - inStore));
             this.expiredProducts.put(expirationDate, inStorage + inStorage);
         }
         else throw new IllegalArgumentException("Not enough quantity to move to expired");
@@ -190,7 +197,7 @@ public class Product {
                 "Sub category: " + subCategory + "\n" +
                 "Size: " + size + "\n" +
                 "Buy price: " + buyPrice + "\n" +
-                "Sale price: " + salePrice + "\n" +
+                "Sale price: " + getDiscountedPrice() + "\n" +
                 "Discount: " + discount * 100 + "% " + "\n" +
                 "Supplier discount: " + supplierDiscount * 100 + "% " + "\n" +
                 "Storage quantity: " + storageQuantity + "\n" +
@@ -253,9 +260,9 @@ public class Product {
             }
         }
 
-        for(Map.Entry<LocalDate, Integer> entry : expirationDates.entrySet()){
+        for(Map.Entry<LocalDate, Map.Entry<Integer,Integer>> entry : expirationDates.entrySet()){
             if(entry.getKey().isBefore(now))
-                count+= entry.getValue();
+                count += entry.getValue().getKey() + entry.getValue().getValue();
         }
         return count;
     }
