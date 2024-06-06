@@ -18,7 +18,6 @@ public class CLI {
     private static PresentationController presentationController;
 
     public static void main(String[] args) throws Exception {
-        setDomain();
         System.out.println("Welcome to the Storage, what would you like to do:\n" +
                 "1. Add products.\n" +
                 "2. Move products.\n" +
@@ -208,7 +207,7 @@ public class CLI {
     }
 
     public static void addProducts() throws Exception{
-        /*presentationController.addProduct(1, "beef number 1 100g", "Meat", "Beef", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(1, "beef number 1 100g", "Meat", "Beef", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
         presentationController.addProduct(2, "beef number 2 200g", "Meat", "Beef", "Medium", 20, 40, 0, 0, "Tnuva", "1", 10);
         presentationController.addProduct(3, "beef number 3 300g", "Meat", "Beef", "Large",  30, 60, 0, 0, "Tnuva", "1", 10);
         presentationController.addProduct(4, "chicken number 1 100g", "Meat", "Chicken", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
@@ -225,6 +224,6 @@ public class CLI {
         presentationController.addProduct(15, "apples number 3 300g", "Fruits", "Apples", "Large", 9, 21, 0, 0, "Tnuva", "8", 10);
         presentationController.addProduct(16, "bananas number 1 100g", "Fruits", "Bananas", "Small", 5, 10, 0, 0, "Tnuva", "8", 10);
         presentationController.addProduct(17, "bananas number 2 200g", "Fruits", "Bananas", "Medium", 10, 20, 0, 0, "Tnuva", "8", 10);
-        presentationController.addProduct(18, "bananas number 3 300g", "Fruits", "Bananas", "Large", 15, 30, 0, 0, "Tnuva", "8", 10);*/
+        presentationController.addProduct(18, "bananas number 3 300g", "Fruits", "Bananas", "Large", 15, 30, 0, 0, "Tnuva", "8", 10);
     }
 }

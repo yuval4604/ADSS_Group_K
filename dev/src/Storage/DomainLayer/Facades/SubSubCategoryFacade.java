@@ -18,10 +18,12 @@ public class SubSubCategoryFacade {
         if (this.products == null) {
             this.products = new java.util.HashMap<Integer, Product>();
         }
+        if(this.products.containsKey(product.getCatalogNumber())) throw new IllegalArgumentException("Product already exists");
         this.products.put(product.getCatalogNumber(), product);
     }
 
     public Product getProduct(int catalogNumber) throws Exception{
+        if(!this.products.containsKey(catalogNumber)) throw new IllegalArgumentException("Product does not exist");
         return this.products.get(catalogNumber);
     }
 
@@ -34,6 +36,7 @@ public class SubSubCategoryFacade {
     }
 
     public void removeProduct(int catalogNumber) throws Exception{
+        if(!this.products.containsKey(catalogNumber)) throw new IllegalArgumentException("Product does not exist");
         this.products.remove(catalogNumber);
     }
 

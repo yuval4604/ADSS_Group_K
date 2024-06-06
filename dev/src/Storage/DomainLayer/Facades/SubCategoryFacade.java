@@ -16,14 +16,17 @@ public class SubCategoryFacade {
     }
 
     public void addProduct(Product product) throws Exception {
+        if(!this.subSubCategories.containsKey(product.getSize())) throw new IllegalArgumentException("SubSubCategory does not exist");
         this.getSubSubCategoryFacade(product.getSize()).addProduct(product);
     }
 
     public void removeProduct(Product product) throws Exception{
+        if(!this.subSubCategories.containsKey(product.getSize())) throw new IllegalArgumentException("SubSubCategory does not exist");
         this.getSubSubCategoryFacade(product.getSize()).removeProduct(product.getCatalogNumber());
     }
 
     public SubSubCategoryFacade getSubSubCategoryFacade(SubSubCategory subSubCategory) throws Exception{
+        if(!this.subSubCategories.containsKey(subSubCategory)) throw new IllegalArgumentException("SubSubCategory does not exist");
         return this.subSubCategories.get(subSubCategory);
     }
 
