@@ -2,6 +2,7 @@ package Storage.DomainLayer.Facades;
 
 import Storage.DomainLayer.Product;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class SubSubCategoryFacade {
     private Map<Integer, Product> products;
 
     public SubSubCategoryFacade() {
-        this.products = null;
+        this.products = new HashMap<>();
     }
 
     public void addProduct(Product product) throws Exception {

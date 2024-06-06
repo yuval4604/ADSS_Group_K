@@ -57,19 +57,7 @@ public class ServiceController {
 
     // returns a string with the names of the products that are below the minimal quantity
     public String alertOnMinimalQuantity() throws Exception{
-        Category[] categories = Category.values();
-        List<String> categoriesList = new java.util.ArrayList<String>();
-        for(Category category : categories){
-            categoriesList.add(category.toString());
-        }
-        List<Product> info = manager.getProductsByCategories(categoriesList);
-        String alert = "";
-        for(Product product : info){
-            if(product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()){
-                alert += product.getName() + "\n";
-            }
-        }
-        return alert;
+        return this.manager.alertOnMinimalQuantity();
     }
 
     // updates the discount of the given product

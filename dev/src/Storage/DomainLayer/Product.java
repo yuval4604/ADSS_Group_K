@@ -137,7 +137,7 @@ public class Product {
     }
 
     public void addByExpirationDate(int amountForStore, int amountForStorage, LocalDate expirationDate) {
-        if(expirationDate.isBefore(LocalDate.now())) throw new IllegalArgumentException("Expiration date is in the past");
+        //if(expirationDate.isBefore(LocalDate.now())) throw new IllegalArgumentException("Expiration date is in the past");
         this.storeQuantity += amountForStore;
         this.storageQuantity += amountForStorage;
         expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, 0) + amountForStore + amountForStorage);
@@ -239,7 +239,20 @@ public class Product {
 
     public int expiredCount(){
         int count = 0;
-        LocalDate now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
+        LocalDate now;
+        if(LocalDateTime.now().getMonthValue() < 10 && LocalDateTime.now().getDayOfMonth() < 10)
+            now =  LocalDate.parse(LocalDateTime.now().getYear() + "-0" + LocalDateTime.now().getMonthValue() + "-0" + LocalDateTime.now().getDayOfMonth());
+        else{
+            if(LocalDateTime.now().getMonthValue() < 10)
+                now =  LocalDate.parse(LocalDateTime.now().getYear() + "-0" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
+            else{
+                if(LocalDateTime.now().getDayOfMonth() < 10)
+                    now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-0" + LocalDateTime.now().getDayOfMonth());
+                else
+                    now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
+            }
+        }
+
         for(Map.Entry<LocalDate, Integer> entry : expirationDates.entrySet()){
             if(entry.getKey().isBefore(now))
                 count+= entry.getValue();

@@ -104,4 +104,23 @@ public class DomainManager {
         }
         return expiredProducts;
     }
+
+
+    public String alertOnMinimalQuantity() throws Exception {
+        Category[] categories = Category.values();
+        List<String> categoriesList = new java.util.ArrayList<String>();
+        for(Category category : categories){
+            categoriesList.add(category.toString());
+        }
+        List<Product> info = getProductsByCategories(categoriesList);
+        String alert = "";
+        for(Product product : info){
+            if(product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()){
+                alert += product.getName() + "\n";
+            }
+        }
+        if(info.size() > 0)
+            alert = alert.substring(0,alert.length()-1);
+        return alert;
+    }
 }

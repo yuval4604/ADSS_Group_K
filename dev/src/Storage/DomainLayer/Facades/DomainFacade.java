@@ -3,6 +3,7 @@ package Storage.DomainLayer.Facades;
 import Storage.DomainLayer.Enums.Category;
 import Storage.DomainLayer.Product;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DomainFacade {
@@ -10,7 +11,7 @@ public class DomainFacade {
     private Map<Category, CategoryFacade> categories;
 
     public DomainFacade() {
-        this.categories = null;
+        this.categories = new HashMap<>();
     }
 
     public void addProduct(Product product) throws Exception{
