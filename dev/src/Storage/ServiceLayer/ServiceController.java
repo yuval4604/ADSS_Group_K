@@ -28,7 +28,7 @@ public class ServiceController {
             if(entry.getKey().isBefore(now))
                 throw new IllegalArgumentException("Invalid expiration date");
         }
-        Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+        Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), buyPrice, salePrice, discount, supplierDiscount, damageQuantity, manufacturer, aisle, minimalQuantity);
         this.manager.addProduct(product);
     }
 
