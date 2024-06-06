@@ -1,6 +1,7 @@
 package Storage.UnitTests;
 
 
+import Storage.DomainLayer.Facades.DomainFacade;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
@@ -19,8 +20,8 @@ public class Tests {
     @Before
     public void initTest() {
         milk = new Product(100,"Tnuva-milk 500ml", Category.Dairy, SubCategory.Milk, SubSubCategory.Small,6,8.5,0,0,"Tnuva","14",15);
-        beef = new Product(100,"Beef-Steak 500gr", Category.Meat, SubCategory.Beef, SubSubCategory.Large,50,74.95,0,0,"Joes' Meats","10",20);
-        soap = new Product(100,"Hand-Soap 200ml", Category.Cleaning, SubCategory.Soap, SubSubCategory.Medium,10,15,0,0,"Soapy","7",13);
+        beef = new Product(101,"Beef-Steak 500gr", Category.Meat, SubCategory.Beef, SubSubCategory.Large,50,74.95,0,0,"Joes' Meats","10",20);
+        soap = new Product(102,"Hand-Soap 200ml", Category.Cleaning, SubCategory.Soap, SubSubCategory.Medium,10,15,0,0,"Soapy","7",13);
     }
 
     @Test
@@ -99,11 +100,29 @@ public class Tests {
         Assert.assertEquals(10,soap.getStoreQuantity());
     }
 
-   /* @Test
+    @Test
     public void CheckExpirationTest(){
-        milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
+        milk.addByExpirationDate(1,0, LocalDate.parse("2024-06-01"));
+        milk.addByExpirationDate(1,0, LocalDate.parse("2024-07-01"));
+        beef.addByExpirationDate(0,3, LocalDate.parse("2024-06-01"));
+        beef.addByExpirationDate(1,1, LocalDate.parse("2024-07-01"));
+        soap.addByExpirationDate(1,0, LocalDate.parse("2024-12-12"));
+
+        Assert.assertEquals(1,milk.expiredCount());
+        Assert.assertEquals(3,beef.expiredCount());
+        Assert.assertEquals(0,soap.expiredCount());
+    }
+
+    @Test
+    public void CheckMinimalQuantityTest() throws Exception {
+        DomainManager manager = new DomainManager(new DomainFacade());
+        manager.addProduct(milk);
+        manager.addProduct(beef);
+        manager.addProduct(soap);
         beef.addByExpirationDate(3,14, LocalDate.parse("2024-06-20"));
         beef.addByExpirationDate(2,20, LocalDate.parse("2024-06-24"));
         soap.addByExpirationDate(10,0, LocalDate.parse("2024-12-12"));
-    }*/
+
+        Assert.assertEquals("Tnuva-milk 500ml\nHand-Soap 200ml",manager.alertOnMinimalQuantity());
+    }
 }

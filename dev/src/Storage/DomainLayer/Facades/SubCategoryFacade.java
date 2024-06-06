@@ -16,7 +16,6 @@ public class SubCategoryFacade {
     }
 
     public void addProduct(Product product) throws Exception {
-        if(!this.subSubCategories.containsKey(product.getSize())) throw new IllegalArgumentException("SubSubCategory does not exist");
         this.getSubSubCategoryFacade(product.getSize()).addProduct(product);
     }
 
@@ -26,7 +25,9 @@ public class SubCategoryFacade {
     }
 
     public SubSubCategoryFacade getSubSubCategoryFacade(SubSubCategory subSubCategory) throws Exception{
-        if(!this.subSubCategories.containsKey(subSubCategory)) throw new IllegalArgumentException("SubSubCategory does not exist");
+        if(!this.subSubCategories.containsKey(subSubCategory)) {
+            subSubCategories.put(subSubCategory, new SubSubCategoryFacade());
+        }
         return this.subSubCategories.get(subSubCategory);
     }
 
