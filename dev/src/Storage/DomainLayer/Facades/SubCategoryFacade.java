@@ -14,15 +14,15 @@ public class SubCategoryFacade {
         this.subSubCategories = null;
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product) throws Exception {
         this.getSubSubCategoryFacade(product.getSize()).addProduct(product);
     }
 
-    public void removeProduct(Product product) {
+    public void removeProduct(Product product) throws Exception{
         this.getSubSubCategoryFacade(product.getSize()).removeProduct(product.getCatalogNumber());
     }
 
-    public SubSubCategoryFacade getSubSubCategoryFacade(SubSubCategory subSubCategory) {
+    public SubSubCategoryFacade getSubSubCategoryFacade(SubSubCategory subSubCategory) throws Exception{
         return this.subSubCategories.get(subSubCategory);
     }
 
@@ -30,11 +30,11 @@ public class SubCategoryFacade {
         return this.subSubCategories;
     }
 
-    public void setSubSubCategories(Map<SubSubCategory, SubSubCategoryFacade> subSubCategories) {
+    public void setSubSubCategories(Map<SubSubCategory, SubSubCategoryFacade> subSubCategories) throws Exception {
         this.subSubCategories = subSubCategories;
     }
 
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() throws Exception{
         List<Product> products = new java.util.ArrayList<Product>();
         for(SubSubCategoryFacade subSubCategoryFacade : this.subSubCategories.values()){
             products.addAll(subSubCategoryFacade.getAllProducts());

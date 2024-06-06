@@ -20,53 +20,53 @@ public class PresentationController {
         this.serviceController = serviceController;
     }
 
-    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
-        this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, double buyPrice, double salePrice, double discount, double supplierDiscount, String manufacturer, String aisle, int minimalQuantity) throws Exception {
+        this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, buyPrice, salePrice, discount, supplierDiscount, manufacturer, aisle, minimalQuantity);
     }
 
-    private String produceProductReport(List<String> categories) {
+    private String produceProductReport(List<String> categories) throws Exception {
         return this.serviceController.produceProductReport(categories);
     }
 
-    private String produceDamageReport(List<String> categories) {
+    private String produceDamageReport(List<String> categories) throws Exception{
         return this.serviceController.produceDamageReport(categories);
     }
 
-    private void removeProduct(int catalogNumber) {
+    private void removeProduct(int catalogNumber) throws Exception{
         this.serviceController.removeProduct(catalogNumber);
     }
 
-    public String alertOnMinimalQuantity() {
+    public String alertOnMinimalQuantity() throws Exception {
         return this.serviceController.alertOnMinimalQuantity();
     }
 
-    public Map<Integer,Integer> expiredCount() { return this.serviceController.expiredCount(); }
+    public Map<Integer,Integer> expiredCount() throws Exception { return this.serviceController.expiredCount(); }
 
-    private String getProduct(int catalogNumber) {
+    private String getProduct(int catalogNumber) throws Exception{
         return this.serviceController.getProduct(catalogNumber);
     }
 
-    private void updateDiscountForProduct(int catalogNumber, double discount) {
+    private void updateDiscountForProduct(int catalogNumber, double discount) throws Exception {
         this.serviceController.updateDiscountForProduct(catalogNumber, discount);
     }
 
-    private void updateDiscountForCategory(List<String> categories, double discount) {
+    private void updateDiscountForCategory(List<String> categories, double discount) throws Exception{
         this.serviceController.updateDiscountForCategory(categories, discount);
     }
 
-    private void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, LocalDate expirationDate) {
+    private void updateDamageForProduct(int catalogNumber, int inStore, int inStorage, LocalDate expirationDate) throws Exception{
         this.serviceController.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
-    private void moveProductToStore(int catalogNumber, int quantity) {
+    private void moveProductToStore(int catalogNumber, int quantity) throws Exception{
         this.serviceController.moveProductToStore(catalogNumber, quantity);
     }
 
-    private void subtractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
-        this.serviceController.substractFromStore(catalogNumber, products);
+    private void subtractFromStore(int catalogNumber, Map<LocalDate,Integer> products) throws Exception{
+        this.serviceController.subtractFromStore(catalogNumber, products);
     }
 
-    public void parseAddProductMessage(String str){
+    public void parseAddProductMessage(String str) throws Exception{
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
         String name = parts[1];
@@ -77,35 +77,25 @@ public class PresentationController {
         double salePrice = Double.parseDouble(parts[6]);
         double discount = Double.parseDouble(parts[7]);
         double supplierDiscount = Double.parseDouble(parts[8]);
-        int storageQuantity = Integer.parseInt(parts[9]);
-        int storeQuantity = Integer.parseInt(parts[10]);
-        int damageQuantity = Integer.parseInt(parts[11]);
-        String manufacturer = parts[12];
-        String aisle = parts[13];
+        String manufacturer = parts[9];
+        String aisle = parts[10];
         int minimalQuantity = Integer.parseInt(parts[14]);
-        Map<LocalDate, Integer> expirationDates = null;
-        if(parts.length > 15){
-            expirationDates = new HashMap<>();
-            for(int i = 15; i < parts.length; i+=2){
-                expirationDates.put(LocalDate.parse(parts[i]), Integer.parseInt(parts[i+1]));
-            }
-        }
-        this.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
+        this.addProduct(catalogNumber, name, category, subCategory, size, buyPrice, salePrice, discount, supplierDiscount, manufacturer, aisle, minimalQuantity);
     }
 
-    public void parseRemoveProductMessage(String str){
+    public void parseRemoveProductMessage(String str) throws Exception{
         int catalogNumber = Integer.parseInt(str);
         this.removeProduct(catalogNumber);
     }
 
-    public void parseUpdateDiscountForProductMessage(String str){
+    public void parseUpdateDiscountForProductMessage(String str) throws Exception{
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
         double discount = Double.parseDouble(parts[1]);
         this.updateDiscountForProduct(catalogNumber, discount);
     }
 
-    public void parseUpdateDamageForProductMessage(String str){
+    public void parseUpdateDamageForProductMessage(String str) throws Exception{
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
         int inStore = Integer.parseInt(parts[1]);
@@ -114,12 +104,12 @@ public class PresentationController {
         this.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
     }
 
-    public void parseGetProductMessage(String str){
+    public void parseGetProductMessage(String str) throws Exception{
         int catalogNumber = Integer.parseInt(str);
         this.getProduct(catalogNumber);
     }
 
-    public void parseProduceProductReportMessage(String str){
+    public void parseProduceProductReportMessage(String str) throws Exception{
         String[] parts = str.split("|");
         List<String> categories = new java.util.LinkedList<String>();
         for(String category : parts){
@@ -128,7 +118,7 @@ public class PresentationController {
         this.produceProductReport(categories);
     }
 
-    public void parseProduceDamageReportMessage(String str){
+    public void parseProduceDamageReportMessage(String str) throws Exception{
         String[] parts = str.split("|");
         List<String> categories = new java.util.LinkedList<String>();
         for(String category : parts){
@@ -137,7 +127,7 @@ public class PresentationController {
         this.produceDamageReport(categories);
     }
 
-    public void parseUpdateDiscountForCategory(String str){
+    public void parseUpdateDiscountForCategory(String str) throws Exception{
         String[] parts = str.split("|");
         double discount = Double.parseDouble(parts[0]);
         List<String> categories = new java.util.LinkedList<String>();
@@ -147,14 +137,14 @@ public class PresentationController {
         this.updateDiscountForCategory(categories, discount);
     }
 
-    public void parseMoveProductToStore(String str){
+    public void parseMoveProductToStore(String str) throws Exception{
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
         int quantity = Integer.parseInt(parts[1]);
         this.moveProductToStore(catalogNumber, quantity);
     }
 
-    public void parseSubtractFromStore(String str){
+    public void parseSubtractFromStore(String str) throws Exception{
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
         Map<LocalDate, Integer> products = new HashMap<>();

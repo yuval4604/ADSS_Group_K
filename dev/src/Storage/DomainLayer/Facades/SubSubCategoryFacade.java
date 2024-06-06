@@ -13,14 +13,14 @@ public class SubSubCategoryFacade {
         this.products = null;
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product) throws Exception {
         if (this.products == null) {
             this.products = new java.util.HashMap<Integer, Product>();
         }
         this.products.put(product.getCatalogNumber(), product);
     }
 
-    public Product getProduct(int catalogNumber) {
+    public Product getProduct(int catalogNumber) throws Exception{
         return this.products.get(catalogNumber);
     }
 
@@ -32,7 +32,7 @@ public class SubSubCategoryFacade {
         this.products = products;
     }
 
-    public void removeProduct(int catalogNumber) {
+    public void removeProduct(int catalogNumber) throws Exception{
         this.products.remove(catalogNumber);
     }
 

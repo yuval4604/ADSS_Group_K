@@ -9,7 +9,6 @@ import Storage.DomainLayer.Facades.SubCategoryFacade;
 import Storage.DomainLayer.Facades.SubSubCategoryFacade;
 import Storage.DomainLayer.Product;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,7 +17,7 @@ public class CLI {
 
     private static PresentationController presentationController;
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception {
         System.out.println("Welcome to the Storage, what would you like to do:\n" +
                 "1. Add products.\n" +
                 "2. Move products.\n" +
@@ -131,7 +130,7 @@ public class CLI {
         }
     }
 
-    public static void setDomain(){
+    public static void setDomain() throws Exception{
         SubSubCategoryFacade ssc1small = new SubSubCategoryFacade();
         SubSubCategoryFacade ssc1medium = new SubSubCategoryFacade();
         SubSubCategoryFacade ssc1large = new SubSubCategoryFacade();
@@ -207,60 +206,24 @@ public class CLI {
         presentationController = new PresentationController(products, facade);
     }
 
-    public static void addProducts(){
-        Map<LocalDate, Integer> expirationDates1 = new HashMap<>();
-        expirationDates1.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(1, "beef number 1 100g", "Meat", "Beef", "Small", expirationDates1, 10, 20, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates2 = new HashMap<>();
-        expirationDates2.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(2, "beef number 2 200g", "Meat", "Beef", "Medium", expirationDates2, 20, 40, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates3 = new HashMap<>();
-        expirationDates3.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(3, "beef number 3 300g", "Meat", "Beef", "Large", expirationDates3, 30, 60, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates4 = new HashMap<>();
-        expirationDates4.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(4, "chicken number 1 100g", "Meat", "Chicken", "Small", expirationDates4, 10, 20, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates5 = new HashMap<>();
-        expirationDates5.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(5, "chicken number 2 200g", "Meat", "Chicken", "Medium", expirationDates5, 20, 40, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates6 = new HashMap<>();
-        expirationDates6.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(6, "chicken number 3 300g", "Meat", "Chicken", "Large", expirationDates6, 30, 60, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates7 = new HashMap<>();
-        expirationDates7.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(7, "fish number 1 100g", "Meat", "Pork", "Small", expirationDates7, 10, 20, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates8 = new HashMap<>();
-        expirationDates8.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(8, "fish number 2 200g", "Meat", "Pork", "Medium", expirationDates8, 20, 40, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates9 = new HashMap<>();
-        expirationDates9.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(9, "fish number 3 300g", "Meat", "Pork", "Large", expirationDates9, 30, 60, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates10 = new HashMap<>();
-        expirationDates10.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(10, "grapes number 1 100g", "Fruits", "Grapes", "Small", expirationDates10, 10, 20, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates11 = new HashMap<>();
-        expirationDates11.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(11, "grapes number 2 200g", "Fruits", "Grapes", "Medium", expirationDates11, 20, 40, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates12 = new HashMap<>();
-        expirationDates12.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(12, "grapes number 3 300g", "Fruits", "Grapes", "Large", expirationDates12, 30, 60, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates13 = new HashMap<>();
-        expirationDates13.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(13, "apples number 1 100g", "Fruits", "Apples", "Small", expirationDates13, 10, 20, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates14 = new HashMap<>();
-        expirationDates14.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(14, "apples number 2 200g", "Fruits", "Apples", "Medium", expirationDates14, 20, 40, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates15 = new HashMap<>();
-        expirationDates15.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(15, "apples number 3 300g", "Fruits", "Apples", "Large", expirationDates15, 30, 60, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates16 = new HashMap<>();
-        expirationDates16.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(16, "bananas number 1 100g", "Fruits", "Bananas", "Small", expirationDates16, 10, 20, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates17 = new HashMap<>();
-        expirationDates17.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(17, "bananas number 2 200g", "Fruits", "Bananas", "Medium", expirationDates17, 20, 40, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
-        Map<LocalDate, Integer> expirationDates18 = new HashMap<>();
-        expirationDates18.put(LocalDate.of(2024, 7, 10), 100);
-        presentationController.addProduct(18, "bananas number 3 300g", "Fruits", "Bananas", "Large", expirationDates18, 30, 60, 0, 0, 100, 0, 0, "Tnuva", "1", 10);
+    public static void addProducts() throws Exception{
+        presentationController.addProduct(1, "beef number 1 100g", "Meat", "Beef", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(2, "beef number 2 200g", "Meat", "Beef", "Medium", 20, 40, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(3, "beef number 3 300g", "Meat", "Beef", "Large",  30, 60, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(4, "chicken number 1 100g", "Meat", "Chicken", "Small", 10, 20, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(5, "chicken number 2 200g", "Meat", "Chicken", "Medium", 20, 40, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(6, "chicken number 3 300g", "Meat", "Chicken", "Large", 30, 60, 0, 0, "Tnuva", "1", 10);
+        presentationController.addProduct(7, "fish number 1 100g", "Meat", "Pork", "Small", 15, 30, 0, 0.15, "Tnuva", "1", 10);
+        presentationController.addProduct(8, "fish number 2 200g", "Meat", "Pork", "Medium", 30, 60, 0, 0.15, "Tnuva", "1", 10);
+        presentationController.addProduct(9, "fish number 3 300g", "Meat", "Pork", "Large", 45, 90, 0, 0.15, "Tnuva", "1", 10);
+        presentationController.addProduct(10, "grapes number 1 100g", "Fruits", "Grapes", "Small", 5, 10, 0, 0, "Tnuva", "7", 10);
+        presentationController.addProduct(11, "grapes number 2 200g", "Fruits", "Grapes", "Medium", 10, 20, 0, 0, "Tnuva", "7", 10);
+        presentationController.addProduct(12, "grapes number 3 300g", "Fruits", "Grapes", "Large", 15, 30, 0, 0, "Tnuva", "7", 10);
+        presentationController.addProduct(13, "apples number 1 100g", "Fruits", "Apples", "Small", 3, 7, 0, 0, "Tnuva", "8", 10);
+        presentationController.addProduct(14, "apples number 2 200g", "Fruits", "Apples", "Medium", 6, 14, 0, 0, "Tnuva", "8", 10);
+        presentationController.addProduct(15, "apples number 3 300g", "Fruits", "Apples", "Large", 9, 21, 0, 0, "Tnuva", "8", 10);
+        presentationController.addProduct(16, "bananas number 1 100g", "Fruits", "Bananas", "Small", 5, 10, 0, 0, "Tnuva", "8", 10);
+        presentationController.addProduct(17, "bananas number 2 200g", "Fruits", "Bananas", "Medium", 10, 20, 0, 0, "Tnuva", "8", 10);
+        presentationController.addProduct(18, "bananas number 3 300g", "Fruits", "Bananas", "Large", 15, 30, 0, 0, "Tnuva", "8", 10);
     }
 }

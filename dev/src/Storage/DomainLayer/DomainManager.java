@@ -23,7 +23,7 @@ public class DomainManager {
         this.domainFacade = domainFacade;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) throws Exception{
         if(this.productMap.containsKey(product.getCatalogNumber())){
             throw new IllegalArgumentException("Product with this catalog number already exists");
         }
@@ -31,7 +31,7 @@ public class DomainManager {
         this.productMap.put(product.getCatalogNumber(), product);
     }
 
-    public Product getProduct(int catalogNumber){
+    public Product getProduct(int catalogNumber) throws Exception{
         if(!this.productMap.containsKey(catalogNumber)){
             throw new IllegalArgumentException("Product with this catalog number does not exist");
         }
@@ -42,7 +42,7 @@ public class DomainManager {
         return this.productMap;
     }
 
-    public void removeProduct(Product product){
+    public void removeProduct(Product product) throws Exception{
         if(!this.productMap.containsKey(product.getCatalogNumber())){
             throw new IllegalArgumentException("Product with this catalog number does not exist");
         }
@@ -51,7 +51,7 @@ public class DomainManager {
     }
 
     // in the presentaion we will force the user to choose all the higher level categories of a chosen category
-    public List<Product> getProductsByCategories(List<String> categories){
+    public List<Product> getProductsByCategories(List<String> categories) throws Exception{
         List<Product> products = new LinkedList<>();
         for(String category : categories){
             String[] divided = category.split(",");
@@ -81,12 +81,12 @@ public class DomainManager {
         return products;
     }
 
-    public void moveProductToStore(int catalogNumber, int quantity) {
+    public void moveProductToStore(int catalogNumber, int quantity) throws Exception {
         Product product = this.productMap.get(catalogNumber);
         product.moveProductToStore(quantity);
     }
 
-    public void substractFromStore(int catalogNumber, Map<LocalDate,Integer> products) {
+    public void subtractFromStore(int catalogNumber, Map<LocalDate,Integer> products) throws Exception{
         Product product = this.productMap.get(catalogNumber);
         for(Map.Entry<LocalDate,Integer> entry : products.entrySet()){
             if(product.getStoreQuantity() < entry.getValue())
@@ -97,7 +97,7 @@ public class DomainManager {
         }
     }
 
-    public Map<Integer,Integer> expiredCount(){
+    public Map<Integer,Integer> expiredCount() throws Exception{
         Map<Integer, Integer> expiredProducts = new HashMap<>();
         for(Integer catalogNumber : productMap.keySet()){
             expiredProducts.put(catalogNumber,productMap.get(catalogNumber).expiredCount());

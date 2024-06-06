@@ -13,15 +13,15 @@ public class DomainFacade {
         this.categories = null;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) throws Exception{
         this.getCategoryFacade(product.getCategory()).addProduct(product);
     }
 
-    public void removeProduct(Product product){
+    public void removeProduct(Product product) throws Exception{
         this.getCategoryFacade(product.getCategory()).removeProduct(product);
     }
 
-    public CategoryFacade getCategoryFacade(Category category) {
+    public CategoryFacade getCategoryFacade(Category category) throws Exception {
         return this.categories.get(category);
     }
 
