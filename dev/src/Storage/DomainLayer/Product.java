@@ -48,7 +48,6 @@ public class Product {
         this.manufacturer = manufacturer;
         this.aisle = aisle;
         this.minimalQuantity = minimalQuantity;
-        this.expirationDates = new HashMap<LocalDate, Integer>();
     }
 
     public int getCatalogNumber() {

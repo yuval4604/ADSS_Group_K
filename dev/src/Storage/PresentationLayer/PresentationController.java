@@ -5,8 +5,9 @@ import Storage.DomainLayer.Product;
 import Storage.ServiceLayer.ServiceController;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PresentationController {
     private ServiceController serviceController;
@@ -19,7 +20,7 @@ public class PresentationController {
         this.serviceController = serviceController;
     }
 
-    private void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, expirationDates, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity, damageQuantity, manufacturer, aisle, minimalQuantity);
     }
 
