@@ -31,19 +31,19 @@ public class Product {
     private int minimalQuantity;
 
     private String aisle;
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, Map<LocalDate, Integer> expirationDates, double buyPrice, double salePrice, double discount, double supplierDiscount, int storageQuantity, int storeQuantity, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, double buyPrice, double salePrice, double discount, double supplierDiscount, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
         this.catalogNumber = catalogNumber;
         this.name = name;
         this.category = category;
         this.subCategory = subCategory;
         this.size = size;
-        this.expirationDates = expirationDates;
+        this.expirationDates = new HashMap<>();
         this.buyPrice = buyPrice;
         this.salePrice = salePrice;
         this.discount = discount;
         this.supplierDiscount = supplierDiscount;
-        this.storageQuantity = storageQuantity;
-        this.storeQuantity = storeQuantity;
+        this.storageQuantity = 0;
+        this.storeQuantity = 0;
         this.damageQuantity = damageQuantity;
         this.manufacturer = manufacturer;
         this.aisle = aisle;

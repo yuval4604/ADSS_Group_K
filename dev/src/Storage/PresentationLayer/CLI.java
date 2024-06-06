@@ -67,6 +67,7 @@ public class CLI {
                         choice = scan.nextLine();
                     }
                     info = info.substring(0,info.length());
+                    presentationController.parseSubtractFromStore(info);
                     break;
                 }
                 case "4":{

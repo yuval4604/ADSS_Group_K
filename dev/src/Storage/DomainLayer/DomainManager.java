@@ -91,7 +91,9 @@ public class DomainManager {
         for(Map.Entry<LocalDate,Integer> entry : products.entrySet()){
             if(product.getStoreQuantity() < entry.getValue())
                 throw new IllegalArgumentException("Not enough products in store");
-            product.removeOne(false,entry.getKey());
+            for(int i = 0; i < entry.getValue(); i++){
+                product.removeOne(false,entry.getKey());
+            }
         }
     }
 
