@@ -14,15 +14,15 @@ public class CategoryFacade {
         this.subCategories = null;
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product) throws Exception {
         this.getSubCategories().get(product.getSubCategory()).addProduct(product);
     }
 
-    public void removeProduct(Product product) {
+    public void removeProduct(Product product) throws Exception{
         this.getSubCategories().get(product.getSubCategory()).removeProduct(product);
     }
 
-    public SubCategoryFacade getSubCategoryFacade(SubCategory subCategory) {
+    public SubCategoryFacade getSubCategoryFacade(SubCategory subCategory) throws Exception {
         return this.subCategories.get(subCategory);
     }
 
@@ -34,7 +34,7 @@ public class CategoryFacade {
         this.subCategories = subCategories;
     }
 
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() throws Exception{
         List<Product> products = new java.util.ArrayList<Product>();
         for(SubCategoryFacade subCategoryFacade : this.subCategories.values()){
             products.addAll(subCategoryFacade.getAllProducts());

@@ -31,7 +31,7 @@ public class Product {
     private int minimalQuantity;
 
     private String aisle;
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, double buyPrice, double salePrice, double discount, double supplierDiscount, int damageQuantity, String manufacturer, String aisle, int minimalQuantity) {
+    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, double buyPrice, double salePrice, double discount, double supplierDiscount, String manufacturer, String aisle, int minimalQuantity) {
         this.catalogNumber = catalogNumber;
         this.name = name;
         this.category = category;
@@ -44,7 +44,7 @@ public class Product {
         this.supplierDiscount = supplierDiscount;
         this.storageQuantity = 0;
         this.storeQuantity = 0;
-        this.damageQuantity = damageQuantity;
+        this.damageQuantity = 0;
         this.manufacturer = manufacturer;
         this.aisle = aisle;
         this.minimalQuantity = minimalQuantity;
@@ -137,6 +137,7 @@ public class Product {
     }
 
     public void addByExpirationDate(int amountForStore, int amountForStorage, LocalDate expirationDate) {
+        if(expirationDate.isBefore(LocalDate.now())) throw new IllegalArgumentException("Expiration date is in the past");
         this.storeQuantity += amountForStore;
         this.storageQuantity += amountForStorage;
         expirationDates.put(expirationDate, expirationDates.getOrDefault(expirationDate, 0) + amountForStore + amountForStorage);
@@ -179,7 +180,7 @@ public class Product {
             this.expirationDates.put(expirationDate, quantity);
             this.expiredProducts.put(expirationDate, inStorage + inStorage);
         }
-        else throw new IllegalArgumentException("Not enough quantity to move to damage");
+        else throw new IllegalArgumentException("Not enough quantity to move to expired");
     }
 
     public String toString(){
@@ -190,7 +191,8 @@ public class Product {
                 "Size: " + size + "\n" +
                 "Buy price: " + buyPrice + "\n" +
                 "Sale price: " + salePrice + "\n" +
-                "Discount: " + discount + "\n" +
+                "Discount: " + discount * 100 + "% " + "\n" +
+                "Supplier discount: " + supplierDiscount * 100 + "% " + "\n" +
                 "Storage quantity: " + storageQuantity + "\n" +
                 "Store quantity: " + storeQuantity + "\n" +
                 "Manufacturer: " + manufacturer + "\n" +
@@ -208,6 +210,7 @@ public class Product {
                 "Store quantity: " + storeQuantity + "\n" +
                 "Manufacturer: " + manufacturer + "\n" +
                 "Discount: " + discount * 100 + "% " + "\n" +
+                "Supplier discount: " + supplierDiscount * 100 + "% " + "\n" +
                 "Aisle: " + aisle + "\n" +
                 "Minimal quantity: " + minimalQuantity + "\n";
     }
