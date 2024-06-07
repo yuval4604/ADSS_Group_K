@@ -15,7 +15,6 @@ public class DomainFacade {
     }
 
     public void addProduct(Product product) throws Exception{
-        if(!this.categories.containsKey(product.getCategory())) throw new IllegalArgumentException("Category does not exist");
         this.getCategoryFacade(product.getCategory()).addProduct(product);
     }
 
@@ -25,7 +24,9 @@ public class DomainFacade {
     }
 
     public CategoryFacade getCategoryFacade(Category category) throws Exception {
-        if(!this.categories.containsKey(category)) throw new IllegalArgumentException("Category does not exist");
+        if(!this.categories.containsKey(category)) {
+            categories.put(category, new CategoryFacade());
+        }
         return this.categories.get(category);
     }
 

@@ -91,7 +91,7 @@ public class PresentationController {
     public void parseUpdateDiscountForProductMessage(String str) throws Exception{
         String[] parts = str.split(",");
         int catalogNumber = Integer.parseInt(parts[0]);
-        double discount = Double.parseDouble(parts[1]);
+        double discount = Double.parseDouble(parts[1])/100;
         this.updateDiscountForProduct(catalogNumber, discount);
     }
 
