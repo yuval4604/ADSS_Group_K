@@ -207,27 +207,37 @@ public class CLI {
         String info = "";
         String next = "";
         while(!next.equals(".")){
-            System.out.println("Please enter the category of the product you wish to produce a report for: ");
+            System.out.println("If you wish to select all of the categories, please enter 'all'.\nIf not, please enter the category of the product you wish to produce a report for: ");
             System.out.println(getCategories());
-            next = scan.nextLine();
-            info += next + ",";
-            System.out.println("Please enter the sub category you wish to produce a report for: ");
-            System.out.println(getSubCategories());
-            System.out.println("If you wish to get the entire category, please enter 'all'.");
             next = scan.nextLine();
             if(!next.equals("all")) {
                 info += next + ",";
-                System.out.println("Please enter the size you wish to produce a report for: ");
-                System.out.println(getSubSubCategories());
-                System.out.println("If you wish to get the entire sub category, please enter 'all'.");
+                System.out.println("Please enter the sub category you wish to produce a report for: ");
+                System.out.println(getSubCategories());
+                System.out.println("If you wish to get the entire category, please enter 'all'.");
                 next = scan.nextLine();
-                if(!next.equals("all"))
-                    info += next + "|";
-                else
-                    info += "|";
+                if (!next.equals("all")) {
+                    info += next + ",";
+                    System.out.println("Please enter the size you wish to produce a report for: ");
+                    System.out.println(getSubSubCategories());
+                    System.out.println("If you wish to get the entire sub category, please enter 'all'.");
+                    next = scan.nextLine();
+                    if (!next.equals("all"))
+                        info += next + ";";
+                    else
+                        info += ";";
+                } else
+                    info += ";";
+                System.out.println("If you are done choosing please press '.'");
+                next = scan.nextLine();
             }
-            else
-                info += "|";
+            else {
+                String categories = "";
+                for(Category category : Category.values()){
+                    categories += category.toString() + ";";
+                }
+                return categories.substring(0,categories.length());
+            }
         }
         return info.substring(0,info.length()-1);
     }

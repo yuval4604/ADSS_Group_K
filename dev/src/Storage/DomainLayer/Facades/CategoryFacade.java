@@ -17,8 +17,12 @@ public class CategoryFacade {
 
     public void addProduct(Product product) throws Exception {
         try {
+            if(!this.subCategories.containsKey(product.getSubCategory())){
+                this.subCategories.put(product.getSubCategory(),new SubCategoryFacade());
+            }
             this.getSubCategoryFacade(product.getSubCategory()).addProduct(product);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw e;
         }
     }

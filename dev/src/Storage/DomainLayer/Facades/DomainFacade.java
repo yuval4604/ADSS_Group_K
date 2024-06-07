@@ -16,8 +16,12 @@ public class DomainFacade {
 
     public void addProduct(Product product) throws Exception{
         try {
+            if(!this.categories.containsKey(product.getCategory())){
+                this.categories.put(product.getCategory(),new CategoryFacade());
+            }
             this.getCategoryFacade(product.getCategory()).addProduct(product);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw e;
         }
     }

@@ -233,7 +233,7 @@ public class PresentationController {
 
     public String parseProduceProductReportMessage(String str) throws Exception{
         try {
-            String[] parts = str.split("|");
+            String[] parts = str.split(";");
             List<String> categories = new java.util.LinkedList<String>();
             for (String category : parts) {
                 categories.add(category);
