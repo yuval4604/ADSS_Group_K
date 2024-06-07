@@ -85,7 +85,9 @@ public class PresentationController {
             for(Map.Entry<Integer,Integer> entry : map.entrySet())
                 if(entry.getValue() > 0)
                     str += "Catalog number: " + entry.getKey() + ", quantity: " + entry.getValue() + "\n";
-            return str.substring(0, str.length()-1);
+            if(!str.equals(""))
+                return str.substring(0, str.length()-1);
+            return str;
         }
         catch (Exception e) {
             return e.getMessage();
