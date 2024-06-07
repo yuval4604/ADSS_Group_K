@@ -16,12 +16,21 @@ public class SubCategoryFacade {
     }
 
     public void addProduct(Product product) throws Exception {
-        this.getSubSubCategoryFacade(product.getSize()).addProduct(product);
+        try {
+            this.getSubSubCategoryFacade(product.getSize()).addProduct(product);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public void removeProduct(Product product) throws Exception{
-        if(!this.subSubCategories.containsKey(product.getSize())) throw new IllegalArgumentException("SubSubCategory does not exist");
-        this.getSubSubCategoryFacade(product.getSize()).removeProduct(product.getCatalogNumber());
+        try {
+            if (!this.subSubCategories.containsKey(product.getSize()))
+                throw new IllegalArgumentException("SubSubCategory does not exist");
+            this.getSubSubCategoryFacade(product.getSize()).removeProduct(product.getCatalogNumber());
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public SubSubCategoryFacade getSubSubCategoryFacade(SubSubCategory subSubCategory) throws Exception{

@@ -1,16 +1,17 @@
 package Storage.UnitTests;
 
 
+import Storage.DomainLayer.DomainManager;
+import Storage.DomainLayer.Enums.Category;
+import Storage.DomainLayer.Enums.SubCategory;
+import Storage.DomainLayer.Enums.SubSubCategory;
 import Storage.DomainLayer.Facades.DomainFacade;
+import Storage.DomainLayer.Product;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Before;
-
-import Storage.DomainLayer.Enums.*;
-import Storage.DomainLayer.*;
+import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -88,10 +89,10 @@ public class Tests {
         beef.addByExpirationDate(2,20, LocalDate.parse("2024-06-24"));
         soap.addByExpirationDate(10,0, LocalDate.parse("2024-12-12"));
 
-       milk.moveProductToStore(14);
-       beef.moveProductToStore(34);
+       milk.moveProductToStore(LocalDate.parse("2024-07-10"), 14);
+       beef.moveProductToStore(LocalDate.parse("2024-06-24") ,20);
        try{
-            soap.moveProductToStore(1);
+            soap.moveProductToStore(LocalDate.parse("2024-12-12") ,1);
        }
        catch (Exception e){
            Assert.assertEquals("Not enough quantity to move to store",e.getMessage());
@@ -156,9 +157,9 @@ public class Tests {
         beef.addByExpirationDate(2,20, LocalDate.parse("2024-06-24"));
         soap.addByExpirationDate(10,0, LocalDate.parse("2024-12-12"));
 
-        milk.moveToDamage(2,15,LocalDate.parse("2024-07-07"));
-        beef.moveToDamage(3,2,LocalDate.parse("2024-06-20"));
-        soap.moveToDamage(0,0,LocalDate.parse("2024-12-12"));
+        milk.moveToDamage(new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
+        beef.moveToDamage(new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2024-06-20")});
+        soap.moveToDamage(new int[]{0},new int[]{0}, new LocalDate[]{LocalDate.parse("2024-12-12")});
 
         Assert.assertEquals(35,milk.getStorageQuantity());
         Assert.assertEquals(1,milk.getStoreQuantity());
@@ -195,7 +196,7 @@ public class Tests {
         milk.addByExpirationDate(3,15, LocalDate.parse("2024-07-07"));
         milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
 
-        milk.moveToDamage(2,15,LocalDate.parse("2024-07-07"));
+        milk.moveToDamage(new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
         Assert.assertEquals("Catalog number: " + 100 + "\n" +
                 "Name: " + "Tnuva-milk 500ml" + "\n" +
                 "Category: " + "Dairy" + "\n" +

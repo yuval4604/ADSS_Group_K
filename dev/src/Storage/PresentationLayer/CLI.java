@@ -18,119 +18,243 @@ public class CLI {
     private static PresentationController presentationController;
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Welcome to the Storage, what would you like to do:\n" +
-                "1. Add products.\n" +
-                "2. Move products.\n" +
-                "3. decrease products quantity.\n" +
-                "4. decrease damaged or expired products.\n" +
-                "5. Produce products report.\n" +
-                "6. Produce damaged and expired report.\n" +
-                "7. Check for supplies below minimal quantity.\n" +
-                "8. Check for expired products.\n" +
-                "9. Exit program.");
+        resetFactory();
+        String choice = "";
         Scanner scan = new Scanner(System.in);
-        String choice = scan.nextLine();
-
-        while(!choice.equals("9")){
+        String info;
+        while(!choice.equals("15")){
+            info = "";
+            System.out.println("Welcome to the Storage, what would you like to do:\n" +
+                    "1. Get product information.\n" +
+                    "2. Add products.\n" +
+                    "3. Add to product.\n" +
+                    "4. Move products to store.\n" +
+                    "5. Decrease products quantity.\n" +
+                    "6. Remove damage products.\n" +
+                    "7. Remove expired products.\n" +
+                    "8. Update discount for product.\n" +
+                    "9. Update discount for categories.\n" +
+                    "10. Remove products.\n" +
+                    "11. Produce products report.\n" +
+                    "12. Produce damaged and expired report.\n" +
+                    "13. Check for products below minimal quantity.\n" +
+                    "14. Check for expired products.\n" +
+                    "15. Exit program.");
+            choice = scan.nextLine();
             switch (choice){
                 case "1":{
-                    System.out.println("Please enter the information of the new product batch:");
-                    String info = "";
-                    choice = scan.nextLine();
-                    while(!choice.equals("finish")){
-                        info += choice + ",";
-                        choice = scan.nextLine();
-                    }
-                    info = info.substring(0,info.length());
-                    presentationController.parseAddProductMessage(info);
+                    System.out.println("Please enter the catalog number of the product you wish to get information for: ");
+                    System.out.println(presentationController.parseGetProductMessage(scan.nextLine()));
                     break;
                 }
                 case "2":{
-                    System.out.println("Please enter the information of the product batch you wish to move:");
-                    String info = "";
-                    choice = scan.nextLine();
-                    while(!choice.equals("finish")){
-                        info += choice + ",";
-                        choice = scan.nextLine();
-                    }
-                    info = info.substring(0,info.length());
-                    presentationController.parseMoveProductToStore(choice);
+                    System.out.println("Please enter the catalog number of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the name of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the category of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the sub category of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the size of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the buy price of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the sale price of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the discount of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the supplier discount of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the manufacturer of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the aisle of this product: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the minimal quantity of this product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseAddProductMessage(info));
                     break;
                 }
                 case "3":{
-                    System.out.println("Please enter the information of the product batch you wish to decrease:");
-                    String info = "";
-                    choice = scan.nextLine();
-                    while(!choice.equals("finish")){
-                        info += choice + ",";
-                        choice = scan.nextLine();
-                    }
-                    info = info.substring(0,info.length());
-                    presentationController.parseSubtractFromStore(info);
+                    System.out.println("Please enter the catalog number of the product you wish to add to: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the expiration date of the product you wish to add: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the quantity in store of the product you wish to add: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the quantity in storage of the product you wish to add: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseAddToProductMessage(info));
                     break;
                 }
                 case "4":{
-                    System.out.println("Please enter the information of damaged batch you removed:");
-                    String info = "";
-                    choice = scan.nextLine();
-                    while(!choice.equals("finish")){
-                        info += choice + ",";
-                        choice = scan.nextLine();
-                    }
-                    info = info.substring(0,info.length());
-                    presentationController.parseUpdateDamageForProductMessage(info);
+                    System.out.println("Please enter the catalog number of the product you wish to move: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the date of the product you wish to move: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the quantity of the product you wish to move: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseMoveProductToStore(info));
                     break;
                 }
                 case "5":{
-                    System.out.println("Please enter the information of the product batch:");
-                    String info = "";
-                    choice = scan.nextLine();
-                    while(!choice.equals("finish")){
-                        info += choice + ",";
-                        choice = scan.nextLine();
+                    System.out.println("Please enter the catalog number of the product you wish to subtract from store: ");
+                    info += scan.nextLine() + ",";
+                    String next = "";
+                    int i = 0;
+                    while(!next.equals(".")){
+                        System.out.println("Please enter the date of the product you wish to subtract from store: ");
+                        next = scan.nextLine();
+                        info += next + ",";
+                        System.out.println("Please enter the quantity of the product you wish to subtract from store: ");
+                        next = scan.nextLine();
+                        info += next + ",";
+                        i++;
+                        System.out.println("If you wish to subtract more products from store, please enter 'y'. Otherwise, please enter '.'");
+                        next = scan.nextLine();
                     }
-                    info = info.substring(0,info.length());
-                    presentationController.parseProduceProductReportMessage(info);
+                    if(i != 0) {
+                        info = info.substring(0, info.length() - 1);
+                        System.out.println(presentationController.parseSubtractFromStore(info));
+                    }
+                    else
+                        System.out.println("No products were subtracted from store.");
                     break;
                 }
                 case "6":{
-                    System.out.println("Please enter the information of the product batch:");
-                    String info = "";
-                    choice = scan.nextLine();
-                    while(!choice.equals("finish")){
-                        info += choice + ",";
-                        choice = scan.nextLine();
+                    System.out.println("Please enter the catalog number of the product you wish to remove damage from: ");
+                    info += scan.nextLine() + ",";
+                    String next = "";
+                    while(!next.equals(".")){
+                        System.out.println("Please enter the date of the product you wish to remove damage from: ");
+                        next = scan.nextLine();
+                        info += next + ",";
+                        System.out.println("Please enter the quantity in store of the product you wish to remove damage from: ");
+                        next = scan.nextLine();
+                        info += next + ",";
+                        System.out.println("Please enter the quantity in storage of the product you wish to remove damage from: ");
+                        next = scan.nextLine();
+                        info += next + ",";
                     }
-                    info = info.substring(0,info.length());
-                    presentationController.parseProduceDamageReportMessage(info);
+                    info = info.substring(0,info.length()-1);
+                    System.out.println(presentationController.parseUpdateDamageForProductMessage(info));
                     break;
                 }
                 case "7":{
-                    System.out.println("The products that need to be ordered are:");
-                    presentationController.alertOnMinimalQuantity();
+                    System.out.println("Please enter the catalog number of the product you wish to move to expired: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the date of the product you wish to move to expired: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the quantity in store of the product you wish to move to expired: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the quantity in storage of the product you wish to move to expired: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseMoveToExpiredMessage(info));
                     break;
                 }
                 case "8":{
-                    System.out.println("The expired products are: ");
-                    Map<Integer,Integer> expired = presentationController.expiredCount();
-                    for(Map.Entry<Integer,Integer> entry : expired.entrySet())
-                        System.out.println("Catalog number: " + entry.getKey() + ", quantity: " + entry.getValue());
+                    System.out.println("Please enter the catalog number of the product you wish to update the discount for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new discount for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateDiscountForProductMessage(info));
                     break;
                 }
                 case "9":{
-
+                    info = getCategoriesFromUser(scan);
+                    System.out.println(presentationController.parseUpdateDiscountForCategoryMessage(info));
+                    break;
+                }
+                case "10":{
+                    System.out.println("Please enter the catalog number of the product you wish to remove: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseRemoveProductMessage(info));
+                    break;
+                }
+                case "11":{
+                    info = getCategoriesFromUser(scan);
+                    System.out.println(presentationController.parseProduceProductReportMessage(info));
+                    break;
+                }
+                case "12":{
+                    System.out.println(presentationController.parseProduceDamageReportMessage());
+                    break;
+                }
+                case "13":{
+                    System.out.println("The products that need to be ordered are:");
+                    System.out.println(presentationController.alertOnMinimalQuantity());
+                    break;
+                }
+                case "14":{
+                    System.out.println("The expired products are: ");
+                    System.out.println(presentationController.expiredCount());
+                    break;
+                }
+                case "15":{
                     break;
                 }
                 default:
                     System.out.println("Invalid choice, please choose again.");
                     break;
             }
-            System.out.println("Welcome to the Storage, what would you like to do:");
-            choice = scan.nextLine();
         }
+        System.out.println("Goodbye :)");
     }
 
-    public static void setDomain() throws Exception{
+    public static String getCategoriesFromUser(Scanner scan) throws Exception{
+        String info = "";
+        String next = "";
+        while(!next.equals(".")){
+            System.out.println("Please enter the category of the product you wish to produce a report for: ");
+            System.out.println(getCategories());
+            next = scan.nextLine();
+            info += next + ",";
+            System.out.println("Please enter the sub category you wish to produce a report for: ");
+            System.out.println(getSubCategories());
+            System.out.println("If you wish to get the entire category, please enter 'all'.");
+            next = scan.nextLine();
+            if(!next.equals("all")) {
+                info += next + ",";
+                System.out.println("Please enter the size you wish to produce a report for: ");
+                System.out.println(getSubSubCategories());
+                System.out.println("If you wish to get the entire sub category, please enter 'all'.");
+                next = scan.nextLine();
+                if(!next.equals("all"))
+                    info += next + "|";
+                else
+                    info += "|";
+            }
+            else
+                info += "|";
+        }
+        return info.substring(0,info.length()-1);
+    }
+
+    public static String getCategories(){
+        String categories = "";
+        for(Category category : Category.values()){
+            categories += category.toString() + "\n";
+        }
+        return categories.substring(0,categories.length()-1);
+    }
+
+    public static String getSubCategories(){
+        String subCategories = "";
+        for(SubCategory subCategory : SubCategory.values()){
+            subCategories += subCategory.toString() + "\n";
+        }
+        return subCategories.substring(0,subCategories.length()-1);
+    }
+
+    public static String getSubSubCategories(){
+        String subSubCategories = "";
+        for(SubSubCategory subSubCategory : SubSubCategory.values()){
+            subSubCategories += subSubCategory.toString() + "\n";
+        }
+        return subSubCategories.substring(0,subSubCategories.length()-1);
+    }
+
+    public static void resetFactory() throws Exception{
         SubSubCategoryFacade ssc1small = new SubSubCategoryFacade();
         SubSubCategoryFacade ssc1medium = new SubSubCategoryFacade();
         SubSubCategoryFacade ssc1large = new SubSubCategoryFacade();
@@ -206,7 +330,7 @@ public class CLI {
         presentationController = new PresentationController(products, facade);
     }
 
-    public static void addProducts() throws Exception{
+    public static void productFactory() throws Exception{
         presentationController.parseAddProductMessage("1,beef number,1 100g,Meat,Beef,Small,10,20,0,0,Tnuva,1,10");
         presentationController.parseAddProductMessage("2,beef number 2 200g,Meat,Beef,Medium,20,40,0,0,Tnuva,1,10");
         presentationController.parseAddProductMessage("3,beef number 3 300g,Meat,Beef,Large,30,60,0,0,Tnuva,1,10");

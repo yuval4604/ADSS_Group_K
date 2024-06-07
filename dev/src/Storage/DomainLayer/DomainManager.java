@@ -24,18 +24,26 @@ public class DomainManager {
     }
 
     public void addProduct(Product product) throws Exception{
-        if(this.productMap.containsKey(product.getCatalogNumber())){
-            throw new IllegalArgumentException("Product with this catalog number already exists");
+        try {
+            if (this.productMap.containsKey(product.getCatalogNumber())) {
+                throw new IllegalArgumentException("Product with this catalog number already exists");
+            }
+            this.domainFacade.addProduct(product);
+            this.productMap.put(product.getCatalogNumber(), product);
+        } catch (Exception e) {
+            throw e;
         }
-        this.domainFacade.addProduct(product);
-        this.productMap.put(product.getCatalogNumber(), product);
     }
 
     public Product getProduct(int catalogNumber) throws Exception{
-        if(!this.productMap.containsKey(catalogNumber)){
-            throw new IllegalArgumentException("Product with this catalog number does not exist");
+        try {
+            if (!this.productMap.containsKey(catalogNumber)) {
+                return null;
+            }
+            return this.productMap.get(catalogNumber);
+        } catch (Exception e) {
+            throw e;
         }
-        return this.productMap.get(catalogNumber);
     }
 
     public Map<Integer, Product> getProductMap() {
@@ -43,57 +51,69 @@ public class DomainManager {
     }
 
     public void removeProduct(Product product) throws Exception{
-        if(!this.productMap.containsKey(product.getCatalogNumber())){
-            throw new IllegalArgumentException("Product with this catalog number does not exist");
+        try {
+            if (!this.productMap.containsKey(product.getCatalogNumber())) {
+                throw new IllegalArgumentException("Product with this catalog number does not exist");
+            }
+            this.productMap.remove(product.getCatalogNumber());
+            this.domainFacade.removeProduct(product);
+        } catch (Exception e) {
+            throw e;
         }
-        this.productMap.remove(product.getCatalogNumber());
-        this.domainFacade.removeProduct(product);
     }
 
     // in the presentaion we will force the user to choose all the higher level categories of a chosen category
     public List<Product> getProductsByCategories(List<String> categories) throws Exception{
-        List<Product> products = new LinkedList<>();
-        for(String category : categories){
-            String[] divided = category.split(",");
-            if(divided.length == 0 || divided.length > 3 )
-                throw new IllegalArgumentException("invalid entry");
-            if(Category.contains(divided[0])){
-                if(divided.length == 1)
-                    products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getAllProducts());
-                else if(SubCategory.contains(divided[1])){
-                    if(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategories().containsKey(SubCategory.valueOf(divided[1]))) {
-                        if (divided.length == 2)
-                            products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getAllProducts());
-                        else if (SubSubCategory.contains(divided[2])) {
-                            if (domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getSubSubCategories().containsKey(SubSubCategory.valueOf(divided[2])))
-                                products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).
-                                        getSubSubCategoryFacade(SubSubCategory.valueOf(divided[2])).getAllProducts());
-                            else throw new NoSuchElementException("sub category does not have this size");
-                        }
-                        else throw new NoSuchElementException("Size doesn't exist");
-                    }
-                    else throw new NoSuchElementException("category does not have this sub category");
-                }
-                else throw new NoSuchElementException("Sub Category doesn't exist");
+        try {
+            List<Product> products = new LinkedList<>();
+            for (String category : categories) {
+                String[] divided = category.split(",");
+                if (divided.length == 0 || divided.length > 3)
+                    throw new IllegalArgumentException("invalid entry");
+                if (Category.contains(divided[0])) {
+                    if (divided.length == 1)
+                        products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getAllProducts());
+                    else if (SubCategory.contains(divided[1])) {
+                        if (domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategories().containsKey(SubCategory.valueOf(divided[1]))) {
+                            if (divided.length == 2)
+                                products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getAllProducts());
+                            else if (SubSubCategory.contains(divided[2])) {
+                                if (domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getSubSubCategories().containsKey(SubSubCategory.valueOf(divided[2])))
+                                    products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).
+                                            getSubSubCategoryFacade(SubSubCategory.valueOf(divided[2])).getAllProducts());
+                                else throw new NoSuchElementException("sub category does not have this size");
+                            } else throw new NoSuchElementException("Size doesn't exist");
+                        } else throw new NoSuchElementException("category does not have this sub category");
+                    } else throw new NoSuchElementException("Sub Category doesn't exist");
+                } else throw new NoSuchElementException("Category doesn't exist");
             }
-            else throw new NoSuchElementException("Category doesn't exist");
+            return products;
+        } catch (Exception e) {
+            throw e;
         }
-        return products;
     }
 
-    public void moveProductToStore(int catalogNumber, int quantity) throws Exception {
-        Product product = this.productMap.get(catalogNumber);
-        product.moveProductToStore(quantity);
+    public void moveProductToStore(int catalogNumber, LocalDate expirationDate, int quantity) throws Exception {
+        try {
+            Product product = this.productMap.get(catalogNumber);
+            product.moveProductToStore(expirationDate, quantity);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public void subtractFromStore(int catalogNumber, Map<LocalDate,Integer> products) throws Exception{
-        Product product = this.productMap.get(catalogNumber);
-        for(Map.Entry<LocalDate,Integer> entry : products.entrySet()){
-            if(product.getStoreQuantity() < entry.getValue())
-                throw new IllegalArgumentException("Not enough products in store");
-            for(int i = 0; i < entry.getValue(); i++){
-                product.removeOne(false,entry.getKey());
+        try {
+            Product product = this.productMap.get(catalogNumber);
+            for (Map.Entry<LocalDate, Integer> entry : products.entrySet()) {
+                if (product.getStoreQuantity() < entry.getValue())
+                    throw new IllegalArgumentException("Not enough products in store");
+                for (int i = 0; i < entry.getValue(); i++) {
+                    product.removeOne(false, entry.getKey());
+                }
             }
+        } catch (Exception e) {
+            throw e;
         }
     }
 
@@ -107,20 +127,40 @@ public class DomainManager {
 
 
     public String alertOnMinimalQuantity() throws Exception {
-        Category[] categories = Category.values();
-        List<String> categoriesList = new java.util.ArrayList<String>();
-        for(Category category : categories){
-            categoriesList.add(category.toString());
-        }
-        List<Product> info = getProductsByCategories(categoriesList);
         String alert = "";
-        for(Product product : info){
+        for(Product product : this.productMap.values()){
             if(product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()){
                 alert += product.getName() + "\n";
             }
         }
-        if(info.size() > 0)
+        if(this.productMap.values().size() > 0)
             alert = alert.substring(0,alert.length()-1);
         return alert;
+    }
+
+    public void addToProduct(LocalDate expirationDate, int catalogNumber, int inStore, int inStorage) throws Exception{
+        try {
+            Product product = this.productMap.get(catalogNumber);
+            product.addByExpirationDate(inStore, inStorage, expirationDate);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void moveToExpired(int catalogNumber, LocalDate expirationDate, int inStore, int inStorage) throws Exception{
+        try{
+            Product product = this.productMap.get(catalogNumber);
+            product.moveToExpired(inStore, inStorage, expirationDate);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void setDiscount(int catalogNumber, double discount) {
+        try{
+            this.productMap.get(catalogNumber).setDiscount(discount);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

@@ -15,12 +15,21 @@ public class DomainFacade {
     }
 
     public void addProduct(Product product) throws Exception{
-        this.getCategoryFacade(product.getCategory()).addProduct(product);
+        try {
+            this.getCategoryFacade(product.getCategory()).addProduct(product);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public void removeProduct(Product product) throws Exception{
-        if(!this.categories.containsKey(product.getCategory())) throw new IllegalArgumentException("Category does not exist");
-        this.getCategoryFacade(product.getCategory()).removeProduct(product);
+        try {
+            if (!this.categories.containsKey(product.getCategory()))
+                throw new IllegalArgumentException("Category does not exist");
+            this.getCategoryFacade(product.getCategory()).removeProduct(product);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public CategoryFacade getCategoryFacade(Category category) throws Exception {

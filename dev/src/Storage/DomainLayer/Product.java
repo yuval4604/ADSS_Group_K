@@ -168,18 +168,34 @@ public class Product {
         }
     }
 
-    public void moveToDamage(int inStore, int inStorage, LocalDate expirationDate){
-        if(this.expirationDates.get(expirationDate).getKey() >= inStorage && this.expirationDates.get(expirationDate).getValue() >= inStore){
-            this.storeQuantity -= inStore;
-            this.storageQuantity -= inStorage;
-            this.damageQuantity += inStore + inStorage;
-            Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate);
-            this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - inStorage, oldValues.getValue() - inStore));
+    public void moveToDamage(int[] inStore, int[] inStorage, LocalDate[] expirationDate){
+        int storage = 0;
+        for(int amount: inStorage)
+            storage += amount;
+        int store = 0;
+        for(int amount: inStore)
+            store += amount;
+        boolean flag = true;
+        for(int i = 0; i < inStorage.length; i++){
+            if(!this.expirationDates.containsKey(expirationDate[i]))
+                flag = false;
+            if(this.expirationDates.get(expirationDate[i]).getKey() < inStorage[i] || this.expirationDates.get(expirationDate[i]).getValue() < inStore[i])
+                flag = false;
+        }
+        if(this.storageQuantity >= storage && this.storeQuantity >= store && flag){
+            this.storageQuantity -= storage;
+            this.storeQuantity -= store;
+            this.damageQuantity += storage + store;
+            for(int i = 0; i < inStorage.length; i++){
+                Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate[i]);
+                this.expirationDates.put(expirationDate[i], new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - inStorage[i], oldValues.getValue() - inStore[i]));
+            }
         }
         else throw new IllegalArgumentException("Not enough quantity to move to damage");
     }
 
     public void moveToExpired(int inStore, int inStorage, LocalDate expirationDate){
+        if(!this.expirationDates.containsKey(expirationDate)) throw new IllegalArgumentException("No such expiration date");
         if(this.expirationDates.get(expirationDate).getKey() >= inStorage && this.expirationDates.get(expirationDate).getValue() >= inStore){
             this.storeQuantity -= inStore;
             this.storageQuantity -= inStorage;
@@ -236,10 +252,13 @@ public class Product {
                 "Damaged quantity: " + damageQuantity  + "\n";
     }
 
-    public void moveProductToStore(int quantity) {
-        if (this.storageQuantity < quantity) {
+    public void moveProductToStore(LocalDate expirationDate, int quantity) {
+        if(this.expirationDates.get(expirationDate) == null) throw new IllegalArgumentException("No such expiration date");
+        if (quantity > this.expirationDates.get(expirationDate).getKey()) {
             throw new IllegalArgumentException("Not enough quantity to move to store");
         }
+        Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate);
+        this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - quantity, oldValues.getValue() + quantity));
         this.storageQuantity -= quantity;
         this.storeQuantity += quantity;
     }
