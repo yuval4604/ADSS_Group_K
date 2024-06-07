@@ -8,6 +8,7 @@ import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -59,10 +60,11 @@ public class ServiceController {
     // returns a string with the damage properties of the products in the given categories
     public String produceDamageReport() throws Exception{
         try {
-            Product[] info = (Product[]) manager.getProductMap().keySet().toArray();
+            Collection<Product> info = manager.getProductMap().values();
             String report = "";
             for (Product product : info) {
-                report += product.damagedReportToString() + "\n";
+                if(product.getDamageQuantity() > 0 || product.expiredCount() > 0)
+                    report += product.damagedReportToString() + "\n";
             }
             return report;
         } catch (Exception e) {

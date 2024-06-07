@@ -195,6 +195,7 @@ public class Product {
     }
 
     public void moveToExpired(int inStore, int inStorage, LocalDate expirationDate){
+        if(!expirationDate.isBefore(LocalDate.now())) throw new IllegalArgumentException("Expiration date is in the future");
         if(!this.expirationDates.containsKey(expirationDate)) throw new IllegalArgumentException("No such expiration date");
         if(this.expirationDates.get(expirationDate).getKey() >= inStorage && this.expirationDates.get(expirationDate).getValue() >= inStore){
             this.storeQuantity -= inStore;

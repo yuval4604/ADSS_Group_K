@@ -250,7 +250,7 @@ public class PresentationController {
 
     public String parseUpdateDiscountForCategoryMessage(String str) throws Exception{
         try {
-            String[] parts = str.split("|");
+            String[] parts = str.split(";");
             double discount = Double.parseDouble(parts[0]);
             List<String> categories = new java.util.LinkedList<String>();
             for (int i = 1; i < parts.length; i++) {

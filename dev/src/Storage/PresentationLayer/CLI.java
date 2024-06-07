@@ -163,7 +163,9 @@ public class CLI {
                     break;
                 }
                 case "9":{
-                    info = getCategoriesFromUser(scan);
+                    System.out.println("Please enter the new discount for the categories: ");
+                    info += scan.nextLine() + ";";
+                    info += getCategoriesFromUser(scan);
                     System.out.println(presentationController.parseUpdateDiscountForCategoryMessage(info));
                     break;
                 }
@@ -236,7 +238,7 @@ public class CLI {
                 for(Category category : Category.values()){
                     categories += category.toString() + ";";
                 }
-                return categories.substring(0,categories.length());
+                return categories.substring(0, categories.length());
             }
         }
         return info.substring(0,info.length()-1);
