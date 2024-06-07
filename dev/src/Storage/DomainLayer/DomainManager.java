@@ -133,7 +133,7 @@ public class DomainManager {
                 alert += product.getName() + "\n";
             }
         }
-        if(this.productMap.values().size() > 0)
+        if(this.productMap.values().size() > 0 && !alert.equals(""))
             alert = alert.substring(0,alert.length()-1);
         return alert;
     }
