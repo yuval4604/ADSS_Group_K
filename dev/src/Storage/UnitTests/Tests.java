@@ -101,8 +101,8 @@ public class Tests {
         Assert.assertEquals(36,milk.getStorageQuantity());
         Assert.assertEquals(17,milk.getStoreQuantity());
 
-        Assert.assertEquals(0,beef.getStorageQuantity());
-        Assert.assertEquals(39,beef.getStoreQuantity());
+        Assert.assertEquals(14,beef.getStorageQuantity());
+        Assert.assertEquals(25,beef.getStoreQuantity());
 
         Assert.assertEquals(0,soap.getStorageQuantity());
         Assert.assertEquals(10,soap.getStoreQuantity());

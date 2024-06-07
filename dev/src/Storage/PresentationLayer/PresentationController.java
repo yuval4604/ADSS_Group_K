@@ -83,7 +83,8 @@ public class PresentationController {
         try {
             Map<Integer, Integer> map = this.serviceController.expiredCount();
             for(Map.Entry<Integer,Integer> entry : map.entrySet())
-                str += "Catalog number: " + entry.getKey() + ", quantity: " + entry.getValue() + "\n";
+                if(entry.getValue() > 0)
+                    str += "Catalog number: " + entry.getKey() + ", quantity: " + entry.getValue() + "\n";
             return str.substring(0, str.length()-1);
         }
         catch (Exception e) {

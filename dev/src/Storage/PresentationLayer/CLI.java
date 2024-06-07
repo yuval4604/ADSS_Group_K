@@ -135,6 +135,8 @@ public class CLI {
                         System.out.println("Please enter the quantity in storage of the product you wish to remove damage from: ");
                         next = scan.nextLine();
                         info += next + ",";
+                        System.out.println("If you wish to subtract more products from store, please enter 'y'. Otherwise, please enter '.'");
+                        next = scan.nextLine();
                     }
                     info = info.substring(0,info.length()-1);
                     System.out.println(presentationController.parseUpdateDamageForProductMessage(info));
