@@ -349,6 +349,7 @@ public class Connector {
             }
             if(shift.getShiftManager().getID() == _worker.getID()) {
                 shift.altarRole(id,role);
+                return true;
             }
             return false;
         }
