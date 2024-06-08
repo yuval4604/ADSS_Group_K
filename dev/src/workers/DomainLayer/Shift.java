@@ -20,7 +20,8 @@ public class Shift {
     private int _dayOfWeek;
     private boolean _dayShift; // true - morning / false - evening
     private Map<String, List<Worker>> workers; // map contains a role and a list of workers
-    public Shift(Worker sManager,String date, boolean dayShift,int dayOfWeek, boolean active) {
+    private Branch _branch;
+    public Shift(Worker sManager,String date, boolean dayShift,int dayOfWeek, boolean active, Branch branch) {
         shiftManager = sManager;
         _date = date;
         _dayShift = dayShift;
@@ -29,6 +30,7 @@ public class Shift {
         _active = active;
         _localDate = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
         minimalWorkers = new HashMap<>();
+        _branch = branch;
     }
 
     public String getDate() {
@@ -92,4 +94,5 @@ public class Shift {
             }
         }
     }
+
 }

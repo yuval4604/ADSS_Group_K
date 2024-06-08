@@ -2,30 +2,32 @@ package workers.DomainLayer;
 import java.time.LocalDate;
 import java.util.*;
 
-public class HeadOfHR {
-    private Worker worker;
-    private Map<Integer,Worker> allWorkers;
+public class BranchManager extends Worker {
+    private static Map<Integer,Worker> allWorkers;
     private List<Shift> allShifts;
-    private Map<String,List<Worker>> roleList; // a list of qualified workers for each role
+    private static Map<String,List<Worker>> roleList; // a list of qualified workers for each role
     private Shift currentShift; // the current shift that the HR is working on
     private int _lastdaytoSetConstraints;
 
     private Map<LocalDate,List<Worker>> firedWorkers;
 
-    public HeadOfHR() {
+    private Branch _branch;
+
+    public BranchManager(String name, int id, int bankNum, int globalWage, int hourlyWage, String dateOfStart, boolean fullTimeJob, int totalVacationDays, int currentVacationDays, Branch branch) {
+        super(name, id, bankNum, globalWage, hourlyWage, dateOfStart, fullTimeJob, totalVacationDays, currentVacationDays);
         _lastdaytoSetConstraints = 6;
         allWorkers = new HashMap<>();
         allShifts = new LinkedList<>();
-        worker = new Worker("Admin",-1,0,0,0,"",true,0,0);
-        allWorkers.put(-1,worker);
+        allWorkers.put(-1,this);
         currentShift = null;
         roleList = new HashMap<>();
         roleList.put("Shift-Manager",new LinkedList<>());
-        roleList.get("Shift-Manager").add(worker);
+        roleList.get("Shift-Manager").add(this);
         firedWorkers = new HashMap<>();
+        _branch = branch;
     }
 
-    public Worker getWorker(int id) {
+    public static Worker getWorker(int id) {
         if(!allWorkers.containsKey(id))
             return null;
         return allWorkers.get(id);
@@ -164,7 +166,7 @@ public class HeadOfHR {
         return false;
     }
 
-    public List<String> getRoles (Worker worker){
+    public static List<String> getRoles (Worker worker){
         List<String> roles = new LinkedList<>();
         for (Map.Entry<String, List<Worker>> entry : roleList.entrySet()) {
             if (entry.getValue().contains(worker)) {
@@ -320,6 +322,20 @@ public class HeadOfHR {
             if(currentShift.getWorkers().get(entry.getKey()).size() < entry.getValue())
                 return false;
         }
+        return true;
+    }
+
+    public boolean addWorkerToBranch(Worker worker) {
+        if(_branch.getWorkers().contains(worker))
+            return false;
+        _branch.addWorker(worker);
+        return true;
+    }
+
+    public boolean removeWorkerFromBranch(Worker worker) {
+        if(!_branch.getWorkers().contains(worker))
+            return false;
+        _branch.removeWorker(worker);
         return true;
     }
 }
