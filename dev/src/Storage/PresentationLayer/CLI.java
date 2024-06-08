@@ -9,6 +9,7 @@ import Storage.DomainLayer.Facades.SubCategoryFacade;
 import Storage.DomainLayer.Facades.SubSubCategoryFacade;
 import Storage.DomainLayer.Product;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,13 +17,22 @@ import java.util.Scanner;
 public class CLI {
 
     private static PresentationController presentationController;
-
+    private static final int DAY_OF_WEEK = 1;
+    private static boolean isProductReportAlerted = false;
     public static void main(String[] args) throws Exception {
         resetFactory();
         String choice = "";
         Scanner scan = new Scanner(System.in);
         String info;
         while(!choice.equals("15")){
+            if(!isProductReportAlerted && LocalDate.now().getDayOfWeek().getValue() == DAY_OF_WEEK){
+                System.out.println("The products that need to be ordered are:");
+                System.out.println(presentationController.alertOnMinimalQuantity());
+                isProductReportAlerted = true;
+            }
+            else if(isProductReportAlerted && LocalDate.now().getDayOfWeek().getValue() != DAY_OF_WEEK){
+                isProductReportAlerted = false;
+            }
             info = "";
             System.out.println("Welcome to the Storage, what would you like to do:\n" +
                     "1. Get product information.\n" +
