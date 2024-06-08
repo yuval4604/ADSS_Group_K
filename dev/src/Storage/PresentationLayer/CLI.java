@@ -17,17 +17,25 @@ import java.util.Scanner;
 public class CLI {
 
     private static PresentationController presentationController;
-    private static final int DAY_OF_WEEK = 1;
+    private static final int DAY_OF_WEEK = 7;
+    private static final int DAY_OF_MONTH = 1;
+    private static boolean isDamageReportAlerted = false;
     private static boolean isProductReportAlerted = false;
     public static void main(String[] args) throws Exception {
         resetFactory();
         String choice = "";
         Scanner scan = new Scanner(System.in);
         String info;
-        while(!choice.equals("15")){
+        while(!choice.equals("21")){
+            if(!isDamageReportAlerted && LocalDate.now().getDayOfMonth() == DAY_OF_MONTH){
+                System.out.println("It is time to produce the damage report. Please choose option 12.");
+                isDamageReportAlerted = true;
+            }
+            else if(isDamageReportAlerted && LocalDate.now().getDayOfMonth() != DAY_OF_MONTH){
+                isDamageReportAlerted = false;
+            }
             if(!isProductReportAlerted && LocalDate.now().getDayOfWeek().getValue() == DAY_OF_WEEK){
-                System.out.println("The products that need to be ordered are:");
-                System.out.println(presentationController.alertOnMinimalQuantity());
+                System.out.println("It is time to produce the product report. Please choose option 11, and enter the categories you wish to produce a report for.");
                 isProductReportAlerted = true;
             }
             else if(isProductReportAlerted && LocalDate.now().getDayOfWeek().getValue() != DAY_OF_WEEK){
@@ -42,14 +50,20 @@ public class CLI {
                     "5. Decrease products quantity.\n" +
                     "6. Remove damage products.\n" +
                     "7. Remove expired products.\n" +
-                    "8. Update discount for product.\n" +
-                    "9. Update discount for categories.\n" +
-                    "10. Remove products.\n" +
-                    "11. Produce products report.\n" +
-                    "12. Produce damaged and expired report.\n" +
-                    "13. Check for products below minimal quantity.\n" +
-                    "14. Check for expired products.\n" +
-                    "15. Exit program.");
+                    "8. Update buy price for product.\n" +
+                    "9. Update sale price for product.\n" +
+                    "10. Update supplier discount for product.\n" +
+                    "11. Update manufacturer for product.\n" +
+                    "12. Update aisle for product.\n" +
+                    "13. Update minimal quantity for product.\n" +
+                    "14. Update discount for product.\n" +
+                    "15. Update discount for categories.\n" +
+                    "16. Remove products.\n" +
+                    "17. Produce products report.\n" +
+                    "18. Produce damaged and expired report.\n" +
+                    "19. Check for products below minimal quantity.\n" +
+                    "20. Check for expired products.\n" +
+                    "21. Exit program.");
             choice = scan.nextLine();
             switch (choice){
                 case "1":{
@@ -165,6 +179,54 @@ public class CLI {
                     break;
                 }
                 case "8":{
+                    System.out.println("Please enter the catalog number of the product you wish to update the buy price for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new buy price for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateBuyPriceForProductMessage(info));
+                    break;
+                }
+                case "9":{
+                    System.out.println("Please enter the catalog number of the product you wish to update the sale price for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new sale price for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateSalePriceForProductMessage(info));
+                    break;
+                }
+                case "10":{
+                    System.out.println("Please enter the catalog number of the product you wish to update the supplier discount for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new supplier discount for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateSupplierDiscountForProductMessage(info));
+                    break;
+                }
+                case "11":{
+                    System.out.println("Please enter the catalog number of the product you wish to update the manufacturer for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new manufacturer for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateManufacturerForProductMessage(info));
+                    break;
+                }
+                case "12":{
+                    System.out.println("Please enter the catalog number of the product you wish to update the aisle for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new aisle for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateAisleForProductMessage(info));
+                    break;
+                }
+                case "13":{
+                    System.out.println("Please enter the catalog number of the product you wish to update the minimal quantity for: ");
+                    info += scan.nextLine() + ",";
+                    System.out.println("Please enter the new minimal quantity for the product: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseUpdateMinimalQuantityForProductMessage(info));
+                    break;
+                }
+                case "14":{
                     System.out.println("Please enter the catalog number of the product you wish to update the discount for: ");
                     info += scan.nextLine() + ",";
                     System.out.println("Please enter the new discount for the product: ");
@@ -172,39 +234,39 @@ public class CLI {
                     System.out.println(presentationController.parseUpdateDiscountForProductMessage(info));
                     break;
                 }
-                case "9":{
+                case "15":{
                     System.out.println("Please enter the new discount for the categories: ");
                     info += scan.nextLine() + ";";
                     info += getCategoriesFromUser(scan);
                     System.out.println(presentationController.parseUpdateDiscountForCategoryMessage(info));
                     break;
                 }
-                case "10":{
+                case "16":{
                     System.out.println("Please enter the catalog number of the product you wish to remove: ");
                     info += scan.nextLine();
                     System.out.println(presentationController.parseRemoveProductMessage(info));
                     break;
                 }
-                case "11":{
+                case "17":{
                     info = getCategoriesFromUser(scan);
                     System.out.println(presentationController.parseProduceProductReportMessage(info));
                     break;
                 }
-                case "12":{
+                case "18":{
                     System.out.println(presentationController.parseProduceDamageReportMessage());
                     break;
                 }
-                case "13":{
+                case "19":{
                     System.out.println("The products that need to be ordered are:");
                     System.out.println(presentationController.alertOnMinimalQuantity());
                     break;
                 }
-                case "14":{
+                case "20":{
                     System.out.println("The expired products are: ");
                     System.out.println(presentationController.expiredCount());
                     break;
                 }
-                case "15":{
+                case "21":{
                     break;
                 }
                 default:

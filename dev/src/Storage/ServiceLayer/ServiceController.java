@@ -152,4 +152,52 @@ public class ServiceController {
             throw new Exception(e.getMessage());
         }
     }
+
+    public void updateBuyPriceForProduct(int catalogNumber, double buyPrice) {
+        try {
+            this.manager.updateBuyPriceForProduct(catalogNumber, buyPrice);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateSalePriceForProduct(int catalogNumber, double salePrice) {
+        try {
+            this.manager.updateSalePriceForProduct(catalogNumber, salePrice);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateSupplierDiscountForProduct(int catalogNumber, double supplierDiscount) {
+        try {
+            this.manager.updateSupplierDiscountForProduct(catalogNumber, supplierDiscount);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateManufacturerForProduct(int catalogNumber, String manufacturer) {
+        try {
+            this.manager.updateManufacturerForProduct(catalogNumber, manufacturer);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateAisleForProduct(int catalogNumber, String aisle) {
+        try {
+            this.manager.updateAisleForProduct(catalogNumber, aisle);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateMinimalQuantityForProduct(int catalogNumber, int minimalQuantity) {
+        try {
+            this.manager.updateMinimalQuantityForProduct(catalogNumber, minimalQuantity);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }

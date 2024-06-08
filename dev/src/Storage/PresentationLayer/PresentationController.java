@@ -163,6 +163,30 @@ public class PresentationController {
         }
     }
 
+    private void updateMinimalQuantityForProduct(int catalogNumber, int minimalQuantity) {
+        this.serviceController.updateMinimalQuantityForProduct(catalogNumber, minimalQuantity);
+    }
+
+    private void updateAisleForProduct(int catalogNumber, String aisle) {
+        this.serviceController.updateAisleForProduct(catalogNumber, aisle);
+    }
+
+    private void updateManufacturerForProduct(int catalogNumber, String manufacturer) {
+        this.serviceController.updateManufacturerForProduct(catalogNumber, manufacturer);
+    }
+
+    private void updateSupplierDiscountForProduct(int catalogNumber, double supplierDiscount) {
+        this.serviceController.updateSupplierDiscountForProduct(catalogNumber, supplierDiscount);
+    }
+
+    private void updateSalePriceForProduct(int catalogNumber, double salePrice) {
+        this.serviceController.updateSalePriceForProduct(catalogNumber, salePrice);
+    }
+
+    private void updateBuyPriceForProduct(int catalogNumber, double buyPrice) {
+        this.serviceController.updateBuyPriceForProduct(catalogNumber, buyPrice);
+    }
+
     public String parseAddProductMessage(String str) throws Exception{
         try {
             String[] parts = str.split(",");
@@ -317,6 +341,78 @@ public class PresentationController {
             return this.moveToExpired(catalogNumber, expirationDate, inStore, inStorage);
         } catch (Exception e) {
             return "give us good info please!";
+        }
+    }
+
+    public boolean parseUpdateBuyPriceForProductMessage(String info) {
+        try {
+            String[] parts = info.split(",");
+            int catalogNumber = Integer.parseInt(parts[0]);
+            double buyPrice = Double.parseDouble(parts[1]);
+            this.updateBuyPriceForProduct(catalogNumber, buyPrice);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean parseUpdateSalePriceForProductMessage(String info) {
+        try {
+            String[] parts = info.split(",");
+            int catalogNumber = Integer.parseInt(parts[0]);
+            double salePrice = Double.parseDouble(parts[1]);
+            this.updateSalePriceForProduct(catalogNumber, salePrice);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean parseUpdateSupplierDiscountForProductMessage(String info) {
+        try {
+            String[] parts = info.split(",");
+            int catalogNumber = Integer.parseInt(parts[0]);
+            double supplierDiscount = Double.parseDouble(parts[1]);
+            this.updateSupplierDiscountForProduct(catalogNumber, supplierDiscount);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean parseUpdateManufacturerForProductMessage(String info) {
+        try {
+            String[] parts = info.split(",");
+            int catalogNumber = Integer.parseInt(parts[0]);
+            String manufacturer = parts[1];
+            this.updateManufacturerForProduct(catalogNumber, manufacturer);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean parseUpdateAisleForProductMessage(String info) {
+        try {
+            String[] parts = info.split(",");
+            int catalogNumber = Integer.parseInt(parts[0]);
+            String aisle = parts[1];
+            this.updateAisleForProduct(catalogNumber, aisle);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean parseUpdateMinimalQuantityForProductMessage(String info) {
+        try {
+            String[] parts = info.split(",");
+            int catalogNumber = Integer.parseInt(parts[0]);
+            int minimalQuantity = Integer.parseInt(parts[1]);
+            this.updateMinimalQuantityForProduct(catalogNumber, minimalQuantity);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

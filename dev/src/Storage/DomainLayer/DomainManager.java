@@ -18,12 +18,13 @@ public class DomainManager {
         this.domainFacade = domainFacade;
         this.productMap = new HashMap<Integer, Product>();
     }
+
     public DomainManager(Map<Integer, Product> productMap, DomainFacade domainFacade) {
         this.productMap = productMap;
         this.domainFacade = domainFacade;
     }
 
-    public void addProduct(Product product) throws Exception{
+    public void addProduct(Product product) throws Exception {
         try {
             if (this.productMap.containsKey(product.getCatalogNumber())) {
                 throw new IllegalArgumentException("Product with this catalog number already exists");
@@ -35,7 +36,7 @@ public class DomainManager {
         }
     }
 
-    public Product getProduct(int catalogNumber) throws Exception{
+    public Product getProduct(int catalogNumber) throws Exception {
         try {
             if (!this.productMap.containsKey(catalogNumber)) {
                 return null;
@@ -50,7 +51,7 @@ public class DomainManager {
         return this.productMap;
     }
 
-    public void removeProduct(Product product) throws Exception{
+    public void removeProduct(Product product) throws Exception {
         try {
             if (!this.productMap.containsKey(product.getCatalogNumber())) {
                 throw new IllegalArgumentException("Product with this catalog number does not exist");
@@ -63,7 +64,7 @@ public class DomainManager {
     }
 
     // in the presentaion we will force the user to choose all the higher level categories of a chosen category
-    public List<Product> getProductsByCategories(List<String> categories) throws Exception{
+    public List<Product> getProductsByCategories(List<String> categories) throws Exception {
         try {
             List<Product> products = new LinkedList<>();
             for (String category : categories) {
@@ -102,7 +103,7 @@ public class DomainManager {
         }
     }
 
-    public void subtractFromStore(int catalogNumber, Map<LocalDate,Integer> products) throws Exception{
+    public void subtractFromStore(int catalogNumber, Map<LocalDate, Integer> products) throws Exception {
         try {
             Product product = this.productMap.get(catalogNumber);
             for (Map.Entry<LocalDate, Integer> entry : products.entrySet()) {
@@ -117,10 +118,10 @@ public class DomainManager {
         }
     }
 
-    public Map<Integer,Integer> expiredCount() throws Exception{
+    public Map<Integer, Integer> expiredCount() throws Exception {
         Map<Integer, Integer> expiredProducts = new HashMap<>();
-        for(Integer catalogNumber : productMap.keySet()){
-            expiredProducts.put(catalogNumber,productMap.get(catalogNumber).expiredCount());
+        for (Integer catalogNumber : productMap.keySet()) {
+            expiredProducts.put(catalogNumber, productMap.get(catalogNumber).expiredCount());
         }
         return expiredProducts;
     }
@@ -128,17 +129,17 @@ public class DomainManager {
 
     public String alertOnMinimalQuantity() throws Exception {
         String alert = "";
-        for(Product product : this.productMap.values()){
-            if(product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()){
+        for (Product product : this.productMap.values()) {
+            if (product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()) {
                 alert += product.getName() + "\n";
             }
         }
-        if(this.productMap.values().size() > 0 && !alert.equals(""))
-            alert = alert.substring(0,alert.length()-1);
+        if (this.productMap.values().size() > 0 && !alert.equals(""))
+            alert = alert.substring(0, alert.length() - 1);
         return alert;
     }
 
-    public void addToProduct(LocalDate expirationDate, int catalogNumber, int inStore, int inStorage) throws Exception{
+    public void addToProduct(LocalDate expirationDate, int catalogNumber, int inStore, int inStorage) throws Exception {
         try {
             Product product = this.productMap.get(catalogNumber);
             product.addByExpirationDate(inStore, inStorage, expirationDate);
@@ -147,8 +148,8 @@ public class DomainManager {
         }
     }
 
-    public void moveToExpired(int catalogNumber, LocalDate expirationDate, int inStore, int inStorage) throws Exception{
-        try{
+    public void moveToExpired(int catalogNumber, LocalDate expirationDate, int inStore, int inStorage) throws Exception {
+        try {
             Product product = this.productMap.get(catalogNumber);
             product.moveToExpired(inStore, inStorage, expirationDate);
         } catch (Exception e) {
@@ -157,10 +158,58 @@ public class DomainManager {
     }
 
     public void setDiscount(int catalogNumber, double discount) {
-        try{
+        try {
             this.productMap.get(catalogNumber).setDiscount(discount);
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    public void updateBuyPriceForProduct(int catalogNumber, double buyPrice) {
+        try {
+            this.productMap.get(catalogNumber).setBuyPrice(buyPrice);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateSalePriceForProduct(int catalogNumber, double salePrice) {
+        try {
+            this.productMap.get(catalogNumber).setSalePrice(salePrice);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateSupplierDiscountForProduct(int catalogNumber, double supplierDiscount) {
+        try {
+            this.productMap.get(catalogNumber).setSupplierDiscount(supplierDiscount);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateManufacturerForProduct(int catalogNumber, String manufacturer) {
+        try {
+            this.productMap.get(catalogNumber).setManufacturer(manufacturer);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateAisleForProduct(int catalogNumber, String aisle) {
+        try {
+            this.productMap.get(catalogNumber).setAisle(aisle);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateMinimalQuantityForProduct(int catalogNumber, int minimalQuantity) {
+        try {
+            this.productMap.get(catalogNumber).setMinimalQuantity(minimalQuantity);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 }

@@ -243,7 +243,7 @@ public class Product {
         int expiredSum = 0;
         for(LocalDate expiredDate : this.expiredProducts.keySet())
             expiredSum += this.expiredProducts.get(expiredDate);
-        return "Catalog number: " + catalogNumber + "\n" +
+        String ret = "Catalog number: " + catalogNumber + "\n" +
                 "Name: " + name + "\n" +
                 "Category: " + category + "\n" +
                 "Sub category: " + subCategory + "\n" +
@@ -251,6 +251,9 @@ public class Product {
                 "Aisle: " + aisle + "\n" +
                 "Expired quantity: " + expiredSum + "\n" +
                 "Damaged quantity: " + damageQuantity  + "\n";
+        damageQuantity = 0;
+        expiredProducts.clear();
+        return ret;
     }
 
     public void moveProductToStore(LocalDate expirationDate, int quantity) {
@@ -285,5 +288,13 @@ public class Product {
                 count += entry.getValue().getKey() + entry.getValue().getValue();
         }
         return count;
+    }
+
+    public void setSupplierDiscount(double supplierDiscount) {
+        this.supplierDiscount = supplierDiscount;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }
