@@ -515,11 +515,11 @@ public class ActionManager {
         boolean keepWorking = true;
         while (keepWorking)
         {
-            System.out.println("choose command:\n1) add worker to shift\n2) remove a worker from the shift\n3) show available workers of role\n4) show shift\n5) back");
+            System.out.println("choose command:\n1) add worker to shift\n2) remove a worker from the shift\n3) show available workers of role\n4) show shift\n5) check if the current shift has enough workers\n6) back");
             int result;
             try {
                 result = scanner.nextInt();
-                if(result < 1 || result > 5) {
+                if(result < 1 || result > 6) {
                     throw new Exception();
                 }
             }
@@ -534,7 +534,18 @@ public class ActionManager {
                 case 2 -> removeWorkerFromShift();
                 case 3 -> ShowAvailableWorkersOfRole();
                 case 4 -> System.out.println(_connector.showShift());
-                case 5 -> keepWorking = false;
+                case 5 -> checkIfRoleHasMinimalWorkers();
+                case 6 -> {
+                    if(_connector.checkIfRoleHasMinimalWorkers())
+                    {
+                        System.out.println("Shift is ready to go!");
+                        keepWorking = false;
+                    }
+                    else
+                    {
+                        System.out.println("Shift is not ready to go!");
+                    }
+                }
                 default -> System.out.println("Didnt choose one of the options");
             }
         }
@@ -694,8 +705,20 @@ public class ActionManager {
         System.out.println(roles);
     }
 
-    public boolean isHR() {
-        return _connector.getIsHR();
+    public boolean isBM() {
+        return _connector.getIsBM();
+    }
+
+    public void joinBranch() {
+        System.out.println("Enter Branch's id: ");
+        String branchID = scanner.nextLine();
+        boolean res = _connector.joinBranch(branchID);
+        if(res) {
+            System.out.println("joined successfully");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
     }
 
     public void setLastDayForConstraints() {
@@ -834,9 +857,192 @@ public class ActionManager {
             System.out.println("All roles have reached the mimnimal requirement of workers");
         }
         else {
-            System.out.println("Error: some roles did not reached the mimnimal requirement of workers");
+            System.out.println("some roles did not reached the mimnimal requirement of workers");
         }
     }
 
+    public void showBranch() {
+        System.out.println("Enter Branch's id: ");
+        int branchID;
+        try {
+            branchID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        System.out.println(_connector.showBranch(branchID));
+    }
 
+    public void showBranches() {
+        System.out.println(_connector.showBranches());
+    }
+
+    public void setBranchManager() {
+        System.out.println("Enter Branch's id: ");
+        int branchID;
+        try {
+            branchID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        System.out.println("Enter Worker's id: ");
+        int workerID;
+        try {
+            workerID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        boolean res = _connector.setBranchManager(branchID,workerID);
+        if(res) {
+            System.out.println("Branch manager has been set!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void removeWorkerFromBranch() {
+        System.out.println("Enter Worker's id: ");
+        int workerID;
+        try {
+            workerID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        boolean res = _connector.removeWorkerFromBranch(workerID);
+        if(res) {
+            System.out.println("Worker has been removed from branch!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void addWorkerToBranch() {
+        System.out.println("Enter Worker's id: ");
+        int workerID;
+        try {
+            workerID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        boolean res = _connector.addWorkerToBranch(workerID);
+        if(res) {
+            System.out.println("Worker has been added to branch!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void removeBranch() {
+        System.out.println("Enter Branch's id: ");
+        int branchID;
+        try {
+            branchID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        boolean res = _connector.removeBranch(branchID);
+        if(res) {
+            System.out.println("Branch has been removed!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void addBranch() {
+        System.out.println("Enter Branch's id: ");
+        int branchID;
+        try {
+            branchID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        System.out.println("Enter Branch's name: ");
+        String branchName;
+        try {
+            branchName = scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        System.out.println("Enter Branch's address: ");
+        String adress = scanner.nextLine();
+        System.out.println("Enter Branch's BM id: ");
+        int BMID;
+        try {
+            BMID = scanner.nextInt();
+            scanner.nextLine();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            return;
+        }
+        boolean res = _connector.addBranch(branchName, branchID, adress, BMID);
+        if(res) {
+            System.out.println("Branch has been added!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
+
+    public void altarOnGoingShift() {
+        System.out.println("Enter Worker's id: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
+        System.out.println("Enter Worker's new role: ");
+        String role = scanner.nextLine();
+        System.out.println("Enter branch's id: ");
+        int bID;
+        try {
+            bID = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
+        boolean res = _connector.altarOnGoingShift(id,role,bID);
+        if(res) {
+            System.out.println("selected successfully");
+        }
+        else {
+            System.out.println("Error: shift does not exist");
+        }
+    }
+
+    public boolean isHR() {
+        return _connector.getIsHR();
+    }
 }

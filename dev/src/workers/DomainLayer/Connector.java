@@ -15,6 +15,9 @@ public class Connector {
         _lastUpdate = LocalDate.now();
         loginInfos = new HashMap<>();
         loginInfos.put(-1, password);
+        Branch ABranch = new Branch("Admin", -1, "Admin", null);
+        _worker = new HR(ABranch);
+        ABranch.setBranchManager(_worker);
     }
     public boolean login(int id,String password) {
         if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {
@@ -30,31 +33,31 @@ public class Connector {
         _worker.setBankNum(bank);
     }
     public boolean setGlobalWage(int id,int wage){
-        if(_worker.getIsHR()) {
+        if(_worker.getIsBM()) {
             return ((BranchManager)_worker).setWorkerGlobal(id,wage);
         }
         return false;
     }
     public boolean setHourlyWage(int id,int wage){
-        if(_worker.getIsHR()) {
+        if(_worker.getIsBM()) {
             return ((BranchManager)_worker).setWorkerHourly(id,wage);
         }
         return false;
     }
     public boolean setFullTimeJob(int id,boolean full){
-        if(_worker.getIsHR()) {
+        if(_worker.getIsBM()) {
             return ((BranchManager)_worker).setFullTime(id,full);
         }
         return false;
     }
     public boolean setVacationDays(int id, int days){
-        if(_worker.getIsHR()) {
+        if(_worker.getIsBM()) {
             return ((BranchManager)_worker).setVacation(id,days);
         }
         return false;
     }
     public boolean ResetVacationDays(int id){
-        if(_worker.getIsHR()) {
+        if(_worker.getIsBM()) {
             return ((BranchManager)_worker).ResetVacationDays(id);
         }
         return false;
@@ -68,11 +71,13 @@ public class Connector {
         List<Worker>[] list = ((BranchManager)_worker).getAvailableWorkersOfRole(role);
         res += "For the role, " + role + " , the workers who want to work this shift are: \n";
         for(Worker worker : list[0]) {
-            res += worker.getName() + ", " + worker.getID() + "\n";
+            if (worker.inBranch(((BranchManager)_worker).getBranch().getName()))
+                res += worker.getName() + ", " + worker.getID() + "\n";
         }
         res += "For the role, " + role + " , the workers who can work this shift are: \n";
         for(Worker worker : list[1]) {
-            res += worker.getName() + ", " + worker.getID();
+            if (worker.inBranch(((BranchManager)_worker).getBranch().getName()))
+                res += worker.getName() + ", " + worker.getID() + "\n";
         }
         return res;
     }
@@ -81,6 +86,8 @@ public class Connector {
             return false;
         }
         Worker worker = BranchManager.getWorker(id);
+        if (!worker.inBranch(((BranchManager)_worker).getBranch().getName()))
+            return false;
         return ((BranchManager)_worker).addWorkerToShift(worker,role);
     }
     public boolean selectShift(String date,boolean dayShift) {
@@ -88,6 +95,8 @@ public class Connector {
     }
     public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek) {
         Worker shiftManager = BranchManager.getWorker(id);
+        if (!shiftManager.inBranch(((BranchManager)_worker).getBranch().getName()))
+            return false;
         return ((BranchManager)_worker).createShift(shiftManager,date,dayShift,dayOfWeek);
     }
 
@@ -97,7 +106,8 @@ public class Connector {
                 + "Global wage:" + _worker.getGWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
-                + "Current vacation days:" + _worker.getCurrVacationDays();
+                + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
+                + "Branches: " + _worker.getBranches();
         String HRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Hourly wage:" + _worker.getHWage() + "\n"
@@ -121,12 +131,12 @@ public class Connector {
     }
 
     public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) {
-        if(_worker.getIsHR())
+        if(_worker.getIsBM())
             return ((BranchManager)_worker).setHalfDayShiftOff(date,dayShift,dayOfWeek);
         return false;
     }
     public boolean setAllDayOff(String date, int dayOfWeek) {
-        if(_worker.getIsHR()) {
+        if(_worker.getIsBM()) {
             return ((BranchManager)_worker).setAllDayOff(date,dayOfWeek);
         }
         return false;
@@ -147,7 +157,7 @@ public class Connector {
 
     public boolean addWorker(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {
         if(!((BranchManager)_worker).contains(id)) {
-            Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays);
+            Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays,false);
             ((BranchManager)_worker).addWorker(worker);
             loginInfos.put(id,name);
             return true;
@@ -178,8 +188,8 @@ public class Connector {
         return ((BranchManager)_worker).isInactive();
     }
 
-    public boolean getIsHR() {
-        return _worker.getIsHR();
+    public boolean getIsBM() {
+        return _worker.getIsBM();
     }
 
     public boolean isFullTime(int id) {
@@ -192,6 +202,20 @@ public class Connector {
 
     public void load() {
         login(-1,"admin");
+        ((HR)_worker).addBranch("Tel-Aviv",1,"Tel-Aviv",new Worker("Benjamin",22,2,2,2,"2",true,2,2,false));
+        ((HR)_worker).addBranch("Jerusalem",2,"Jerusalem",new Worker("Casey",23,3,3,3,"3",true,3,3,false));
+        ((HR)_worker).addBranch("Haifa",3,"Haifa",new Worker("Daniel",24,4,4,4,"4",true,4,4,false));
+        ((HR)_worker).addBranch("Beer-Sheva",4,"Beer-Sheva",new Worker("Emily",25,5,5,5,"5",true,5,5,false));
+        ((HR)_worker).addBranch("Eilat",5,"Eilat",new Worker("Francis",26,6,6,6,"6",true,6,6,false));
+        ((HR)_worker).addBranch("Ashdod",6,"Ashdod",new Worker("George",27,7,7,7,"7",true,7,7,false));
+        ((HR)_worker).addBranch("Natanya",7,"Natanya",new Worker("Hanna",28,8,8,8,"8",true,8,8,false));
+        ((HR)_worker).addBranch("Rishon-Lezion",8,"Rishon-Lezion",new Worker("Ian",29,9,9,9,"9",true,9,9,false));
+        ((HR)_worker).addBranch("Petah-Tikva",9,"Petah-Tikva",new Worker("John",30,10,10,10,"10",true,10,10,false));
+        ((HR)_worker).addBranch("Holon",10,"Holon",new Worker("Kelly",41,11,11,11,"11",true,11,11,false));
+        ((HR)_worker).addBranch("Herzliya",11,"Herzliya",new Worker("Louis",42,12,12,12,"12",true,12,12,false));
+        ((HR)_worker).addBranch("Kfar-Saba",12,"Kfar-Saba",new Worker("Margo",43,13,13,13,"13",true,13,13,false));
+        logOut();
+        login(22,"Benjamin");
         loginInfos.put(1,"1234");
         loginInfos.put(2,"1234");
         loginInfos.put(3,"1234");
@@ -207,21 +231,21 @@ public class Connector {
         loginInfos.put(13,"1234");
         loginInfos.put(14,"1234");
         loginInfos.put(15,"1234");
-        ((BranchManager)_worker).addWorker(new Worker("Alfred",1,1,1,1,"1",true,1,1));
-        ((BranchManager)_worker).addWorker(new Worker("Benjamin",2,2,2,2,"2",true,2,2));
-        ((BranchManager)_worker).addWorker(new Worker("Casey",3,3,3,3,"3",true,3,3));
-        ((BranchManager)_worker).addWorker(new Worker("Daniel",4,4,4,4,"4",true,4,4));
-        ((BranchManager)_worker).addWorker(new Worker("Emily",5,5,5,5,"5",true,5,5));
-        ((BranchManager)_worker).addWorker(new Worker("Francis",6,6,6,6,"6",true,6,6));
-        ((BranchManager)_worker).addWorker(new Worker("George",7,7,7,7,"7",true,7,7));
-        ((BranchManager)_worker).addWorker(new Worker("Hanna",8,8,8,8,"8",true,8,8));
-        ((BranchManager)_worker).addWorker(new Worker("Ian",9,9,9,9,"9",true,9,9));
-        ((BranchManager)_worker).addWorker(new Worker("John",10,10,10,10,"10",true,10,10));
-        ((BranchManager)_worker).addWorker(new Worker("Kelly",11,11,11,11,"11",true,11,11));
-        ((BranchManager)_worker).addWorker(new Worker("Louis",12,12,12,12,"12",true,12,12));
-        ((BranchManager)_worker).addWorker(new Worker("Margo",13,13,13,13,"13",true,13,13));
-        ((BranchManager)_worker).addWorker(new Worker("Nathan",14,14,14,14,"14",true,14,14));
-        ((BranchManager)_worker).addWorker(new Worker("Oliver",15,15,15,15,"15",true,15,15));
+        ((BranchManager)_worker).addWorker(new Worker("Alfred",1,1,1,1,"1",true,1,1,false));
+        ((BranchManager)_worker).addWorker(new Worker("Benjamin",2,2,2,2,"2",true,2,2,false));
+        ((BranchManager)_worker).addWorker(new Worker("Casey",3,3,3,3,"3",true,3,3,false));
+        ((BranchManager)_worker).addWorker(new Worker("Daniel",4,4,4,4,"4",true,4,4,false));
+        ((BranchManager)_worker).addWorker(new Worker("Emily",5,5,5,5,"5",true,5,5,false));
+        ((BranchManager)_worker).addWorker(new Worker("Francis",6,6,6,6,"6",true,6,6,false));
+        ((BranchManager)_worker).addWorker(new Worker("George",7,7,7,7,"7",true,7,7,false));
+        ((BranchManager)_worker).addWorker(new Worker("Hanna",8,8,8,8,"8",true,8,8,false));
+        ((BranchManager)_worker).addWorker(new Worker("Ian",9,9,9,9,"9",true,9,9,false));
+        ((BranchManager)_worker).addWorker(new Worker("John",10,10,10,10,"10",true,10,10,false));
+        ((BranchManager)_worker).addWorker(new Worker("Kelly",11,11,11,11,"11",true,11,11,false));
+        ((BranchManager)_worker).addWorker(new Worker("Louis",12,12,12,12,"12",true,12,12,false));
+        ((BranchManager)_worker).addWorker(new Worker("Margo",13,13,13,13,"13",true,13,13,false));
+        ((BranchManager)_worker).addWorker(new Worker("Nathan",14,14,14,14,"14",true,14,14,false));
+        ((BranchManager)_worker).addWorker(new Worker("Oliver",15,15,15,15,"15",true,15,15,false));
         ((BranchManager)_worker).addRole(1,"Cashier");
         ((BranchManager)_worker).addRole(2,"Cashier");
         ((BranchManager)_worker).addRole(3,"Delivery");
@@ -282,7 +306,7 @@ public class Connector {
     }
 
     public String showWorkerShifts(String fromDate,String ToDate,int id) {
-        List Shifts = new LinkedList<>();
+        List<Shift> Shifts = new LinkedList<>();
         LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.split(".")[2]), Integer.parseInt(fromDate.split(".")[1]), Integer.parseInt(fromDate.split(".")[0]));
         LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.split(".")[2]), Integer.parseInt(ToDate.split(".")[1]), Integer.parseInt(ToDate.split(".")[0]));
         for (Shift shift : ((BranchManager)_worker).getAllShifts()) {
@@ -292,7 +316,11 @@ public class Connector {
                 }
             }
         }
-        return Shifts.toString();
+        String res = "";
+        for (Shift shift : Shifts) {
+            res += shift.getDate() + "," + (shift.getDayShift()?"day shift":"night shift") + "," + shift.getBranch().getName()+ "\n";
+        }
+        return res;
     }
 
         public boolean hasChangedPassword () {
@@ -309,41 +337,43 @@ public class Connector {
 
         public void checkUpdateDay () {
             if (_lastUpdate.isBefore(LocalDate.now())) {
-                ((BranchManager)_worker).checkUpdateDay();
+                _worker.checkUpdateDay();
                 _lastUpdate = LocalDate.now();
             }
         }
 
         public boolean fireWorker( int id){
 
-            if(_worker.getIsHR()) {
-                ((BranchManager)_worker).fireWorker(id);
+            if(_worker.getIsBM()) {
+                ((HR)_worker).fireWorker(id);
                 return true;
             }
             return false;
         }
         public boolean endContranct30DaysFromNow( int id){
-            if(_worker.getIsHR()) {
-                ((BranchManager)_worker).endContranct30DaysFromNow(id);
+            if(_worker.getIsBM()) {
+                ((HR)_worker).endContranct30DaysFromNow(id);
                 return true;
             }
             return false;
         }
         public boolean setMinimalWorkers(String role,int num){
-            if(_worker.getIsHR()) {
-                return ((BranchManager)_worker).setMinimalWorkers(role, num);
+            if(_worker.getIsBM()) {
+                ((BranchManager)_worker).setMinimalAmount(role, num);
+                return true;
             }
             return false;
         }
         public boolean checkIfRoleHasMinimalWorkers() {
-            if(_worker.getIsHR()) {
+            if(_worker.getIsBM()) {
                 return ((BranchManager)_worker).checkIfRoleHasMinimalWorkers();
             }
             return false;
         }
 
-        public boolean altarOnGoingShift (int id, String role){
-            Shift shift = ((BranchManager)_worker).getOnGoingShift();
+        public boolean altarOnGoingShift (int id, String role,int bID){
+
+            Shift shift = BranchManager.getOnGoingShift(bID);
             if(shift == null) {
                 return false;
             }
@@ -353,5 +383,75 @@ public class Connector {
             }
             return false;
         }
+
+        public boolean addBranch(String name, int id, String address, int branchManagerID) {
+            if(!_worker.getIsBM()) {
+                return false;
+            }
+            BranchManager branchManager = (BranchManager)BranchManager.getWorker(branchManagerID);
+            return ((HR)_worker).addBranch(name, id, address, branchManager);
+        }
+
+        public boolean removeBranch(int id) {
+            if(!_worker.getIsBM()) {
+                return false;
+            }
+            return ((HR)_worker).removeBranch(id);
+        }
+
+        public boolean addWorkerToBranch(int workerID) {
+            if(!_worker.getIsBM()) {
+                return false;
+            }
+            Worker worker = BranchManager.getWorker(workerID);
+            ((BranchManager)_worker).addWorkerToBranch(worker);
+            return true;
+        }
+
+        public boolean removeWorkerFromBranch(int workerID) {
+            if(!_worker.getIsBM()) {
+                return false;
+            }
+            Worker worker = BranchManager.getWorker(workerID);
+            ((BranchManager)_worker).removeWorkerFromBranch(worker);
+            return true;
+        }
+
+        public String showBranches () {
+            if(!_worker.getIsBM()) {
+                return "Error: no permission to do that";
+            }
+            return ((HR)_worker).showBranches();
+        }
+
+        public boolean setBranchManager ( int branchID, int ID){
+            if(_worker.getID() != -1) {
+                return false;
+            }
+            Worker BM = BranchManager.getWorker(ID);
+            if(BM == null) {
+                return false;
+            }
+            if(!_worker.getIsBM()) {
+                return false;
+            }
+            return ((HR)_worker).setBranchManager(branchID, BM);
+        }
+
+        public String showBranch ( int branchID){
+            if(!_worker.getIsBM()) {
+                return "Error: no permission to do that";
+            }
+            return ((HR)_worker).showBranch(branchID);
+        }
+
+    public boolean getIsHR() {
+        return _worker.getID() == -1;
+    }
+
+    public boolean joinBranch(String BranchName) {
+        _worker.addOptionalBranches(BranchName);
+        return true;
+    }
 }
 

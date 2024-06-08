@@ -12,12 +12,13 @@ public class Worker {
     private boolean _fullTimeJob;
     private int _totalVacationDays;
     private int _currentVacationDays;
-    private boolean isHR;
+    private boolean _isBM;
     private Constraints[][] _prefList;
     private List<Constraints[][]> _constraints;
     private boolean _changedPassword;
+    private List<String> branches;
 
-    public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays) {
+    public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays,boolean isBM) {
         _name = name;
         _fullTimeJob = fullTimeJob;
         _id = id;
@@ -36,7 +37,7 @@ public class Worker {
         }
         _prefList[6][0] = Constraints.inactive;
         _prefList[6][1] = Constraints.inactive;
-        isHR = name.equals("Admin");
+        _isBM = isBM;
         _changedPassword = false;
     }
     public String getName() {
@@ -104,8 +105,8 @@ public class Worker {
         }
         return true;
     }
-    public boolean getIsHR() {
-        return isHR;
+    public boolean getIsBM() {
+        return _isBM;
     }
     public boolean useVacationDays(int days) {
         if (days < _currentVacationDays) {
@@ -129,5 +130,23 @@ public class Worker {
             }
 
         }
+    }
+
+    public void addOptionalBranches(String name) {
+        branches.add(name);
+    }
+
+    public boolean inBranch(String name) {
+        return branches.contains(name);
+    }
+
+    public String getBranches() {
+        StringBuilder sb = new StringBuilder();
+        for (String name : branches) {
+            sb.append(name);
+            sb.append(", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        return sb.toString();
     }
 }

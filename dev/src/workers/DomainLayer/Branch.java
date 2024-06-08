@@ -55,11 +55,6 @@ public class Branch {
     public void removeWorker(Worker worker) {
         _workers.remove(worker);
     }
-
-    public void removeShift(Shift shift) {
-        _shifts.remove(shift);
-    }
-
     public void setBranchManager(Worker branchManager) {
         _branchManager = branchManager;
     }

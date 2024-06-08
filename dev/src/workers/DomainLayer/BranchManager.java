@@ -3,27 +3,26 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class BranchManager extends Worker {
-    private static Map<Integer,Worker> allWorkers;
-    private List<Shift> allShifts;
-    private static Map<String,List<Worker>> roleList; // a list of qualified workers for each role
+
+    private Map<String,Integer> minimalWorkers;
+    protected static Map<Integer,Worker> allWorkers;
+    protected static List<Shift> allShifts;
+    protected static Map<String,List<Worker>> roleList; // a list of qualified workers for each role
     private Shift currentShift; // the current shift that the HR is working on
     private int _lastdaytoSetConstraints;
-
-    private Map<LocalDate,List<Worker>> firedWorkers;
 
     private Branch _branch;
 
     public BranchManager(String name, int id, int bankNum, int globalWage, int hourlyWage, String dateOfStart, boolean fullTimeJob, int totalVacationDays, int currentVacationDays, Branch branch) {
-        super(name, id, bankNum, globalWage, hourlyWage, dateOfStart, fullTimeJob, totalVacationDays, currentVacationDays);
+        super(name, id, bankNum, globalWage, hourlyWage, dateOfStart, fullTimeJob, totalVacationDays, currentVacationDays, true);
         _lastdaytoSetConstraints = 6;
         allWorkers = new HashMap<>();
         allShifts = new LinkedList<>();
-        allWorkers.put(-1,this);
+        allWorkers.put(id,this);
         currentShift = null;
         roleList = new HashMap<>();
         roleList.put("Shift-Manager",new LinkedList<>());
         roleList.get("Shift-Manager").add(this);
-        firedWorkers = new HashMap<>();
         _branch = branch;
     }
 
@@ -111,7 +110,8 @@ public class BranchManager extends Worker {
     }
     public boolean createShift(Worker shiftManager,String date,boolean dayShift,int dayOfWeek) {
         if(!selectShift(date,dayShift)) {
-            Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek,true);
+            Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek,true,_branch);
+            _branch.addShift(shift);
             allShifts.add(shift);
             currentShift = shift;
             return true;
@@ -122,7 +122,7 @@ public class BranchManager extends Worker {
 
     public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) { // shift manager is null, active is set to false
         if(!selectShift(date,dayShift)) {
-            Shift shift = new Shift(null, date, dayShift, dayOfWeek, false);
+            Shift shift = new Shift(null, date, dayShift, dayOfWeek, false, _branch);
             allShifts.add(shift);
             for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) { // for each worker, setting the same dayShift as inactive
                 entry.getValue().addConstraints(dayOfWeek, dayShift, Constraints.inactive);
@@ -229,47 +229,10 @@ public class BranchManager extends Worker {
         }
         return false;
     }
-    public Shift getShiftFromCertainDay(LocalDate date, boolean dayShift) {
-        for (Shift shift : allShifts) {
-            if(shift.getDayShift() == dayShift && shift.getLocalDate().equals(date)) {
-                return shift;
-            }
-        }
-        return null;
-    }
     public List<Shift> getAllShifts() {
         return allShifts;
     }
 
-    public boolean fireWorker(int id) {
-        if(allWorkers.containsKey(id)) {
-            allWorkers.remove(id);
-            return true;
-        }
-        for(Map.Entry<String,List<Worker>> entry : roleList.entrySet()) {
-            if(entry.getValue().contains(allWorkers.get(id))) {
-                entry.getValue().remove(allWorkers.get(id));
-            }
-        }
-        return false;
-    }
-
-    public boolean endContranct30DaysFromNow(int id) {
-        if (allWorkers.containsKey(id)) {
-            Worker worker = allWorkers.get(id);
-            LocalDate _30DaysFromNow = LocalDate.now().plusDays(30);
-            if (!firedWorkers.containsKey(_30DaysFromNow)) {
-                firedWorkers.put(_30DaysFromNow, new LinkedList<>());
-                firedWorkers.get(_30DaysFromNow).add(worker);
-                return true;
-            } else {
-                firedWorkers.get(_30DaysFromNow).add(worker);
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
     public int lastDayToSetConstraints() {
         return _lastdaytoSetConstraints;
     }
@@ -285,40 +248,29 @@ public class BranchManager extends Worker {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
             entry.getValue().checkUpdateDay();
         }
-        for(Map.Entry<LocalDate,List<Worker>> entry:firedWorkers.entrySet()) {
-            if(entry.getKey().isBefore(LocalDate.now())||entry.getKey().isEqual(LocalDate.now()) ){
-                for(Worker worker : entry.getValue()) {
-                    fireWorker(worker.getID());
-                }
-                firedWorkers.remove(entry.getKey());
-            }
-        }
+
 
     }
 
-    public Shift getOnGoingShift() {
+    public static Shift getOnGoingShift(int bID) {
         for (Shift shift : allShifts) {
-            if(shift.getLocalDate() == LocalDate.now()) {
+            if(shift.getLocalDate() == LocalDate.now() && shift.getBranch().getID() == bID) {
                 return shift;
             }
         }
         return null;
     }
-    public boolean setMinimalWorkers(String role,int num) {
-        if(currentShift == null)
-            return false;
-        if(!currentShift.getMinimalWorkers().containsKey(role)) {
-            currentShift.getMinimalWorkers().put(role, num);
-            return true;
+    public void setMinimalAmount(String role, int amount) {
+        if(minimalWorkers.containsKey(role)) {
+            minimalWorkers.replace(role,amount);
         }
-        else {
-            currentShift.getMinimalWorkers().replace(role,num);
-            return true;
-        }
+        else if(amount > 0)
+            minimalWorkers.remove(role);
+        else
+            minimalWorkers.put(role,amount);
     }
     public boolean checkIfRoleHasMinimalWorkers() {
-        Map<String,Integer> minimal = currentShift.getMinimalWorkers();
-        for (Map.Entry<String,Integer> entry : minimal.entrySet()) {
+        for (Map.Entry<String,Integer> entry : minimalWorkers.entrySet()) {
             if(currentShift.getWorkers().get(entry.getKey()).size() < entry.getValue())
                 return false;
         }
@@ -337,5 +289,9 @@ public class BranchManager extends Worker {
             return false;
         _branch.removeWorker(worker);
         return true;
+    }
+
+    public Branch getBranch() {
+        return _branch;
     }
 }
