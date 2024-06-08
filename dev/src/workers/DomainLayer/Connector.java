@@ -1,9 +1,12 @@
 package workers.DomainLayer;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Character.*;
 
 public class Connector {
     private Worker _worker;
@@ -143,6 +146,8 @@ public class Connector {
     }
     public boolean changePassword(String oldPass,String newPass) {
         int id = _worker.getID();
+        if(isLegalPassword(newPass))
+            return false;
         if(loginInfos.get(id).equals(oldPass)) {
             loginInfos.remove(id,oldPass);
             loginInfos.put(id,newPass);
@@ -150,6 +155,24 @@ public class Connector {
         }
         return false;
     }
+
+    private boolean isLegalPassword(String newPass) {
+        boolean UCase = false;
+        boolean LCase = false;
+        boolean num = false;
+        List<Character> digits = new LinkedList<>();
+        for (int i = 0; i < newPass.length(); i++) {
+
+            if(!num && isDigit(newPass.charAt(i)))
+                num = true;
+            if(!LCase && isLowerCase(newPass.charAt(i)))
+                LCase = true;
+            if(!UCase && isUpperCase(newPass.charAt(i)))
+                UCase = true;
+        }
+        return UCase & LCase & num;
+    }
+
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
         boolean res = _worker.addConstraints(day,dayShift,cons);
         return res;
@@ -202,24 +225,25 @@ public class Connector {
 
     public void load() {
         login(-1,"admin");
+        loginInfos.put(22,"Benjamin");
         ((HR)_worker).addBranch("Tel-Aviv",1,"Tel-Aviv",new Worker("Benjamin",22,2,2,2,"2",true,2,2,false));
         logOut();
         login(22,"Benjamin");
-        loginInfos.put(1,"1234");
-        loginInfos.put(2,"1234");
-        loginInfos.put(3,"1234");
-        loginInfos.put(4,"1234");
-        loginInfos.put(5,"1234");
-        loginInfos.put(6,"1234");
-        loginInfos.put(7,"1234");
-        loginInfos.put(8,"1234");
-        loginInfos.put(9,"1234");
-        loginInfos.put(10,"1234");
-        loginInfos.put(11,"1234");
-        loginInfos.put(12,"1234");
-        loginInfos.put(13,"1234");
-        loginInfos.put(14,"1234");
-        loginInfos.put(15,"1234");
+        loginInfos.put(1,"Alfred");
+        loginInfos.put(2,"Benjamin");
+        loginInfos.put(3,"Casey");
+        loginInfos.put(4,"Daniel");
+        loginInfos.put(5,"Emily");
+        loginInfos.put(6,"Francis");
+        loginInfos.put(7,"George");
+        loginInfos.put(8,"Hanna");
+        loginInfos.put(9,"Ian");
+        loginInfos.put(10,"Kelly");
+        loginInfos.put(11,"Kelly");
+        loginInfos.put(12,"Louis");
+        loginInfos.put(13,"Margo");
+        loginInfos.put(14,"Nathan");
+        loginInfos.put(15,"Oliver");
         ((BranchManager)_worker).addWorker(new Worker("Alfred",1,1,1,1,"1",true,1,1,false));
         ((BranchManager)_worker).addWorker(new Worker("Benjamin",2,2,2,2,"2",true,2,2,false));
         ((BranchManager)_worker).addWorker(new Worker("Casey",3,3,3,3,"3",true,3,3,false));
@@ -265,11 +289,14 @@ public class Connector {
         ((BranchManager)_worker).addWorkerToBranch(BranchManager.getWorker(13));
         ((BranchManager)_worker).addWorkerToBranch(BranchManager.getWorker(14));
         ((BranchManager)_worker).addWorkerToBranch(BranchManager.getWorker(15));
-        ((BranchManager)_worker).createShift(BranchManager.getWorker(11),"01.01.2021",false,1);
-        ((BranchManager)_worker).setHalfDayShiftOff("01.01.2021",true,1);
-        ((BranchManager)_worker).createShift(BranchManager.getWorker(11),"02.01.2021",true,2);
-        ((BranchManager)_worker).setAllDayOff("03.01.2021",3);
-        ((BranchManager)_worker).selectShift("01.01.2021",false);
+        int plus = 0;
+        if(LocalDate.now().getDayOfWeek() != DayOfWeek.FRIDAY)
+            plus++;
+        ((BranchManager)_worker).createShift(BranchManager.getWorker(11),(LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false,1);
+        ((BranchManager)_worker).setHalfDayShiftOff((LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),true,1);
+        ((BranchManager)_worker).createShift(BranchManager.getWorker(11),(LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true,2);
+        ((BranchManager)_worker).setAllDayOff((LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),3);
+        ((BranchManager)_worker).selectShift((LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false);
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(1),"Cashier");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(2),"Cashier");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(3),"Delivery");
@@ -284,7 +311,7 @@ public class Connector {
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(13),"Delly-Man");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(14),"Guard");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(15),"Guard");
-        ((BranchManager)_worker).selectShift("02.01.2021",true);
+        ((BranchManager)_worker).selectShift((LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true);
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(1),"Cashier");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(2),"Cashier");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(3),"Delivery");

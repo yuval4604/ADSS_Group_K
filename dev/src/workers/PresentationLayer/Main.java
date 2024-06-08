@@ -28,9 +28,21 @@ public class Main {
 
         boolean isHR = false;
         boolean isBM = false;
+        boolean seen = false;
         while(!terminated) {
             if(!isLoggedIn) {
                 System.out.println("Welcome to the workers system");
+                if(!seen) {
+                    System.out.println("Do you want to login or exit the app? l/e");
+                    String choice = scanner.nextLine();
+                    if (choice.equals("e")) {
+                        System.out.println("GoodBye!");
+                        return;
+                    } else if (!choice.equals("l")) {
+                        System.out.println("you didn't choose any of the option you are moved to login in");
+                    }
+                    seen = true;
+                }
                 isLoggedIn = lm.login();
                 if(isLoggedIn) {
                     System.out.println("Connected successfully");
@@ -43,6 +55,7 @@ public class Main {
                 }
             }
             else{
+                seen = false;
                 System.out.println("\nchoose command:");
                 int result;
                 try {

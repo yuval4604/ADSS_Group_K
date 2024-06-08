@@ -42,7 +42,7 @@ public class LoginManager {
     public void changePass() {
         System.out.println("Enter old password: ");
         String oldPass = scanner.nextLine();
-        System.out.println("Enter new password: ");
+        System.out.println("Enter new password: the password must contains upper case lower case and number and be at least 8 characters");
         String newPass = scanner.nextLine();
         boolean res = _connector.changePassword(oldPass,newPass);
         if(res) {
