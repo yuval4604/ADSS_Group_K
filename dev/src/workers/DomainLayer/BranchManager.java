@@ -131,9 +131,7 @@ public class BranchManager extends Worker {
         }
         return false;
     }
-    public void addWorker (Worker worker){
-        allWorkers.put(worker.getID(), worker);
-    }
+
 
     public boolean addRole ( int id, String role){
         Worker worker = allWorkers.get(id);

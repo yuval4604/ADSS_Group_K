@@ -7,9 +7,9 @@ public class Main {
     public static void printCommands(boolean isHR, boolean isBM) {
         System.out.println("commands:\n-1) Exit\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\n8) show your roles\n9) join branch\n10)show your shifts\n11)altar on going shift");
         if(isBM)
-            System.out.println("BM and HR Only Commands:\n12) Set a worker's global wage\n13) Set a worker's hourly wage\n14) Set if a worker is full time job employee or not\n15) Set a worker's vacation days\n16) Reset a worker's vacation days\n17) add a worker\n18) work on shift of your branch\n19) change a worker's optional roles\n20) set half a day off for your branch\n21) set a full day off for your branch\n22) set the deadline for your branch workers constraints\n23) set your branch's minimal workers for a shift\n24) show your branch's information\n25) set a branch manager\n26) remove a worker from your branch\n27) add a worker to your branch");
+            System.out.println("BM and HR Only Commands:\n12) Set a worker's global wage\n13) Set a worker's hourly wage\n14) Set if a worker is full time job employee or not\n15) Set a worker's vacation days\n16) Reset a worker's vacation days\n17) add a worker to your branch\n18) work on shift of your branch\n19) change a worker's optional roles\n20) set half a day off for your branch\n21) set a full day off for your branch\n22) set the deadline for your branch workers constraints\n23) set your branch's minimal workers for a shift\n24) show your branch's information\n25) set a branch manager\n26) remove a worker from your branch");
         if(isBM)
-            System.out.println("HR Only Commands:\n28) show branches\n29) add branch\n30) remove branch\n31) enter a worker's resignation\n32) fire s worker");
+            System.out.println("HR Only Commands:\n27) add a worker\n28) show branches\n29) add branch\n30) remove branch\n31) enter a worker's resignation\n32) fire s worker");
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -119,11 +119,10 @@ public class Main {
                         }
                     }
                     case 17 -> {
-                        if (isBM) {
-                            ac.addAWorker();
-                        } else {
+                        if(isBM)
+                            ac.addWorkerToBranch();
+                        else
                             System.out.println("Error: no permission to do that");
-                        }
                     }
                     case 18 -> {
                         if (isBM) {
@@ -188,10 +187,11 @@ public class Main {
                             System.out.println("Error: no permission to do that");
                     }
                     case 27 -> {
-                        if(isBM)
-                            ac.addWorkerToBranch();
-                        else
+                        if (isHR) {
+                            ac.addAWorker();
+                        } else {
                             System.out.println("Error: no permission to do that");
+                        }
                     }
                     case 28 -> {
                         if(isHR)

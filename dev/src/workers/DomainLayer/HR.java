@@ -17,6 +17,10 @@ public class HR extends BranchManager{
         firedWorkers = new HashMap<>();
     }
 
+    public void addWorker (Worker worker){
+        allWorkers.put(worker.getID(), worker);
+    }
+
     public boolean addBranch(String name, int id, String address, Worker branchManager) {
         Branch branch = new Branch(name, id, address, branchManager);
         _branch.put(id,branch);
