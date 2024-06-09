@@ -336,13 +336,13 @@ public class Connector {
         return _worker.getCons(i,b);
     }
 
-    public String showWorkerShifts(String fromDate,String ToDate,int id) {
+    public String showWorkerShifts(String fromDate,String ToDate) {
         List<Shift> Shifts = new LinkedList<>();
         LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.split(".")[2]), Integer.parseInt(fromDate.split(".")[1]), Integer.parseInt(fromDate.split(".")[0]));
         LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.split(".")[2]), Integer.parseInt(ToDate.split(".")[1]), Integer.parseInt(ToDate.split(".")[0]));
         for (Shift shift : ((BranchManager)_worker).getAllShifts()) {
             if (shift.getLocalDate().isAfter(fromLocalDate) && shift.getLocalDate().isBefore(toLocalDate)) {
-                if (shift.getWorkers().containsKey(id)) {
+                if (shift.getWorkers().containsKey(_worker.getID())){
                     Shifts.add(shift);
                 }
             }

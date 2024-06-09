@@ -747,23 +747,12 @@ public class ActionManager {
     }
 
     public void showWorkerShifts() {
-        System.out.println("Enter Worker's id: ");
-        int id;
-        try {
-            id = scanner.nextInt();
-            scanner.nextLine();
-        }
-        catch (Exception e) {
-            System.out.println("Invalid id");
-            return;
-        }
-        scanner.nextLine();
         try {
             System.out.println("Choose A starting date from this order: dd.mm.yyyy");
             String date = scanner.nextLine();
             System.out.println("Choose An ending date from this order: dd.mm.yyyy");
             String date1 = scanner.nextLine();
-            System.out.println(_connector.showWorkerShifts(date,date1,id));
+            System.out.println(_connector.showWorkerShifts(date,date1));
         }
         catch (Exception e) {
             System.out.println("Invalid information");
