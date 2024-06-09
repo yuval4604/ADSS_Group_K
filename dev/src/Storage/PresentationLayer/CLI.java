@@ -3,10 +3,7 @@ package Storage.PresentationLayer;
 import Storage.DomainLayer.Enums.Category;
 import Storage.DomainLayer.Enums.SubCategory;
 import Storage.DomainLayer.Enums.SubSubCategory;
-import Storage.DomainLayer.Facades.CategoryFacade;
 import Storage.DomainLayer.Facades.DomainFacade;
-import Storage.DomainLayer.Facades.SubCategoryFacade;
-import Storage.DomainLayer.Facades.SubSubCategoryFacade;
 import Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
@@ -23,19 +20,27 @@ public class CLI {
     private static boolean isProductReportAlerted = false;
     public static void main(String[] args) throws Exception {
         resetFactory();
-        String choice = "";
         Scanner scan = new Scanner(System.in);
+        String choice = "";
+        while(!choice.equals("y") && !choice.equals("n")){
+            System.out.println("Do you want to load example data? (y/n)");
+            choice = scan.nextLine();
+            if(!choice.equals("y") && !choice.equals("n"))
+                System.out.println("Invalid choice, please choose again.");
+        }
+        if(choice.equals("y"))
+            productFactory();
         String info;
         while(!choice.equals("21")){
             if(!isDamageReportAlerted && LocalDate.now().getDayOfMonth() == DAY_OF_MONTH){
-                System.out.println("It is time to produce the damage report. Please choose option 12.");
+                System.out.println("It is time to produce the damage report. Please choose option 18.");
                 isDamageReportAlerted = true;
             }
             else if(isDamageReportAlerted && LocalDate.now().getDayOfMonth() != DAY_OF_MONTH){
                 isDamageReportAlerted = false;
             }
             if(!isProductReportAlerted && LocalDate.now().getDayOfWeek().getValue() == DAY_OF_WEEK){
-                System.out.println("It is time to produce the product report. Please choose option 11, and enter the categories you wish to produce a report for.");
+                System.out.println("It is time to produce the product report. Please choose option 17, and enter the categories you wish to produce a report for.");
                 isProductReportAlerted = true;
             }
             else if(isProductReportAlerted && LocalDate.now().getDayOfWeek().getValue() != DAY_OF_WEEK){
@@ -341,83 +346,13 @@ public class CLI {
     }
 
     public static void resetFactory() throws Exception{
-        SubSubCategoryFacade ssc1small = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc1medium = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc1large = new SubSubCategoryFacade();
-        Map<SubSubCategory, SubSubCategoryFacade> ssc1 = new HashMap<>();
-        ssc1.put(SubSubCategory.Small, ssc1small);
-        ssc1.put(SubSubCategory.Medium, ssc1medium);
-        ssc1.put(SubSubCategory.Large, ssc1large);
-        SubCategoryFacade sc1 = new SubCategoryFacade();
-        sc1.setSubSubCategories(ssc1);
-        SubSubCategoryFacade ssc2small = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc2medium = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc2large = new SubSubCategoryFacade();
-        Map<SubSubCategory, SubSubCategoryFacade> ssc2 = new HashMap<>();
-        ssc1.put(SubSubCategory.Small, ssc2small);
-        ssc1.put(SubSubCategory.Medium, ssc2medium);
-        ssc1.put(SubSubCategory.Large, ssc2large);
-        SubCategoryFacade sc2 = new SubCategoryFacade();
-        sc2.setSubSubCategories(ssc2);
-        SubSubCategoryFacade ssc3small = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc3medium = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc3large = new SubSubCategoryFacade();
-        Map<SubSubCategory, SubSubCategoryFacade> ssc3 = new HashMap<>();
-        ssc1.put(SubSubCategory.Small, ssc3small);
-        ssc1.put(SubSubCategory.Medium, ssc3medium);
-        ssc1.put(SubSubCategory.Large, ssc3large);
-        SubCategoryFacade sc3 = new SubCategoryFacade();
-        sc3.setSubSubCategories(ssc3);
-        Map<SubCategory, SubCategoryFacade> s1 = new HashMap<>();
-        s1.put(SubCategory.Beef, sc1);
-        s1.put(SubCategory.Chicken, sc1);
-        s1.put(SubCategory.Pork, sc1);
-        CategoryFacade c1 = new CategoryFacade();
-        c1.setSubCategories(s1);
-        SubSubCategoryFacade ssc4small = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc4medium = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc4large = new SubSubCategoryFacade();
-        Map<SubSubCategory, SubSubCategoryFacade> ssc4 = new HashMap<>();
-        ssc4.put(SubSubCategory.Small, ssc4small);
-        ssc4.put(SubSubCategory.Medium, ssc4medium);
-        ssc4.put(SubSubCategory.Large, ssc4large);
-        SubCategoryFacade sc4 = new SubCategoryFacade();
-        sc4.setSubSubCategories(ssc4);
-        SubSubCategoryFacade ssc5small = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc5medium = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc5large = new SubSubCategoryFacade();
-        Map<SubSubCategory, SubSubCategoryFacade> ssc5 = new HashMap<>();
-        ssc5.put(SubSubCategory.Small, ssc5small);
-        ssc5.put(SubSubCategory.Medium, ssc5medium);
-        ssc5.put(SubSubCategory.Large, ssc5large);
-        SubCategoryFacade sc5 = new SubCategoryFacade();
-        sc5.setSubSubCategories(ssc5);
-        SubSubCategoryFacade ssc6small = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc6medium = new SubSubCategoryFacade();
-        SubSubCategoryFacade ssc6large = new SubSubCategoryFacade();
-        Map<SubSubCategory, SubSubCategoryFacade> ssc6 = new HashMap<>();
-        ssc6.put(SubSubCategory.Small, ssc6small);
-        ssc6.put(SubSubCategory.Medium, ssc6medium);
-        ssc6.put(SubSubCategory.Large, ssc6large);
-        SubCategoryFacade sc6 = new SubCategoryFacade();
-        sc6.setSubSubCategories(ssc6);
-        Map<SubCategory, SubCategoryFacade> s2 = new HashMap<>();
-        s2.put(SubCategory.Grapes, sc4);
-        s2.put(SubCategory.Apples, sc5);
-        s2.put(SubCategory.Bananas, sc6);
-        CategoryFacade c2 = new CategoryFacade();
-        c2.setSubCategories(s2);
         Map<Integer, Product> products = new HashMap<>();
         DomainFacade facade = new DomainFacade();
-        Map<Category, CategoryFacade> categories = new HashMap<>();
-        categories.put(Category.Meat, c1);
-        categories.put(Category.Fruits, c2);
-        facade.setCategories(categories);
         presentationController = new PresentationController(products, facade);
     }
 
     public static void productFactory() throws Exception{
-        presentationController.parseAddProductMessage("1,beef number,1 100g,Meat,Beef,Small,10,20,0,0,Tnuva,1,10");
+        presentationController.parseAddProductMessage("1,beef number 1 100g,Meat,Beef,Small,10,20,0,0,Tnuva,1,10");
         presentationController.parseAddProductMessage("2,beef number 2 200g,Meat,Beef,Medium,20,40,0,0,Tnuva,1,10");
         presentationController.parseAddProductMessage("3,beef number 3 300g,Meat,Beef,Large,30,60,0,0,Tnuva,1,10");
         presentationController.parseAddProductMessage("4,chicken number 1 100g,Meat,Chicken,Small,10,20,0,0,Tnuva,1,10");

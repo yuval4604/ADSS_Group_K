@@ -53,6 +53,8 @@ public class DomainManager {
 
     public void removeProduct(Product product) throws Exception {
         try {
+            if(product == null)
+                throw new IllegalArgumentException("Product does not exist");
             if (!this.productMap.containsKey(product.getCatalogNumber())) {
                 throw new IllegalArgumentException("Product with this catalog number does not exist");
             }
@@ -97,7 +99,9 @@ public class DomainManager {
     public void moveProductToStore(int catalogNumber, LocalDate expirationDate, int quantity) throws Exception {
         try {
             Product product = this.productMap.get(catalogNumber);
-            product.moveProductToStore(expirationDate, quantity);
+            if(product != null)
+                product.moveProductToStore(expirationDate, quantity);
+            else throw new IllegalArgumentException("Product does not exist");
         } catch (Exception e) {
             throw e;
         }
@@ -106,6 +110,7 @@ public class DomainManager {
     public void subtractFromStore(int catalogNumber, Map<LocalDate, Integer> products) throws Exception {
         try {
             Product product = this.productMap.get(catalogNumber);
+            if(product == null) throw new IllegalArgumentException("Product does not exist");
             for (Map.Entry<LocalDate, Integer> entry : products.entrySet()) {
                 if (product.getStoreQuantity() < entry.getValue())
                     throw new IllegalArgumentException("Not enough products in store");
@@ -129,6 +134,7 @@ public class DomainManager {
 
     public String alertOnMinimalQuantity() throws Exception {
         String alert = "";
+        if(this.productMap == null) return alert;
         for (Product product : this.productMap.values()) {
             if (product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()) {
                 alert += product.getName() + "\n";
@@ -142,6 +148,7 @@ public class DomainManager {
     public void addToProduct(LocalDate expirationDate, int catalogNumber, int inStore, int inStorage) throws Exception {
         try {
             Product product = this.productMap.get(catalogNumber);
+            if(product == null) throw new IllegalArgumentException("Product does not exist");
             product.addByExpirationDate(inStore, inStorage, expirationDate);
         } catch (Exception e) {
             throw e;
@@ -151,6 +158,7 @@ public class DomainManager {
     public void moveToExpired(int catalogNumber, LocalDate expirationDate, int inStore, int inStorage) throws Exception {
         try {
             Product product = this.productMap.get(catalogNumber);
+            if(product == null) throw new IllegalArgumentException("Product does not exist");
             product.moveToExpired(inStore, inStorage, expirationDate);
         } catch (Exception e) {
             throw e;
@@ -159,7 +167,9 @@ public class DomainManager {
 
     public void setDiscount(int catalogNumber, double discount) {
         try {
-            this.productMap.get(catalogNumber).setDiscount(discount);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setDiscount(discount);
         } catch (Exception e) {
             throw e;
         }
@@ -167,7 +177,9 @@ public class DomainManager {
 
     public void updateBuyPriceForProduct(int catalogNumber, double buyPrice) {
         try {
-            this.productMap.get(catalogNumber).setBuyPrice(buyPrice);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setBuyPrice(buyPrice);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -175,7 +187,9 @@ public class DomainManager {
 
     public void updateSalePriceForProduct(int catalogNumber, double salePrice) {
         try {
-            this.productMap.get(catalogNumber).setSalePrice(salePrice);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setSalePrice(salePrice);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -183,7 +197,9 @@ public class DomainManager {
 
     public void updateSupplierDiscountForProduct(int catalogNumber, double supplierDiscount) {
         try {
-            this.productMap.get(catalogNumber).setSupplierDiscount(supplierDiscount);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setSupplierDiscount(supplierDiscount);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -191,7 +207,9 @@ public class DomainManager {
 
     public void updateManufacturerForProduct(int catalogNumber, String manufacturer) {
         try {
-            this.productMap.get(catalogNumber).setManufacturer(manufacturer);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setManufacturer(manufacturer);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -199,7 +217,9 @@ public class DomainManager {
 
     public void updateAisleForProduct(int catalogNumber, String aisle) {
         try {
-            this.productMap.get(catalogNumber).setAisle(aisle);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setAisle(aisle);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -207,7 +227,9 @@ public class DomainManager {
 
     public void updateMinimalQuantityForProduct(int catalogNumber, int minimalQuantity) {
         try {
-            this.productMap.get(catalogNumber).setMinimalQuantity(minimalQuantity);
+            Product p = this.productMap.get(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            p.setMinimalQuantity(minimalQuantity);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

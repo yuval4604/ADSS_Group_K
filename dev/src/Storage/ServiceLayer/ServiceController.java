@@ -111,7 +111,10 @@ public class ServiceController {
     // updates the damage amount of the given product
     public void updateDamageForProduct(int catalogNumber, int inStore[], int inStorage[], LocalDate expirationDate[]) throws Exception{
         try {
-            this.manager.getProduct(catalogNumber).moveToDamage(inStore, inStorage, expirationDate);
+            Product p = this.manager.getProduct(catalogNumber);
+            if (p == null)
+                throw new IllegalArgumentException("Product with this catalog number does not exist");
+            p.moveToDamage(inStore, inStorage, expirationDate);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
