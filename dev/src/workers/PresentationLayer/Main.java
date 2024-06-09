@@ -223,6 +223,12 @@ public class Main {
                         else
                             System.out.println("Error: no permission to do that");
                     }
+                    case 33 -> {
+                        if(isHR)
+                            ac.createBM();
+                        else
+                            System.out.println("Error: no permission to do that");
+                    }
                     case -1 -> terminated = true;
                     default -> System.out.println("Invalid command");
                 }

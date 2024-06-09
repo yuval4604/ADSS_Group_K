@@ -1045,4 +1045,86 @@ public class ActionManager {
     public boolean isHR() {
         return _connector.getIsHR();
     }
+
+    public void createBM() {
+        System.out.println("Enter Worker's name: ");
+        String name = scanner.nextLine();
+        System.out.println("Enter Worker's id: ");
+        int id;
+        try {
+            id = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid id");
+            scanner.nextLine();
+            return;
+        }
+        scanner.nextLine();
+        System.out.println("Enter Worker's bank number: ");
+        int bankNum;
+        try {
+            bankNum = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid bank number");
+            scanner.nextLine();
+            return;
+        }
+        scanner.nextLine();
+        System.out.println("Is the worker full time job?: choose t/f");
+        String c = scanner.nextLine();
+        boolean fullTime;
+        int globalWage = 0 ,hourlyWage = 0;
+        if(c.equals("t")) {
+            fullTime = true;
+            System.out.println("Enter Worker's global wage: ");
+            try{
+                globalWage = scanner.nextInt();
+            }
+            catch (Exception e) {
+                System.out.println("Invalid wage");
+                scanner.nextLine();
+                return;
+            }
+            scanner.nextLine();
+        }
+        else if(c.equals("f")){
+            fullTime = false;
+            System.out.println("Enter Worker's hourly wage: ");
+            try{
+                hourlyWage = scanner.nextInt();
+            }
+            catch (Exception e) {
+                System.out.println("Invalid wage");
+                scanner.nextLine();
+                return;
+            }
+            scanner.nextLine();
+        }
+        else {
+            System.out.println("Didnt enter information correctly");
+            return;
+        }
+        System.out.println("Enter Worker's date of start: ");
+        String dateOfStart = scanner.nextLine();
+        System.out.println("Enter Worker's total vacation days: ");
+        int totalVacationDays;
+        try {
+            totalVacationDays = scanner.nextInt();
+        }
+        catch (Exception e) {
+            System.out.println("Invalid days");
+            scanner.nextLine();
+            return;
+        }
+        scanner.nextLine();
+        boolean res = _connector.createBM(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
+        if(res) {
+            System.out.println("Worker has been added!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+
+    }
 }

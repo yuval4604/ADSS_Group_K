@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public class HR extends BranchManager{
-    private Map<Integer,Branch> _branch;
+    private Map<Integer,Branch> _branches;
     private Map<LocalDate,List<Worker>> firedWorkers;
 
     public HR(Branch ABranch) {
         super("Admin",-1,0,0,0,"",true,0,0,ABranch);
-        _branch = new HashMap<>();
-        _branch.put(-1,ABranch);
+        _branches = new HashMap<>();
+        _branches.put(-1,ABranch);
         firedWorkers = new HashMap<>();
     }
 
@@ -23,13 +23,14 @@ public class HR extends BranchManager{
 
     public boolean addBranch(String name, int id, String address, Worker branchManager) {
         Branch branch = new Branch(name, id, address, branchManager);
-        _branch.put(id,branch);
+        ((BranchManager)branchManager).setBranch(branch);
+        _branches.put(id,branch);
         return true;
     }
 
     public boolean removeBranch(int id) {
-        if(_branch.containsKey(id)) {
-            _branch.remove(id);
+        if(_branches.containsKey(id)) {
+            _branches.remove(id);
             return true;
         }
         return false;
@@ -37,33 +38,33 @@ public class HR extends BranchManager{
 
     public String showBranches() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Integer, Branch> entry : _branch.entrySet()) {
+        for (Map.Entry<Integer, Branch> entry : _branches.entrySet()) {
             sb.append("Branch ID: ").append(entry.getKey()).append(" Branch Name: ").append(entry.getValue().getName()).append("\n");
         }
         return sb.toString();
     }
 
     public boolean setBranchManager(int branchID, Worker branchManager) {
-        if(_branch.containsKey(branchID)) {
-            _branch.get(branchID).setBranchManager(branchManager);
+        if(_branches.containsKey(branchID)) {
+            _branches.get(branchID).setBranchManager(branchManager);
             return true;
         }
         return false;
     }
 
     public String showBranch(int branchID) {
-        if(_branch.containsKey(branchID)) {
+        if(_branches.containsKey(branchID)) {
             StringBuilder sb = new StringBuilder();
-            sb.append("Branch Name: ").append(_branch.get(branchID).getName()).append("\n");
-            sb.append("Branch ID: ").append(_branch.get(branchID).getID()).append("\n");
-            sb.append("Branch Address: ").append(_branch.get(branchID).getAddress()).append("\n");
-            sb.append("Branch Manager ID: ").append(_branch.get(branchID).getBranchManager().getID()).append(" Branch Manager Name: ").append(_branch.get(branchID).getBranchManager().getName()).append("\n");
+            sb.append("Branch Name: ").append(_branches.get(branchID).getName()).append("\n");
+            sb.append("Branch ID: ").append(_branches.get(branchID).getID()).append("\n");
+            sb.append("Branch Address: ").append(_branches.get(branchID).getAddress()).append("\n");
+            sb.append("Branch Manager ID: ").append(_branches.get(branchID).getBranchManager().getID()).append(" Branch Manager Name: ").append(_branches.get(branchID).getBranchManager().getName()).append("\n");
             sb.append("Workers: \n");
-            for (Worker worker : _branch.get(branchID).getWorkers()) {
+            for (Worker worker : _branches.get(branchID).getWorkers()) {
                 sb.append("- Worker ID: ").append(worker.getID()).append(" Worker Name: ").append(worker.getName()).append("\n");
             }
             sb.append("Shifts: \n");
-            for (Shift shift : _branch.get(branchID).getShifts()) {
+            for (Shift shift : _branches.get(branchID).getShifts()) {
                 sb.append(" Shift Date: ").append(shift.getLocalDate()).append("," + (shift.getDayShift()?"day shift":"night shift")).append("\n");
             }
             return sb.toString();

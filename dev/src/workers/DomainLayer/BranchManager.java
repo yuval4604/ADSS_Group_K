@@ -292,4 +292,8 @@ public class BranchManager extends Worker {
     public Branch getBranch() {
         return _branch;
     }
+
+    protected void setBranch(Branch branch) {
+        _branch = branch;
+    }
 }

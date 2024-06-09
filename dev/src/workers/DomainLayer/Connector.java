@@ -484,5 +484,16 @@ public class Connector {
         _worker.addOptionalBranches(BranchName);
         return true;
     }
+
+    public boolean createBM(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {
+        if(!((BranchManager)_worker).contains(id)) {
+            BranchManager worker = new BranchManager(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays,null);
+            ((HR)_worker).addWorker(worker);
+            loginInfos.put(id,name);
+            return true;
+        }
+
+        return false;
+    }
 }
 
