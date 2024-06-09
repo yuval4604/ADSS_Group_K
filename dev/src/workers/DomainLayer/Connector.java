@@ -22,7 +22,6 @@ public class Connector {
         _worker = new HR(ABranch);
         ABranch.setBranchManager(_worker);
         BranchManager.allWorkers.put(-1, _worker);
-        System.out.println(BranchManager.allWorkers.get(-1).getName());
     }
     public boolean login(int id,String password) {
         if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {
@@ -76,12 +75,12 @@ public class Connector {
         List<Worker>[] list = ((BranchManager)_worker).getAvailableWorkersOfRole(role);
         res += "For the role, " + role + " , the workers who want to work this shift are: \n";
         for(Worker worker : list[0]) {
-            if (worker.inBranch(((BranchManager)_worker).getBranch().getName()))
+            if (worker.inBranch(((BranchManager)_worker).getBranchO().getName()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         res += "For the role, " + role + " , the workers who can work this shift are: \n";
         for(Worker worker : list[1]) {
-            if (worker.inBranch(((BranchManager)_worker).getBranch().getName()))
+            if (worker.inBranch(((BranchManager)_worker).getBranchO().getName()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         return res;
@@ -91,7 +90,7 @@ public class Connector {
             return false;
         }
         Worker worker = BranchManager.getWorker(id);
-        if (!worker.inBranch(((BranchManager)_worker).getBranch().getName()))
+        if (!worker.inBranch(((BranchManager)_worker).getBranchO().getName()))
             return false;
         return ((BranchManager)_worker).addWorkerToShift(worker,role);
     }
@@ -100,7 +99,7 @@ public class Connector {
     }
     public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek) {
         Worker shiftManager = BranchManager.getWorker(id);
-        if (!shiftManager.inBranch(((BranchManager)_worker).getBranch().getName()))
+        if (!shiftManager.inBranch(((BranchManager)_worker).getBranchO().getName()))
             return false;
         return ((BranchManager)_worker).createShift(shiftManager,date,dayShift,dayOfWeek);
     }
@@ -112,13 +111,14 @@ public class Connector {
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
-                + "Branches: " + _worker.getBranches();
+                + "Branch: " + _worker.getBranch();
         String HRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Hourly wage:" + _worker.getHWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
-                + "Current vacation days:" + _worker.getCurrVacationDays();
+                + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
+                + "Branch: " + _worker.getBranch();;
         String res = _worker.getFullTimeJob() ? GRes : HRes;
         return res;
 
@@ -151,6 +151,7 @@ public class Connector {
         if(isLegalPassword(newPass))
             return false;
         if(loginInfos.get(id).equals(oldPass)) {
+            BranchManager.getWorker(id).changed();
             loginInfos.remove(id,oldPass);
             loginInfos.put(id,newPass);
             return true;
@@ -172,7 +173,7 @@ public class Connector {
             if(!UCase && isUpperCase(newPass.charAt(i)))
                 UCase = true;
         }
-        return UCase & LCase & num;
+        return UCase & LCase & num & newPass.length() >= 8;
     }
 
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
@@ -205,7 +206,8 @@ public class Connector {
         for(String role : roles) {
             res += role + ", ";
         }
-        res = res.substring(0,res.length()-2);
+        if(res.length() > 2)
+            res = res.substring(0,res.length()-2);
         return res;
     }
 
@@ -482,9 +484,8 @@ public class Connector {
         return _worker.getID() == -1;
     }
 
-    public boolean joinBranch(String BranchName) {
-        _worker.addOptionalBranches(BranchName);
-        return true;
+    public String getBranch() {
+        return _worker.getBranch();
     }
 
     public boolean createBM(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {

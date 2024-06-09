@@ -282,6 +282,7 @@ public class BranchManager extends Worker {
         if(_branch.getWorkers().contains(worker))
             return false;
         _branch.addWorker(worker);
+        worker.setBranch(_branch.getName());
         return true;
     }
 
@@ -292,7 +293,7 @@ public class BranchManager extends Worker {
         return true;
     }
 
-    public Branch getBranch() {
+    public Branch getBranchO() {
         return _branch;
     }
 

@@ -27,10 +27,10 @@ public class LoginManager {
         boolean ans = _connector.login(id,password);
         if (ans)
         {
-            if(_connector.hasChangedPassword())
+            if(!_connector.hasChangedPassword())
             {
                 System.out.println("You must change your password");
-                changePass();
+                while (!changePass());
             }
         }
         return ans;
@@ -39,7 +39,7 @@ public class LoginManager {
         _connector.logOut();
     }
 
-    public void changePass() {
+    public boolean changePass() {
         System.out.println("Enter old password: ");
         String oldPass = scanner.nextLine();
         System.out.println("Enter new password: the password must contains upper case lower case and number and be at least 8 characters");
@@ -47,9 +47,11 @@ public class LoginManager {
         boolean res = _connector.changePassword(oldPass,newPass);
         if(res) {
             System.out.println("password changed successfully");
+            return true;
         }
         else {
             System.out.println("Error: no permission to do that Or wrong password");
+            return false;
         }
     }
 }

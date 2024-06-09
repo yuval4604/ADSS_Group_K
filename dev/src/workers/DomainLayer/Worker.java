@@ -16,7 +16,7 @@ public class Worker {
     private Constraints[][] _prefList;
     private List<Constraints[][]> _constraints;
     private boolean _changedPassword;
-    private List<String> branches;
+    private String branch;
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays,boolean isBM) {
         _name = name;
@@ -132,21 +132,19 @@ public class Worker {
         }
     }
 
-    public void addOptionalBranches(String name) {
-        branches.add(name);
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 
     public boolean inBranch(String name) {
-        return branches.contains(name);
+        return branch.equals(name);
     }
 
-    public String getBranches() {
-        StringBuilder sb = new StringBuilder();
-        for (String name : branches) {
-            sb.append(name);
-            sb.append(", ");
-        }
-        sb.delete(sb.length() - 2, sb.length());
-        return sb.toString();
+    public String getBranch() {
+        return branch;
+    }
+
+    public void changed() {
+        _changedPassword = true;
     }
 }

@@ -438,7 +438,7 @@ public class ActionManager {
     }
 
     public void addConstraints() {
-        if(_connector.lastDayToSetConstraints() < LocalDate.now().getDayOfWeek().getValue()) {
+        if(_connector.lastDayToSetConstraints() > LocalDate.now().getDayOfWeek().getValue()) {
             System.out.println("Can't set constraints for past days");
             return;
         }
@@ -709,16 +709,8 @@ public class ActionManager {
         return _connector.getIsBM();
     }
 
-    public void joinBranch() {
-        System.out.println("Enter Branch's id: ");
-        String branchID = scanner.nextLine();
-        boolean res = _connector.joinBranch(branchID);
-        if(res) {
-            System.out.println("joined successfully");
-        }
-        else {
-            System.out.println("Error: Something went wrong :(");
-        }
+    public void getBranch() {
+        System.out.println(_connector.getBranch());
     }
 
     public void setLastDayForConstraints() {
