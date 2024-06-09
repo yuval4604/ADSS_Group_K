@@ -9,7 +9,7 @@ public class Main {
         if(isBM)
             System.out.println("BM and HR Only Commands:\n12) Set a worker's global wage\n13) Set a worker's hourly wage\n14) Set if a worker is full time job employee or not\n15) Set a worker's vacation days\n16) Reset a worker's vacation days\n17) add a worker to your branch\n18) work on shift of your branch\n19) change a worker's optional roles\n20) set half a day off for your branch\n21) set a full day off for your branch\n22) set the deadline for your branch workers constraints\n23) set your branch's minimal workers for a shift\n24) show your branch's information\n25) set a branch manager\n26) remove a worker from your branch");
         if(isBM)
-            System.out.println("HR Only Commands:\n27) add a worker\n28) show branches\n29) add branch\n30) remove branch\n31) enter a worker's resignation\n32) fire s worker");
+            System.out.println("HR Only Commands:\n27) add a worker\n28) show branches\n29) add branch\n30) remove branch\n31) enter a worker's resignation\n32) fire s worker\n33) create a branch manager");
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
