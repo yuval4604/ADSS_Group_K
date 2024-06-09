@@ -15,15 +15,18 @@ public class BranchManager extends Worker {
 
     public BranchManager(String name, int id, int bankNum, int globalWage, int hourlyWage, String dateOfStart, boolean fullTimeJob, int totalVacationDays, int currentVacationDays, Branch branch) {
         super(name, id, bankNum, globalWage, hourlyWage, dateOfStart, fullTimeJob, totalVacationDays, currentVacationDays, true);
+        if(id==-1) {
+            allWorkers = new HashMap<>();
+            allShifts = new LinkedList<>();
+            roleList = new HashMap<>();
+        }
         _lastdaytoSetConstraints = 6;
-        allWorkers = new HashMap<>();
-        allShifts = new LinkedList<>();
         allWorkers.put(id,this);
         currentShift = null;
-        roleList = new HashMap<>();
         roleList.put("Shift-Manager",new LinkedList<>());
         roleList.get("Shift-Manager").add(this);
         _branch = branch;
+
     }
 
     public static Worker getWorker(int id) {

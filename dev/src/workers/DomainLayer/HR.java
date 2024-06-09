@@ -11,10 +11,13 @@ public class HR extends BranchManager{
     private Map<LocalDate,List<Worker>> firedWorkers;
 
     public HR(Branch ABranch) {
+
         super("Admin",-1,0,0,0,"",true,0,0,ABranch);
+
         _branches = new HashMap<>();
         _branches.put(-1,ABranch);
         firedWorkers = new HashMap<>();
+
     }
 
     public void addWorker (Worker worker){

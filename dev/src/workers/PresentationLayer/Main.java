@@ -71,6 +71,7 @@ public class Main {
                     case 1 -> {
                         lm.logOut();
                         isLoggedIn = false;
+                        seen = true;
                         System.out.println("Disconnected successfully");
                     }
                     case 2 -> lm.changePass();

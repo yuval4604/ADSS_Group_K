@@ -27,7 +27,7 @@ public class Shift {
         workers = new HashMap<>();
         _dayOfWeek = dayOfWeek;
         _active = active;
-        _localDate = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
+        _localDate = LocalDate.of(Integer.parseInt(date.split("\\.")[2]),Integer.parseInt(date.split("\\.")[1]),Integer.parseInt(date.split("\\.")[0]));
         _branch = branch;
     }
 

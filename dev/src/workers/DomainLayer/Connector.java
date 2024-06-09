@@ -21,6 +21,8 @@ public class Connector {
         Branch ABranch = new Branch("Admin", -1, "Admin", null);
         _worker = new HR(ABranch);
         ABranch.setBranchManager(_worker);
+        BranchManager.allWorkers.put(-1, _worker);
+        System.out.println(BranchManager.allWorkers.get(-1).getName());
     }
     public boolean login(int id,String password) {
         if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {
@@ -226,7 +228,7 @@ public class Connector {
     public void load() {
         login(-1,"admin");
         loginInfos.put(22,"Benjamin");
-        ((HR)_worker).addBranch("Tel-Aviv",1,"Tel-Aviv",new Worker("Benjamin",22,2,2,2,"2",true,2,2,false));
+        ((HR)_worker).addBranch("Tel-Aviv",1,"Tel-Aviv",new BranchManager("Benjamin",22,2,2,2,"02.02.2022",true,2,2,null));
         loginInfos.put(1,"Alfred");
         loginInfos.put(2,"Benjamin");
         loginInfos.put(3,"Casey");
@@ -242,21 +244,21 @@ public class Connector {
         loginInfos.put(13,"Margo");
         loginInfos.put(14,"Nathan");
         loginInfos.put(15,"Oliver");
-        ((HR)_worker).addWorker(new Worker("Alfred",1,1,1,1,"1",true,1,1,false));
-        ((HR)_worker).addWorker(new Worker("Benjamin",2,2,2,2,"2",true,2,2,false));
-        ((HR)_worker).addWorker(new Worker("Casey",3,3,3,3,"3",true,3,3,false));
-        ((HR)_worker).addWorker(new Worker("Daniel",4,4,4,4,"4",true,4,4,false));
-        ((HR)_worker).addWorker(new Worker("Emily",5,5,5,5,"5",true,5,5,false));
-        ((HR)_worker).addWorker(new Worker("Francis",6,6,6,6,"6",true,6,6,false));
-        ((HR)_worker).addWorker(new Worker("George",7,7,7,7,"7",true,7,7,false));
-        ((HR)_worker).addWorker(new Worker("Hanna",8,8,8,8,"8",true,8,8,false));
-        ((HR)_worker).addWorker(new Worker("Ian",9,9,9,9,"9",true,9,9,false));
-        ((HR)_worker).addWorker(new Worker("John",10,10,10,10,"10",true,10,10,false));
-        ((HR)_worker).addWorker(new Worker("Kelly",11,11,11,11,"11",true,11,11,false));
-        ((HR)_worker).addWorker(new Worker("Louis",12,12,12,12,"12",true,12,12,false));
-        ((HR)_worker).addWorker(new Worker("Margo",13,13,13,13,"13",true,13,13,false));
-        ((HR)_worker).addWorker(new Worker("Nathan",14,14,14,14,"14",true,14,14,false));
-        ((HR)_worker).addWorker(new Worker("Oliver",15,15,15,15,"15",true,15,15,false));
+        ((HR)_worker).addWorker(new Worker("Alfred",1,1,1,1,"02.02.2022",true,1,1,false));
+        ((HR)_worker).addWorker(new Worker("Benjamin",2,2,2,2,"03.02.2022",true,2,2,false));
+        ((HR)_worker).addWorker(new Worker("Casey",3,3,3,3,"04.02.2022",true,3,3,false));
+        ((HR)_worker).addWorker(new Worker("Daniel",4,4,4,4,"05.02.2022",true,4,4,false));
+        ((HR)_worker).addWorker(new Worker("Emily",5,5,5,5,"02.02.2022",true,5,5,false));
+        ((HR)_worker).addWorker(new Worker("Francis",6,6,6,6,"02.02.2022",true,6,6,false));
+        ((HR)_worker).addWorker(new Worker("George",7,7,7,7,"02.02.2022",true,7,7,false));
+        ((HR)_worker).addWorker(new Worker("Hanna",8,8,8,8,"02.02.2022",true,8,8,false));
+        ((HR)_worker).addWorker(new Worker("Ian",9,9,9,9,"02.02.2022",true,9,9,false));
+        ((HR)_worker).addWorker(new Worker("John",10,10,10,10,"02.02.2022",true,10,10,false));
+        ((HR)_worker).addWorker(new Worker("Kelly",11,11,11,11,"02.02.2022",true,11,11,false));
+        ((HR)_worker).addWorker(new Worker("Louis",12,12,12,12,"02.02.2022",true,12,12,false));
+        ((HR)_worker).addWorker(new Worker("Margo",13,13,13,13,"02.02.2022",true,13,13,false));
+        ((HR)_worker).addWorker(new Worker("Nathan",14,14,14,14,"02.02.2022",true,14,14,false));
+        ((HR)_worker).addWorker(new Worker("Oliver",15,15,15,15,"02.02.2022",true,15,15,false));
         logOut();
         login(22,"Benjamin");
         ((BranchManager)_worker).addRole(1,"Cashier");
