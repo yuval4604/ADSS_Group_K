@@ -139,7 +139,7 @@ public class CLI {
                         next = scan.nextLine();
                         info += next + ",";
                         i++;
-                        System.out.println("If you wish to subtract more products from store, please enter 'y'. Otherwise, please enter '.'");
+                        System.out.println("If you wish to stop please enter '.'.Otherwise press any other key.");
                         next = scan.nextLine();
                     }
                     if(i != 0) {
@@ -164,7 +164,7 @@ public class CLI {
                         System.out.println("Please enter the quantity in storage of the product you wish to remove damage from: ");
                         next = scan.nextLine();
                         info += next + ",";
-                        System.out.println("If you wish to subtract more products from store, please enter 'y'. Otherwise, please enter '.'");
+                        System.out.println("If you wish to stop, please enter '.'. Otherwise, press any other key");
                         next = scan.nextLine();
                     }
                     info = info.substring(0,info.length()-1);
@@ -307,7 +307,7 @@ public class CLI {
                         info += ";";
                 } else
                     info += ";";
-                System.out.println("If you are done choosing please press '.'");
+                System.out.println("If you are done choosing please press '.'. Otherwise, press any other key.");
                 next = scan.nextLine();
             }
             else {
