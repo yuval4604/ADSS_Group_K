@@ -179,7 +179,7 @@ public class Product {
         for(int i = 0; i < inStorage.length; i++){
             if(!this.expirationDates.containsKey(expirationDate[i]))
                 flag = false;
-            if(this.expirationDates.get(expirationDate[i]).getKey() < inStorage[i] || this.expirationDates.get(expirationDate[i]).getValue() < inStore[i])
+            else if(this.expirationDates.get(expirationDate[i]).getKey() < inStorage[i] || this.expirationDates.get(expirationDate[i]).getValue() < inStore[i])
                 flag = false;
         }
         if(this.storageQuantity >= storage && this.storeQuantity >= store && flag){
