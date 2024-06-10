@@ -148,7 +148,7 @@ public class Connector {
     }
     public boolean changePassword(String oldPass,String newPass) {
         int id = _worker.getID();
-        if(isLegalPassword(newPass))
+        if(!isLegalPassword(newPass))
             return false;
         if(loginInfos.get(id).equals(oldPass)) {
             BranchManager.getWorker(id).changed();
@@ -163,6 +163,8 @@ public class Connector {
         boolean UCase = false;
         boolean LCase = false;
         boolean num = false;
+        if(newPass.length() < 8)
+            return false;
         List<Character> digits = new LinkedList<>();
         for (int i = 0; i < newPass.length(); i++) {
 
@@ -173,7 +175,8 @@ public class Connector {
             if(!UCase && isUpperCase(newPass.charAt(i)))
                 UCase = true;
         }
-        return UCase & LCase & num & newPass.length() >= 8;
+        boolean ans = UCase & LCase & num;
+        return ans;
     }
 
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
