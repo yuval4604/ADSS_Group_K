@@ -26,7 +26,7 @@ public class BranchManager extends Worker {
         roleList.put("Shift-Manager",new LinkedList<>());
         roleList.get("Shift-Manager").add(this);
         _branch = branch;
-
+        minimalWorkers = new HashMap<>();
     }
 
     public static Worker getWorker(int id) {
@@ -230,7 +230,7 @@ public class BranchManager extends Worker {
         }
         return false;
     }
-    public List<Shift> getAllShifts() {
+    public static List<Shift> getAllShifts() {
         return allShifts;
     }
 
@@ -247,15 +247,14 @@ public class BranchManager extends Worker {
 
     public void checkUpdateDay() {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
-            entry.getValue().checkUpdateDay();
+            if(entry.getValue().getID() != getID())
+                entry.getValue().checkUpdateDay();
         }
-
-
     }
 
     public static Shift getOnGoingShift(int bID) {
         for (Shift shift : allShifts) {
-            if(shift.getLocalDate() == LocalDate.now() && shift.getBranch().getID() == bID) {
+            if(shift.getLocalDate().isEqual(LocalDate.now()) && shift.getBranch().getID() == bID) {
                 return shift;
             }
         }
@@ -265,9 +264,9 @@ public class BranchManager extends Worker {
         if(minimalWorkers.containsKey(role)) {
             minimalWorkers.replace(role,amount);
         }
-        else if(amount > 0)
+        else if(amount == 0)
             minimalWorkers.remove(role);
-        else
+        else if(amount > 0)
             minimalWorkers.put(role,amount);
     }
     public boolean checkIfRoleHasMinimalWorkers() {
@@ -299,5 +298,15 @@ public class BranchManager extends Worker {
 
     protected void setBranch(Branch branch) {
         _branch = branch;
+        this.branch = branch.getName();
+    }
+
+    public Map<String, Integer> getMinimalWorkersForShift() {
+        return minimalWorkers;
+    }
+
+    public void takeOffBranch() {
+        _branch = null;
+        this.branch = "";
     }
 }

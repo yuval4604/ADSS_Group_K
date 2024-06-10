@@ -2,6 +2,7 @@ package workers.DomainLayer;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class Branch {
     private String _name;
@@ -56,6 +57,11 @@ public class Branch {
         _workers.remove(worker);
     }
     public void setBranchManager(Worker branchManager) {
+        ((BranchManager)branchManager).takeOffBranch();
         _branchManager = branchManager;
+    }
+
+    public Map<String, Integer> getMinimalWorkersForShift() {
+        return ((BranchManager)_branchManager).getMinimalWorkersForShift();
     }
 }

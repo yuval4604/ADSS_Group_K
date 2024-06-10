@@ -16,7 +16,7 @@ public class Worker {
     private Constraints[][] _prefList;
     private List<Constraints[][]> _constraints;
     private boolean _changedPassword;
-    private String branch;
+    protected String branch;
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays,boolean isBM) {
         _name = name;

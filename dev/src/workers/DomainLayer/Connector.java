@@ -98,6 +98,8 @@ public class Connector {
         return ((BranchManager)_worker).selectShift(date,dayShift);
     }
     public boolean createShift(int id,String date,boolean dayShift,int dayOfWeek) {
+        if(!_worker.getIsBM())
+            return false;
         Worker shiftManager = BranchManager.getWorker(id);
         if (!shiftManager.inBranch(((BranchManager)_worker).getBranchO().getName()))
             return false;
@@ -119,9 +121,7 @@ public class Connector {
                 + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
                 + "Branch: " + _worker.getBranch();;
-        String res = _worker.getFullTimeJob() ? GRes : HRes;
-        return res;
-
+        return _worker.getFullTimeJob() ? GRes : HRes;
     }
 
     public String showWorkerConstraints() {
@@ -297,8 +297,12 @@ public class Connector {
         ((BranchManager)_worker).addWorkerToBranch(BranchManager.getWorker(14));
         ((BranchManager)_worker).addWorkerToBranch(BranchManager.getWorker(15));
         int plus = 0;
-        if(LocalDate.now().getDayOfWeek() != DayOfWeek.FRIDAY)
+        if(LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY)
             plus++;
+        if(LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY)
+            plus+=2;
+        ((BranchManager)_worker).createShift(BranchManager.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false,LocalDate.now().getDayOfWeek().getValue());
+        ((BranchManager)_worker).createShift(BranchManager.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true,LocalDate.now().getDayOfWeek().getValue());
         ((BranchManager)_worker).createShift(BranchManager.getWorker(11),(LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false,1);
         ((BranchManager)_worker).setHalfDayShiftOff((LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),true,1);
         ((BranchManager)_worker).createShift(BranchManager.getWorker(11),(LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true,2);
@@ -333,6 +337,36 @@ public class Connector {
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(13),"Delly-Man");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(14),"Guard");
         ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(15),"Guard");
+        ((BranchManager)_worker).selectShift((LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true);
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(1),"Cashier");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(2),"Cashier");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(3),"Delivery");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(4),"Cleaner");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(5),"Cleaner");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(6),"Quartermaster");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(7),"Quartermaster");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(8),"Packer");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(9),"Packer");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(10),"Delivery");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(12),"Butcher");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(13),"Delly-Man");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(14),"Guard");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(15),"Guard");
+        ((BranchManager)_worker).selectShift((LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false);
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(1),"Cashier");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(2),"Cashier");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(3),"Delivery");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(4),"Cleaner");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(5),"Cleaner");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(6),"Quartermaster");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(7),"Quartermaster");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(8),"Packer");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(9),"Packer");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(10),"Delivery");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(12),"Butcher");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(13),"Delly-Man");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(14),"Guard");
+        ((BranchManager)_worker).addWorkerToShift(BranchManager.getWorker(15),"Guard");
     }
 
     public boolean removeWorkerFromShift(int id, String role) {
@@ -345,16 +379,16 @@ public class Connector {
 
     public String showWorkerShifts(String fromDate,String ToDate) {
         List<Shift> Shifts = new LinkedList<>();
-        LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.split(".")[2]), Integer.parseInt(fromDate.split(".")[1]), Integer.parseInt(fromDate.split(".")[0]));
-        LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.split(".")[2]), Integer.parseInt(ToDate.split(".")[1]), Integer.parseInt(ToDate.split(".")[0]));
-        for (Shift shift : ((BranchManager)_worker).getAllShifts()) {
+        LocalDate fromLocalDate = LocalDate.of(Integer.parseInt(fromDate.substring(6,10)),Integer.parseInt(fromDate.substring(3,5)),Integer.parseInt(fromDate.substring(0,2)));
+        LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.substring(6,10)),Integer.parseInt(ToDate.substring(3,5)),Integer.parseInt(ToDate.substring(0,2)));
+        for (Shift shift : BranchManager.getAllShifts()) {
             if (shift.getLocalDate().isAfter(fromLocalDate) && shift.getLocalDate().isBefore(toLocalDate)) {
-                if (shift.getWorkers().containsKey(_worker.getID())){
+                if (shift.isWorkerInShift(_worker.getID())){
                     Shifts.add(shift);
                 }
             }
         }
-        String res = "";
+        String res = "Shifts:\n";
         for (Shift shift : Shifts) {
             res += shift.getDate() + "," + (shift.getDayShift()?"day shift":"night shift") + "," + shift.getBranch().getName()+ "\n";
         }
@@ -476,11 +510,11 @@ public class Connector {
             return ((HR)_worker).setBranchManager(branchID, BM);
         }
 
-        public String showBranch ( int branchID){
+        public String showBranch (){
             if(!_worker.getIsBM()) {
                 return "Error: no permission to do that";
             }
-            return ((HR)_worker).showBranch(branchID);
+            return HR.showBranch(_worker.getBranch());
         }
 
     public boolean getIsHR() {
@@ -500,6 +534,15 @@ public class Connector {
         }
 
         return false;
+    }
+
+    public String getShiftManagers() {
+        String res = "";
+        List<Worker> workers = BranchManager.roleList.get("Shift-Manager");
+        for(Worker worker : workers) {
+            res += worker.getName() + ", " + worker.getID() + "\n";
+        }
+        return res;
     }
 }
 

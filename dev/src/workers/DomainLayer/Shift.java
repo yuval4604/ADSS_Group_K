@@ -83,7 +83,13 @@ public class Shift {
             for (Worker worker : entry.getValue()) {
                 if(worker.getID() == id) {
                     entry.getValue().remove(worker);
-                    workers.get(role).add(worker);
+                    if(workers.containsKey(role)) {
+                        workers.get(role).add(worker);
+                    }
+                    else {
+                        workers.put(role,new LinkedList<>());
+                        workers.get(role).add(worker);
+                    }
                     return;
                 }
             }
@@ -92,5 +98,16 @@ public class Shift {
 
     public Branch getBranch() {
         return _branch;
+    }
+
+    public boolean isWorkerInShift(int id) {
+        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
+            for (Worker worker : entry.getValue()) {
+                if(worker.getID() == id) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

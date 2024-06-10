@@ -268,19 +268,19 @@ public class ActionManager {
             System.out.println("Error: Something went wrong :(");
         }
     }
-    public void selectShift() {
+    public boolean selectShift() {
         System.out.println("Enter the desired date: ");
         String date = scanner.nextLine();
         try{
-            LocalDate ld = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
+            LocalDate ld = LocalDate.of(Integer.parseInt(date.substring(6,10)),Integer.parseInt(date.substring(3,5)),Integer.parseInt(date.substring(0,2)));
             if(ld.isBefore(LocalDate.now())){
                 System.out.println("date is in the past");
-                return;
+                return false;
             }
         }
         catch (Exception e){
             System.out.println("Invalid date try dd.mm.yyyy");
-            return;
+            return false;
         }
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
@@ -293,18 +293,21 @@ public class ActionManager {
         }
         else {
             System.out.println("Didnt choose one of the options");
-            return;
+            return false;
         }
         boolean res = _connector.selectShift(date,dayShift);
         if(res) {
             System.out.println("selected successfully");
+            return true;
         }
         else {
             System.out.println("Error: shift does not exist");
+            return false;
         }
     }
 
-    public void createShift() {
+    public boolean createShift() {
+        System.out.println(_connector.getShiftManagers());
         System.out.println("Enter the shift manager's id: ");
         int id;
         try {
@@ -313,25 +316,25 @@ public class ActionManager {
         catch (Exception e) {
             System.out.println("Invalid id");
             scanner.nextLine();
-            return;
+            return false;
         }
         scanner.nextLine();
         System.out.println("Choose the shift's date: ");
         String date = scanner.nextLine();
         if(date.length() != 10 || date.charAt(2) != '.' || date.charAt(5) != '.'){
             System.out.println("date not at format dd.mm.yyyy");
-            return;
+            return false;
         }
         try{
-            LocalDate ld = LocalDate.of(Integer.parseInt(date.split(".")[2]),Integer.parseInt(date.split(".")[1]),Integer.parseInt(date.split(".")[0]));
+            LocalDate ld = LocalDate.of(Integer.parseInt(date.substring(6,10)),Integer.parseInt(date.substring(3,5)),Integer.parseInt(date.substring(0,2)));
             if(ld.isBefore(LocalDate.now())){
                 System.out.println("date is in the past");
-                return;
+                return false;
             }
         }
         catch (Exception e){
             System.out.println("Invalid date");
-            return;
+            return false;
         }
         System.out.println("Day shift or night shift? : d/n");
         String shiftTime = scanner.nextLine();
@@ -342,7 +345,7 @@ public class ActionManager {
             dayShift = false;
         } else {
             System.out.println("Didnt choose one of the options");
-            return;
+            return false;
         }
         System.out.println("day of week?: choose 1 to 7");
         int dayOfWeek;
@@ -355,16 +358,18 @@ public class ActionManager {
         catch (Exception e) {
             System.out.println("Invalid day of week");
             scanner.nextLine();
-            return;
+            return false;
         }
         scanner.nextLine();
 
         boolean res = _connector.createShift(id, date, dayShift, dayOfWeek);
         if(res) {
             System.out.println("created successfully");
+            return true;
         }
         else {
             System.out.println("Error: shift already exists or wrong info");
+            return false;
         }
     }
     public void showWorkerInfo() {
@@ -493,24 +498,21 @@ public class ActionManager {
 
     public void workOnShift()
     {
-        System.out.println("create or select shift? : c/s");
-        String choice = scanner.nextLine();
-        if(choice.equals("c"))
-        {
-            createShift();
-        }
-        else if(choice.equals("s"))
-        {
-            selectShift();
-            if(_connector.isInactive())
-            {
-                System.out.println("Shift is inactive");
-                return;
+        boolean cOrS = false;
+        while(!cOrS) {
+            System.out.println("create or select shift? : c/s");
+            String choice = scanner.nextLine();
+            if (choice.equals("c")) {
+                cOrS = createShift();
+            } else if (choice.equals("s")) {
+                cOrS = selectShift();
+                if (_connector.isInactive()) {
+                    System.out.println("Shift is inactive");
+                    return;
+                }
+            } else {
+                System.out.println("Didnt choose one of the options");
             }
-        }
-        else
-        {
-            System.out.println("Didnt choose one of the options");
         }
         boolean keepWorking = true;
         while (keepWorking)
@@ -568,7 +570,7 @@ public class ActionManager {
 
         boolean res = _connector.removeWorkerFromShift(id,role);
         if(res) {
-            System.out.println("Worker has been added!");
+            System.out.println("Worker has been removed!");
         }
         else {
             System.out.println("Error: Something went wrong :(");
@@ -843,17 +845,7 @@ public class ActionManager {
     }
 
     public void showBranch() {
-        System.out.println("Enter Branch's id: ");
-        int branchID;
-        try {
-            branchID = scanner.nextInt();
-            scanner.nextLine();
-        }
-        catch (Exception e) {
-            System.out.println("Invalid id");
-            return;
-        }
-        System.out.println(_connector.showBranch(branchID));
+        System.out.println(_connector.showBranch());
     }
 
     public void showBranches() {
@@ -996,6 +988,7 @@ public class ActionManager {
         int id;
         try {
             id = scanner.nextInt();
+            scanner.nextLine();
         }
         catch (Exception e) {
             System.out.println("Invalid id");
@@ -1008,6 +1001,7 @@ public class ActionManager {
         int bID;
         try {
             bID = scanner.nextInt();
+            scanner.nextLine();
         }
         catch (Exception e) {
             System.out.println("Invalid id");
@@ -1016,10 +1010,10 @@ public class ActionManager {
         }
         boolean res = _connector.altarOnGoingShift(id,role,bID);
         if(res) {
-            System.out.println("selected successfully");
+            System.out.println("changed successfully");
         }
         else {
-            System.out.println("Error: shift does not exist");
+            System.out.println("Error: something went wrong");
         }
     }
 

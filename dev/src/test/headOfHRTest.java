@@ -7,16 +7,22 @@ public class headOfHRTest {
     @BeforeEach
     void setUp() {
         connector = new Connector("1234");
+        connector.createBM("a",0,1,true,10000,0,"11/11/11",10,10);
         connector.addWorker("worker1",1,1,true,10000,0,"11/11/11",10,10);
         connector.addWorker("worker2",2,2,false,10000,0,"11/11/11",10,10);
         connector.addWorker("worker3",3,3,false,10000,0,"11/11/11",10,10);
         connector.addWorker("worker4",4,4,true,10000,0,"11/11/11",10,10);
+        connector.addBranch("branch1",1,"a",0);
 
         connector.addRole(1,"Shift-Manager");
         connector.addRole(2,"c");
         connector.addRole(3,"b");
         connector.addRole(4,"a");
-        connector.login(-1,"1234");
+        connector.login(0,"a");
+        connector.addWorkerToBranch(1);
+        connector.addWorkerToBranch(2);
+        connector.addWorkerToBranch(3);
+        connector.addWorkerToBranch(4);
 
         connector.createShift(1,"01.01.2021",true,1);
 
@@ -25,22 +31,22 @@ public class headOfHRTest {
 
     @Test
     void createShiftTest() {
-        Assertions.assertTrue(connector.createShift(1,"12/12/21",true,1),"Shift added successfully");
-        Assertions.assertFalse(connector.createShift(1,"12/12/21",true,1),"Shift already exist");
+        Assertions.assertTrue(connector.createShift(1,"12.12.21",true,1),"Shift added successfully");
+        Assertions.assertFalse(connector.createShift(1,"12.12.21",true,1),"Shift already exist");
     }
     @Test
     void selectShiftTest() {
-        connector.createShift(1,"12/12/21",true,1);
-        Assertions.assertTrue(connector.selectShift("12/12/21",true),"Does exist");
-        Assertions.assertFalse(connector.selectShift("11/12/21",true),"Does not exist");
+        connector.createShift(1,"12.12.21",true,1);
+        Assertions.assertTrue(connector.selectShift("12.12.21",true),"Does exist");
+        Assertions.assertFalse(connector.selectShift("11.12.21",true),"Does not exist");
     }
     @Test
     void setHourlyWage() {
         connector.setHourlyWage(2,1000);
         connector.setHourlyWage(3,100);
-        connector.login(2,"b");
+        connector.login(2,"worker2");
         Assertions.assertEquals(connector.showWorkerInfo().contains("Hourly wage:1000"),true);
-        connector.login(3,"c");
+        connector.login(3,"worker3");
         Assertions.assertEquals(connector.showWorkerInfo().contains("Hourly wage:100"),true);
     }
 
@@ -54,12 +60,16 @@ public class headOfHRTest {
 
     @Test
     void setVacationDays() {
+        connector.logOut();
+        connector.login(0,"a");
         connector.setVacationDays(4,5);
         connector.setVacationDays(1,5);
-        connector.login(4,"a");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Total vacation days:5"),true);
-        connector.login(1,"a");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Total vacation days:5"),true);
+        connector.login(4,"worker4");
+        String workerInfo = connector.showWorkerInfo();
+        Assertions.assertTrue(workerInfo.contains("Total vacation days:5"));
+        connector.login(1,"worker1");
+        workerInfo = connector.showWorkerInfo();
+        Assertions.assertTrue(workerInfo.contains("Total vacation days:5"));
     }
 
     @Test
@@ -86,7 +96,7 @@ public class headOfHRTest {
 
     @Test
     void addWorkerToShift() {
-        connector.createShift(1,"12/12/21",true,1);
+        connector.createShift(1,"12.12.21",true,1);
         Assertions.assertTrue(connector.showShift().contains("worker1"));
         connector.addWorkerToShift(2,"c");
         String shift = connector.showShift();
@@ -115,8 +125,10 @@ public class headOfHRTest {
 
     @Test
     void addWorker() {
-        connector.addWorker("worker5",5,5,true,0,0,"11/11/11",10,10);
-        Assertions.assertTrue(connector.login(5,"a"));
+        connector.logOut();
+        connector.login(-1,"1234");
+        connector.addWorker("worker5",5,5,true,0,0,"11.11.11",10,10);
+        Assertions.assertTrue(connector.login(5,"worker5"));
     }
 
     @Test
@@ -144,7 +156,7 @@ public class headOfHRTest {
 
     @Test
     void removeWorkerFromShift() {
-        connector.createShift(1,"12/12/21",true,1);
+        connector.createShift(1,"12.12.21",true,1);
         connector.addWorkerToShift(3,"b");
         Assertions.assertTrue(connector.showShift().contains("worker3"));
         connector.removeWorkerFromShift(3,"b");

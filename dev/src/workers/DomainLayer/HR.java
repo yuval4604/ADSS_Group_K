@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HR extends BranchManager{
-    private Map<Integer,Branch> _branches;
+    private static Map<Integer,Branch> _branches;
     private Map<LocalDate,List<Worker>> firedWorkers;
 
     public HR(Branch ABranch) {
@@ -55,19 +55,36 @@ public class HR extends BranchManager{
         return false;
     }
 
-    public String showBranch(int branchID) {
-        if(_branches.containsKey(branchID)) {
+    public static String showBranch(String branchName) {
+        int id = -1000000000;
+        for (Map.Entry<Integer, Branch> entry : _branches.entrySet()) {
+            if(entry.getValue().getName().equals(branchName)) {
+                id =  entry.getValue().getID();
+            }
+        }
+        if(_branches.containsKey(id)) {
             StringBuilder sb = new StringBuilder();
-            sb.append("Branch Name: ").append(_branches.get(branchID).getName()).append("\n");
-            sb.append("Branch ID: ").append(_branches.get(branchID).getID()).append("\n");
-            sb.append("Branch Address: ").append(_branches.get(branchID).getAddress()).append("\n");
-            sb.append("Branch Manager ID: ").append(_branches.get(branchID).getBranchManager().getID()).append(" Branch Manager Name: ").append(_branches.get(branchID).getBranchManager().getName()).append("\n");
+            sb.append("Branch Name: ").append(_branches.get(id).getName()).append("\n");
+            sb.append("Branch ID: ").append(_branches.get(id).getID()).append("\n");
+            sb.append("Branch Address: ").append(_branches.get(id).getAddress()).append("\n");
+            sb.append("Branch Manager ID: ").append(_branches.get(id).getBranchManager().getID()).append(" Branch Manager Name: ").append(_branches.get(id).getBranchManager().getName()).append("\n");
             sb.append("Workers: \n");
-            for (Worker worker : _branches.get(branchID).getWorkers()) {
+            for (Worker worker : _branches.get(id).getWorkers()) {
                 sb.append("- Worker ID: ").append(worker.getID()).append(" Worker Name: ").append(worker.getName()).append("\n");
             }
+            sb.append("Roles: \n");
+            for (Map.Entry<String, List<Worker>> entry : roleList.entrySet()) {
+                sb.append("Role: ").append(entry.getKey()).append("\n");
+                for (Worker worker : entry.getValue()) {
+                    sb.append("- Worker ID: ").append(worker.getID()).append(" Worker Name: ").append(worker.getName()).append("\n");
+                }
+            }
+            sb.append("minimal workers for shift: \n");
+            for (Map.Entry<String, Integer> entry : _branches.get(id).getMinimalWorkersForShift().entrySet()) {
+                sb.append(" Role: ").append(entry.getKey()).append(", Number of workers: ").append(entry.getValue()).append("\n");
+            }
             sb.append("Shifts: \n");
-            for (Shift shift : _branches.get(branchID).getShifts()) {
+            for (Shift shift : _branches.get(id).getShifts()) {
                 sb.append(" Shift Date: ").append(shift.getLocalDate()).append("," + (shift.getDayShift()?"day shift":"night shift")).append("\n");
             }
             return sb.toString();
@@ -90,7 +107,8 @@ public class HR extends BranchManager{
 
     public void checkUpdateDay() {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
-            entry.getValue().checkUpdateDay();
+            if(entry.getValue().getID() != getID())
+                entry.getValue().checkUpdateDay();
         }
         for(Map.Entry<LocalDate,List<Worker>> entry:firedWorkers.entrySet()) {
             if(entry.getKey().isBefore(LocalDate.now())||entry.getKey().isEqual(LocalDate.now()) ){
