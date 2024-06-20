@@ -105,6 +105,11 @@ public class Worker {
         }
         return true;
     }
+
+    public String getBranch() {
+        return branch;
+    }
+
     public boolean getIsBM() {
         return _isBM;
     }
@@ -121,7 +126,7 @@ public class Worker {
         return _changedPassword;
     }
 
-    public void checkUpdateDay() {
+    public void checkUpdateDay() {/*
         _constraints.add(_prefList);
         _prefList = new Constraints[7][2];
         for (int i = 0; i < 7; i++) {
@@ -129,7 +134,7 @@ public class Worker {
                 _prefList[i][j] = (i == 6) ? Constraints.inactive : Constraints.can;
             }
 
-        }
+        }*/
     }
 
     public void setBranch(String branch) {
@@ -138,10 +143,6 @@ public class Worker {
 
     public boolean inBranch(String name) {
         return branch.equals(name);
-    }
-
-    public String getBranch() {
-        return branch;
     }
 
     public void changed() {

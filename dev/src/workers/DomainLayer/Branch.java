@@ -10,15 +10,15 @@ public class Branch {
     private List<Worker> _workers;
     private List<Shift> _shifts;
     private String _address;
-    private Worker _branchManager;
+    private Worker _headOfBranch;
 
-    public Branch(String name, int id, String address, Worker branchManager) {
+    public Branch(String name, int id, String address, Worker headOfBranch) {
         _name = name;
         _id = id;
         _workers = new LinkedList<>();
         _shifts = new LinkedList<>();
         _address = address;
-        _branchManager = branchManager;
+        _headOfBranch = headOfBranch;
     }
 
     public String getName() {
@@ -41,8 +41,8 @@ public class Branch {
         return _address;
     }
 
-    public Worker getBranchManager() {
-        return _branchManager;
+    public Worker getHeadOfBranch() {
+        return _headOfBranch;
     }
 
     public void addWorker(Worker worker) {
@@ -56,12 +56,16 @@ public class Branch {
     public void removeWorker(Worker worker) {
         _workers.remove(worker);
     }
-    public void setBranchManager(Worker branchManager) {
-        ((BranchManager)branchManager).takeOffBranch();
-        _branchManager = branchManager;
+    public void setHeadOfBranch(Worker headOfBranch) {
+        ((HeadOfBranch)headOfBranch).takeOffBranch();
+        _headOfBranch = headOfBranch;
     }
 
     public Map<String, Integer> getMinimalWorkersForShift() {
-        return ((BranchManager)_branchManager).getMinimalWorkersForShift();
+        return ((HeadOfBranch) _headOfBranch).getMinimalWorkersForShift();
+    }
+
+    public Worker getBM() {
+        return _headOfBranch;
     }
 }

@@ -443,7 +443,7 @@ public class ActionManager {
     }
 
     public void addConstraints() {
-        if(_connector.lastDayToSetConstraints() > LocalDate.now().getDayOfWeek().getValue()) {
+        if(_connector.lastDayToSetConstraints() < LocalDate.now().getDayOfWeek().getValue()) {
             System.out.println("Can't set constraints for past days");
             return;
         }
@@ -492,7 +492,7 @@ public class ActionManager {
         } else{
             cons = Constraints.cant;
         }
-        _connector.addConstraints(day,dayShift,cons);
+        _connector.addConstraints(day - 1,dayShift,cons);
 
     }
 
@@ -852,7 +852,7 @@ public class ActionManager {
         System.out.println(_connector.showBranches());
     }
 
-    public void setBranchManager() {
+    public void setHeadOfBranch() {
         System.out.println("Enter Branch's id: ");
         int branchID;
         try {
@@ -873,7 +873,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.setBranchManager(branchID,workerID);
+        boolean res = _connector.setHeadOfBranch(branchID,workerID);
         if(res) {
             System.out.println("Branch manager has been set!");
         }

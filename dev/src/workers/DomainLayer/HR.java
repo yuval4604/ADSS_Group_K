@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class HR extends BranchManager{
+public class HR extends HeadOfBranch {
     private static Map<Integer,Branch> _branches;
     private Map<LocalDate,List<Worker>> firedWorkers;
 
@@ -24,9 +24,9 @@ public class HR extends BranchManager{
         allWorkers.put(worker.getID(), worker);
     }
 
-    public boolean addBranch(String name, int id, String address, Worker branchManager) {
-        Branch branch = new Branch(name, id, address, branchManager);
-        ((BranchManager)branchManager).setBranch(branch);
+    public boolean addBranch(String name, int id, String address, Worker headOfBranch) {
+        Branch branch = new Branch(name, id, address, headOfBranch);
+        ((HeadOfBranch)headOfBranch).setBranch(branch);
         _branches.put(id,branch);
         return true;
     }
@@ -47,9 +47,9 @@ public class HR extends BranchManager{
         return sb.toString();
     }
 
-    public boolean setBranchManager(int branchID, Worker branchManager) {
+    public boolean setHeadOfBranch(int branchID, Worker headOfBranch) {
         if(_branches.containsKey(branchID)) {
-            _branches.get(branchID).setBranchManager(branchManager);
+            _branches.get(branchID).setHeadOfBranch(headOfBranch);
             return true;
         }
         return false;
@@ -67,7 +67,7 @@ public class HR extends BranchManager{
             sb.append("Branch Name: ").append(_branches.get(id).getName()).append("\n");
             sb.append("Branch ID: ").append(_branches.get(id).getID()).append("\n");
             sb.append("Branch Address: ").append(_branches.get(id).getAddress()).append("\n");
-            sb.append("Branch Manager ID: ").append(_branches.get(id).getBranchManager().getID()).append(" Branch Manager Name: ").append(_branches.get(id).getBranchManager().getName()).append("\n");
+            sb.append("Branch Manager ID: ").append(_branches.get(id).getHeadOfBranch().getID()).append(" Branch Manager Name: ").append(_branches.get(id).getHeadOfBranch().getName()).append("\n");
             sb.append("Workers: \n");
             for (Worker worker : _branches.get(id).getWorkers()) {
                 sb.append("- Worker ID: ").append(worker.getID()).append(" Worker Name: ").append(worker.getName()).append("\n");
@@ -136,5 +136,14 @@ public class HR extends BranchManager{
         } else {
             return false;
         }
+    }
+
+    public static Branch getBranchO(String branch) {
+        for(Map.Entry<Integer, Branch> entry : _branches.entrySet()) {
+            if(entry.getValue().getName().equals(branch)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 }

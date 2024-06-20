@@ -2,7 +2,7 @@ package workers.DomainLayer;
 import java.time.LocalDate;
 import java.util.*;
 
-public class BranchManager extends Worker {
+public class HeadOfBranch extends Worker {
 
     private Map<String,Integer> minimalWorkers;
     protected static Map<Integer,Worker> allWorkers;
@@ -13,14 +13,14 @@ public class BranchManager extends Worker {
 
     private Branch _branch;
 
-    public BranchManager(String name, int id, int bankNum, int globalWage, int hourlyWage, String dateOfStart, boolean fullTimeJob, int totalVacationDays, int currentVacationDays, Branch branch) {
+    public HeadOfBranch(String name, int id, int bankNum, int globalWage, int hourlyWage, String dateOfStart, boolean fullTimeJob, int totalVacationDays, int currentVacationDays, Branch branch) {
         super(name, id, bankNum, globalWage, hourlyWage, dateOfStart, fullTimeJob, totalVacationDays, currentVacationDays, true);
         if(id==-1) {
             allWorkers = new HashMap<>();
             allShifts = new LinkedList<>();
             roleList = new HashMap<>();
         }
-        _lastdaytoSetConstraints = 6;
+        _lastdaytoSetConstraints = 7;
         allWorkers.put(id,this);
         currentShift = null;
         roleList.put("Shift-Manager",new LinkedList<>());
@@ -95,7 +95,7 @@ public class BranchManager extends Worker {
         return availableWorker;
     }
     public boolean addWorkerToShift(Worker worker,String role) {
-        if(currentShift != null && currentShift.getActive() &&  currentShift.notIn(worker)){
+        if(currentShift != null && currentShift.getActive() &&  currentShift.notIn(worker) && (worker.getCons(currentShift.getDayOfWeek(),currentShift.getDayShift()).equals(Constraints.can) || worker.getCons(currentShift.getDayOfWeek(),currentShift.getDayShift()).equals(Constraints.want))){
             currentShift.addWorker(worker,role);
             return true;
         }
