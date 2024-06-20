@@ -63,14 +63,14 @@ public class Shift {
         return workers;
     }
 
-    public boolean notIn(Worker worker) {
-        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
-            if(entry.getValue().contains(worker)) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    public boolean notIn(Worker worker) {
+//        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
+//            if(entry.getValue().contains(worker)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     public LocalDate getLocalDate() {
         return _localDate;
@@ -78,36 +78,36 @@ public class Shift {
 
 
 
-    public void altarRole(int id, String role) {
-        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
-            for (Worker worker : entry.getValue()) {
-                if(worker.getID() == id) {
-                    entry.getValue().remove(worker);
-                    if(workers.containsKey(role)) {
-                        workers.get(role).add(worker);
-                    }
-                    else {
-                        workers.put(role,new LinkedList<>());
-                        workers.get(role).add(worker);
-                    }
-                    return;
-                }
-            }
-        }
-    }
+//    public void altarRole(int id, String role) {
+//        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
+//            for (Worker worker : entry.getValue()) {
+//                if(worker.getID() == id) {
+//                    entry.getValue().remove(worker);
+//                    if(workers.containsKey(role)) {
+//                        workers.get(role).add(worker);
+//                    }
+//                    else {
+//                        workers.put(role,new LinkedList<>());
+//                        workers.get(role).add(worker);
+//                    }
+//                    return;
+//                }
+//            }
+//        }
+//    }
 
     public Branch getBranch() {
         return _branch;
     }
 
-    public boolean isWorkerInShift(int id) {
-        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
-            for (Worker worker : entry.getValue()) {
-                if(worker.getID() == id) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    public boolean isWorkerInShift(int id) {
+//        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
+//            for (Worker worker : entry.getValue()) {
+//                if(worker.getID() == id) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }

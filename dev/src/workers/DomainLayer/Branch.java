@@ -61,9 +61,9 @@ public class Branch {
         _headOfBranch = headOfBranch;
     }
 
-    public Map<String, Integer> getMinimalWorkersForShift() {
-        return ((HeadOfBranch) _headOfBranch).getMinimalWorkersForShift();
-    }
+//    public Map<String, Integer> getMinimalWorkersForShift() {
+//        return ((HeadOfBranch) _headOfBranch).getMinimalWorkersForShift();
+//    }
 
     public Worker getBM() {
         return _headOfBranch;
