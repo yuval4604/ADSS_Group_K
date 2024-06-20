@@ -108,7 +108,7 @@ public class HR extends HeadOfBranch {
     public void checkUpdateDay() {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
             if(entry.getValue().getID() != getID())
-                entry.getValue().checkUpdateDay();
+                WorkerMnager.checkUpdateDay(entry.getValue());
         }
         for(Map.Entry<LocalDate,List<Worker>> entry:firedWorkers.entrySet()) {
             if(entry.getKey().isBefore(LocalDate.now())||entry.getKey().isEqual(LocalDate.now()) ){

@@ -67,7 +67,7 @@ public class Connector {
         return false;
     }
     public boolean useVacationDays(int days) {
-        return _worker.useVacationDays(days);
+        return WorkerMnager.useVacationDays(_worker,days);
     }
 
     public String getAvailableWorkersOfRole(String role) {
@@ -75,12 +75,12 @@ public class Connector {
         List<Worker>[] list = ((HeadOfBranch)_worker).getAvailableWorkersOfRole(role);
         res += "For the role, " + role + " , the workers who want to work this shift are: \n";
         for(Worker worker : list[0]) {
-            if (worker.inBranch(((HeadOfBranch)_worker).getBranchO().getName()))
+            if (WorkerMnager.inBranch(worker,((HeadOfBranch)_worker).getBranchO().getName()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         res += "For the role, " + role + " , the workers who can work this shift are: \n";
         for(Worker worker : list[1]) {
-            if (worker.inBranch(((HeadOfBranch)_worker).getBranchO().getName()))
+            if (WorkerMnager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         return res;
@@ -90,7 +90,7 @@ public class Connector {
             return false;
         }
         Worker worker = HeadOfBranch.getWorker(id);
-        if (!worker.inBranch(((HeadOfBranch)_worker).getBranchO().getName()))
+        if (!WorkerMnager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
             return false;
         return ((HeadOfBranch)_worker).addWorkerToShift(worker,role);
     }
@@ -101,7 +101,7 @@ public class Connector {
         if(!_worker.getIsBM())
             return false;
         Worker shiftManager = HeadOfBranch.getWorker(id);
-        if (!shiftManager.inBranch(((HeadOfBranch)_worker).getBranchO().getName()))
+        if (!WorkerMnager.inBranch(shiftManager, ((HeadOfBranch)_worker).getBranchO().getName()))
             return false;
         return ((HeadOfBranch)_worker).createShift(shiftManager,date,dayShift,dayOfWeek);
     }
@@ -151,7 +151,7 @@ public class Connector {
         if(!isLegalPassword(newPass))
             return false;
         if(loginInfos.get(id).equals(oldPass)) {
-            HeadOfBranch.getWorker(id).changed();
+            HeadOfBranch.getWorker(id).setChangedPassword();
             loginInfos.remove(id,oldPass);
             loginInfos.put(id,newPass);
             return true;
@@ -396,7 +396,7 @@ public class Connector {
     }
 
         public boolean hasChangedPassword () {
-            return _worker.hasChangedPassword();
+            return _worker.getHasChangedPassword();
         }
 
         public int lastDayToSetConstraints () {
@@ -409,7 +409,7 @@ public class Connector {
 
         public void checkUpdateDay () {
             if (_lastUpdate.isBefore(LocalDate.now())) {
-                _worker.checkUpdateDay();
+                WorkerMnager.checkUpdateDay(_worker);
                 _lastUpdate = LocalDate.now();
             }
         }

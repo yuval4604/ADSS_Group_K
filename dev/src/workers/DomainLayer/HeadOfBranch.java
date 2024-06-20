@@ -61,7 +61,7 @@ public class HeadOfBranch extends Worker {
         if(!allWorkers.containsKey(id)) {
             return false;
         }
-        allWorkers.get(id).ResetVacationDays();
+        WorkerMnager.ResetVacationDays(allWorkers.get(id));
         return true;
     }
     public boolean setWorkerHourly(int id,int wage) {
@@ -76,7 +76,7 @@ public class HeadOfBranch extends Worker {
     
     public List<Worker>[] getAvailableWorkersOfRole(String role) { // list of size 2, first list - want , second list - can
         List<Worker> roleWorkerList = roleList.get(role);
-        List<Worker>[] availableWorker = new List[2]; 
+        List<Worker>[] availableWorker = new List[2];
         availableWorker[0] = new LinkedList<>();
         availableWorker[1] = new LinkedList<>();
         if(roleWorkerList == null) {
@@ -248,7 +248,7 @@ public class HeadOfBranch extends Worker {
     public void checkUpdateDay() {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
             if(entry.getValue().getID() != getID())
-                entry.getValue().checkUpdateDay();
+                WorkerMnager.checkUpdateDay(entry.getValue());
         }
     }
 

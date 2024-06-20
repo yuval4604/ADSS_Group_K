@@ -89,9 +89,6 @@ public class Worker {
     public void setVacationDays(int vic) {
         _totalVacationDays = vic;
     }
-    public void ResetVacationDays() {
-        _currentVacationDays = _totalVacationDays;
-    }
 
     public boolean addConstraints(int day,boolean dayShift, Constraints cons) {
         if(day == 6)
@@ -113,39 +110,36 @@ public class Worker {
     public boolean getIsBM() {
         return _isBM;
     }
-    public boolean useVacationDays(int days) {
-        if (days < _currentVacationDays) {
-            _currentVacationDays = _currentVacationDays - days;
-            return true;
-        }
-        return false;
-    }
 
 
-    public boolean hasChangedPassword() {
+
+    public boolean getHasChangedPassword() {
         return _changedPassword;
     }
 
-    public void checkUpdateDay() {/*
-        _constraints.add(_prefList);
+    public void createNewConstraints()
+    {
         _prefList = new Constraints[7][2];
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 2; j++) {
                 _prefList[i][j] = (i == 6) ? Constraints.inactive : Constraints.can;
             }
 
-        }*/
+        }
+    }
+    public void backupConstraints() {
+        _constraints.add(_prefList);
     }
 
     public void setBranch(String branch) {
         this.branch = branch;
     }
 
-    public boolean inBranch(String name) {
-        return branch.equals(name);
+    public void setChangedPassword() {
+        _changedPassword = true;
     }
 
-    public void changed() {
-        _changedPassword = true;
+    public void setCurrvacationDays(int days) {
+        _currentVacationDays = days;
     }
 }
