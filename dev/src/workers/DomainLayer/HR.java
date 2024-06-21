@@ -80,7 +80,7 @@ public class HR extends HeadOfBranch {
                 }
             }
             sb.append("minimal workers for shift: \n");
-            for (Map.Entry<String, Integer> entry : _branches.get(id).getMinimalWorkersForShift().entrySet()) {
+            for (Map.Entry<String, Integer> entry : BranchManager.getMinimalWorkersForShift(_branches.get(id)).entrySet()) {
                 sb.append(" Role: ").append(entry.getKey()).append(", Number of workers: ").append(entry.getValue()).append("\n");
             }
             sb.append("Shifts: \n");
@@ -108,7 +108,7 @@ public class HR extends HeadOfBranch {
     public void checkUpdateDay() {
         for (Map.Entry<Integer, Worker> entry : allWorkers.entrySet()) {
             if(entry.getValue().getID() != getID())
-                WorkerMnager.checkUpdateDay(entry.getValue());
+                WorkerManager.checkUpdateDay(entry.getValue());
         }
         for(Map.Entry<LocalDate,List<Worker>> entry:firedWorkers.entrySet()) {
             if(entry.getKey().isBefore(LocalDate.now())||entry.getKey().isEqual(LocalDate.now()) ){

@@ -38,49 +38,49 @@ public class Connector {
     }
     public boolean setGlobalWage(int id,int wage){
         if(_worker.getIsBM()) {
-            return ((HeadOfBranch)_worker).setWorkerGlobal(id,wage);
+            return HeadOfBranchManager.setWorkerGlobal(id,wage);
         }
         return false;
     }
     public boolean setHourlyWage(int id,int wage){
         if(_worker.getIsBM()) {
-            return ((HeadOfBranch)_worker).setWorkerHourly(id,wage);
+            return HeadOfBranchManager.setWorkerHourly(id,wage);
         }
         return false;
     }
     public boolean setFullTimeJob(int id,boolean full){
         if(_worker.getIsBM()) {
-            return ((HeadOfBranch)_worker).setFullTime(id,full);
+            return HeadOfBranchManager.setFullTime(id,full);
         }
         return false;
     }
     public boolean setVacationDays(int id, int days){
         if(_worker.getIsBM()) {
-            return ((HeadOfBranch)_worker).setVacation(id,days);
+            return HeadOfBranchManager.setVacation(id,days);
         }
         return false;
     }
     public boolean ResetVacationDays(int id){
         if(_worker.getIsBM()) {
-            return ((HeadOfBranch)_worker).ResetVacationDays(id);
+            return HeadOfBranchManager.ResetVacationDays(id);
         }
         return false;
     }
     public boolean useVacationDays(int days) {
-        return WorkerMnager.useVacationDays(_worker,days);
+        return WorkerManager.useVacationDays(_worker,days);
     }
 
     public String getAvailableWorkersOfRole(String role) {
         String res = "";
-        List<Worker>[] list = ((HeadOfBranch)_worker).getAvailableWorkersOfRole(role);
+        List<Worker>[] list = HeadOfBranchManager.getAvailableWorkersOfRole(((HeadOfBranch)_worker), role);
         res += "For the role, " + role + " , the workers who want to work this shift are: \n";
         for(Worker worker : list[0]) {
-            if (WorkerMnager.inBranch(worker,((HeadOfBranch)_worker).getBranchO().getName()))
+            if (WorkerManager.inBranch(worker,((HeadOfBranch)_worker).getBranchO().getName()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         res += "For the role, " + role + " , the workers who can work this shift are: \n";
         for(Worker worker : list[1]) {
-            if (WorkerMnager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
+            if (WorkerManager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         return res;
@@ -90,9 +90,9 @@ public class Connector {
             return false;
         }
         Worker worker = HeadOfBranch.getWorker(id);
-        if (!WorkerMnager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
+        if (!WorkerManager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
             return false;
-        return ((HeadOfBranch)_worker).addWorkerToShift(worker,role);
+        return HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker),worker,role);
     }
     public boolean selectShift(String date,boolean dayShift) {
         return ((HeadOfBranch)_worker).selectShift(date,dayShift);
@@ -101,9 +101,9 @@ public class Connector {
         if(!_worker.getIsBM())
             return false;
         Worker shiftManager = HeadOfBranch.getWorker(id);
-        if (!WorkerMnager.inBranch(shiftManager, ((HeadOfBranch)_worker).getBranchO().getName()))
+        if (!WorkerManager.inBranch(shiftManager, ((HeadOfBranch)_worker).getBranchO().getName()))
             return false;
-        return ((HeadOfBranch)_worker).createShift(shiftManager,date,dayShift,dayOfWeek);
+        return HeadOfBranchManager.createShift(((HeadOfBranch)_worker), shiftManager,date,dayShift,dayOfWeek);
     }
 
     public String showWorkerInfo() {
@@ -137,12 +137,12 @@ public class Connector {
 
     public boolean setHalfDayShiftOff(String date,boolean dayShift,int dayOfWeek) {
         if(_worker.getIsBM())
-            return ((HeadOfBranch)_worker).setHalfDayShiftOff(date,dayShift,dayOfWeek);
+            return HeadOfBranchManager.setHalfDayShiftOff(((HeadOfBranch)_worker),date,dayShift,dayOfWeek);
         return false;
     }
     public boolean setAllDayOff(String date, int dayOfWeek) {
         if(_worker.getIsBM()) {
-            return ((HeadOfBranch)_worker).setAllDayOff(date,dayOfWeek);
+            return HeadOfBranchManager.setAllDayOff(((HeadOfBranch)_worker),date,dayOfWeek);
         }
         return false;
     }
@@ -196,16 +196,16 @@ public class Connector {
     }
 
     public boolean addRole(int id, String role) {
-        return ((HeadOfBranch)_worker).addRole(id,role);
+        return HeadOfBranchManager.addRole(((HeadOfBranch)_worker), id,role);
     }
 
     public boolean removeRole(int id, String role) {
-        return ((HeadOfBranch)_worker).removeRole(id,role);
+        return HeadOfBranchManager.removeRole(((HeadOfBranch)_worker), id,role);
     }
 
     public String getRoles() {
         String res = "";
-        List<String> roles = HeadOfBranch.getRoles(_worker);
+        List<String> roles = HeadOfBranchManager.getRoles(_worker);
         for(String role : roles) {
             res += role + ", ";
         }
@@ -215,7 +215,7 @@ public class Connector {
     }
 
     public boolean isInactive() {
-        return ((HeadOfBranch)_worker).isInactive();
+        return HeadOfBranchManager.isInactive(((HeadOfBranch)_worker));
     }
 
     public boolean getIsBM() {
@@ -227,7 +227,7 @@ public class Connector {
     }
 
     public String showShift() {
-        return ((HeadOfBranch)_worker).showShift();
+        return HeadOfBranchManager.showShift(((HeadOfBranch)_worker));
     }
 
     public void load() {
@@ -266,111 +266,111 @@ public class Connector {
         ((HR)_worker).addWorker(new Worker("Oliver",15,15,15,15,"02.02.2022",true,15,15,false));
         logOut();
         login(22,"Benjamin");
-        ((HeadOfBranch)_worker).addRole(1,"Cashier");
-        ((HeadOfBranch)_worker).addRole(2,"Cashier");
-        ((HeadOfBranch)_worker).addRole(3,"Delivery");
-        ((HeadOfBranch)_worker).addRole(4,"Cleaner");
-        ((HeadOfBranch)_worker).addRole(5,"Cleaner");
-        ((HeadOfBranch)_worker).addRole(6,"Quartermaster");
-        ((HeadOfBranch)_worker).addRole(7,"Quartermaster");
-        ((HeadOfBranch)_worker).addRole(8,"Packer");
-        ((HeadOfBranch)_worker).addRole(9,"Packer");
-        ((HeadOfBranch)_worker).addRole(10,"Delivery");
-        ((HeadOfBranch)_worker).addRole(11,"Shift-Manager");
-        ((HeadOfBranch)_worker).addRole(12,"Butcher");
-        ((HeadOfBranch)_worker).addRole(13,"Delly-Man");
-        ((HeadOfBranch)_worker).addRole(14, "Guard");
-        ((HeadOfBranch)_worker).addRole(15, "Guard");
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(1));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(2));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(3));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(4));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(5));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(6));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(7));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(8));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(9));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(10));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(11));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(12));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(13));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(14));
-        ((HeadOfBranch)_worker).addWorkerToBranch(HeadOfBranch.getWorker(15));
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 1,"Cashier");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 2,"Cashier");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 3,"Delivery");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 4,"Cleaner");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 5,"Cleaner");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 6,"Quartermaster");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 7,"Quartermaster");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 8,"Packer");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 9,"Packer");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 10,"Delivery");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 11,"Shift-Manager");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 12,"Butcher");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 13,"Delly-Man");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 14, "Guard");
+        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 15, "Guard");
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14));
+        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15));
         int plus = 0;
         if(LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY)
             plus++;
         if(LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY)
             plus+=2;
-        ((HeadOfBranch)_worker).createShift(HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false,LocalDate.now().getDayOfWeek().getValue());
-        ((HeadOfBranch)_worker).createShift(HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true,LocalDate.now().getDayOfWeek().getValue());
-        ((HeadOfBranch)_worker).createShift(HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false,1);
-        ((HeadOfBranch)_worker).setHalfDayShiftOff((LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),true,1);
-        ((HeadOfBranch)_worker).createShift(HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true,2);
-        ((HeadOfBranch)_worker).setAllDayOff((LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),3);
+        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false,LocalDate.now().getDayOfWeek().getValue());
+        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true,LocalDate.now().getDayOfWeek().getValue());
+        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false,1);
+        HeadOfBranchManager.setHalfDayShiftOff(((HeadOfBranch)_worker), (LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),true,1);
+        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true,2);
+        HeadOfBranchManager.setAllDayOff(((HeadOfBranch)_worker), (LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),3);
         ((HeadOfBranch)_worker).selectShift((LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false);
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(1),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(2),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(3),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(4),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(5),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(6),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(7),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(8),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(9),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(10),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(12),"Butcher");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(13),"Delly-Man");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(14),"Guard");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(15),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12),"Butcher");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
         ((HeadOfBranch)_worker).selectShift((LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true);
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(1),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(2),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(3),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(4),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(5),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(6),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(7),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(8),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(9),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(10),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(12),"Butcher");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(13),"Delly-Man");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(14),"Guard");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(15),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12),"Butcher");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
         ((HeadOfBranch)_worker).selectShift((LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true);
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(1),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(2),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(3),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(4),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(5),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(6),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(7),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(8),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(9),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(10),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(12),"Butcher");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(13),"Delly-Man");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(14),"Guard");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(15),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12),"Butcher");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
         ((HeadOfBranch)_worker).selectShift((LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false);
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(1),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(2),"Cashier");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(3),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(4),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(5),"Cleaner");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(6),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(7),"Quartermaster");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(8),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(9),"Packer");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(10),"Delivery");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(12),"Butcher");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(13),"Delly-Man");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(14),"Guard");
-        ((HeadOfBranch)_worker).addWorkerToShift(HeadOfBranch.getWorker(15),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5),"Cleaner");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7),"Quartermaster");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9),"Packer");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10),"Delivery");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12),"Butcher");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
+        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
     }
 
     public boolean removeWorkerFromShift(int id, String role) {
-        return ((HeadOfBranch)_worker).removeWorkerFromShift(id,role);
+        return HeadOfBranchManager.removeWorkerFromShift(((HeadOfBranch)_worker), id,role);
     }
 
     public Object getCons(int i, boolean b) {
@@ -383,7 +383,7 @@ public class Connector {
         LocalDate toLocalDate = LocalDate.of(Integer.parseInt(ToDate.substring(6,10)),Integer.parseInt(ToDate.substring(3,5)),Integer.parseInt(ToDate.substring(0,2)));
         for (Shift shift : HeadOfBranch.getAllShifts()) {
             if (shift.getLocalDate().isAfter(fromLocalDate) && shift.getLocalDate().isBefore(toLocalDate)) {
-                if (shift.isWorkerInShift(_worker.getID())){
+                if (ShiftManager.isWorkerInShift(shift,_worker.getID())){
                     Shifts.add(shift);
                 }
             }
@@ -404,12 +404,17 @@ public class Connector {
         }
 
         public boolean setLastDayForConstraints ( int day){
-            return ((HeadOfBranch)_worker).setLastDayForConstraints(day);
+            return HeadOfBranchManager.setLastDayForConstraints(((HeadOfBranch)_worker),day);
         }
 
         public void checkUpdateDay () {
             if (_lastUpdate.isBefore(LocalDate.now())) {
-                WorkerMnager.checkUpdateDay(_worker);
+                if (_worker.getID() == -1)
+                    ((HR)_worker).checkUpdateDay();
+                else if (_worker.getIsBM())
+                    HeadOfBranchManager.checkUpdateDay(_worker);
+                else
+                    WorkerManager.checkUpdateDay(_worker);
                 _lastUpdate = LocalDate.now();
             }
         }
@@ -431,7 +436,7 @@ public class Connector {
         }
         public boolean setMinimalWorkers(String role,int num){
             if(_worker.getIsBM()) {
-                ((HeadOfBranch)_worker).setMinimalAmount(role, num);
+                HeadOfBranchManager.setMinimalAmount(((HeadOfBranch)_worker),role, num);
                 return true;
             }
             return false;
@@ -450,7 +455,7 @@ public class Connector {
                 return false;
             }
             if(shift.getShiftManager().getID() == _worker.getID()) {
-                shift.altarRole(id,role);
+                ShiftManager.altarRole(shift,id,role);
                 return true;
             }
             return false;
@@ -476,7 +481,7 @@ public class Connector {
                 return false;
             }
             Worker worker = HeadOfBranch.getWorker(workerID);
-            ((HeadOfBranch)_worker).addWorkerToBranch(worker);
+            HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), worker);
             return true;
         }
 
@@ -485,7 +490,7 @@ public class Connector {
                 return false;
             }
             Worker worker = HeadOfBranch.getWorker(workerID);
-            ((HeadOfBranch)_worker).removeWorkerFromBranch(worker);
+            HeadOfBranchManager.removeWorkerFromBranch(((HeadOfBranch)_worker), worker);
             return true;
         }
 
