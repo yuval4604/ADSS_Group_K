@@ -1,5 +1,5 @@
 package workers.PresentationLayer;
-import workers.DomainLayer.Connector;
+import workers.DomainLayer.Facade;
 
 import java.util.Scanner;
 
@@ -13,9 +13,9 @@ public class Main {
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Connector connector = new Connector("admin");
-        LoginManager lm = new LoginManager(connector);
-        ActionManager ac = new ActionManager(connector);
+        Facade facade = new Facade("admin");
+        LoginManager lm = new LoginManager(facade);
+        ActionManager ac = new ActionManager(facade);
         System.out.println("do you want to load the system with data? (y/n)");
         String ans = scanner.nextLine();
         if(ans.equals("y")) {
@@ -44,7 +44,7 @@ public class Main {
                 }
                 isLoggedIn = lm.login();
                 if(isLoggedIn) {
-                    connector.checkUpdateDay();
+                    facade.checkUpdateDay();
                     System.out.println("Connected successfully");
                     isHR = ac.isHR();
                     isBM = ac.isBM();

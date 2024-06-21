@@ -3,163 +3,163 @@ import org.junit.jupiter.api.*;
 import workers.DomainLayer.*;
 
 public class headOfHRTest {
-    private Connector connector;
+    private Facade facade;
     @BeforeEach
     void setUp() {
-        connector = new Connector("1234");
-        connector.createBM("a",0,1,true,10000,0,"11/11/11",10,10);
-        connector.addWorker("worker1",1,1,true,10000,0,"11/11/11",10,10);
-        connector.addWorker("worker2",2,2,false,10000,0,"11/11/11",10,10);
-        connector.addWorker("worker3",3,3,false,10000,0,"11/11/11",10,10);
-        connector.addWorker("worker4",4,4,true,10000,0,"11/11/11",10,10);
-        connector.addBranch("branch1",1,"a",0);
+        facade = new Facade("1234");
+        facade.createBM("a",0,1,true,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker1",1,1,true,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker2",2,2,false,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker3",3,3,false,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker4",4,4,true,10000,0,"11/11/11",10,10);
+        facade.addBranch("branch1",1,"a",0);
 
-        connector.addRole(1,"Shift-Manager");
-        connector.addRole(2,"c");
-        connector.addRole(3,"b");
-        connector.addRole(4,"a");
-        connector.login(0,"a");
-        connector.addWorkerToBranch(1);
-        connector.addWorkerToBranch(2);
-        connector.addWorkerToBranch(3);
-        connector.addWorkerToBranch(4);
+        facade.addRole(1,"Shift-Manager");
+        facade.addRole(2,"c");
+        facade.addRole(3,"b");
+        facade.addRole(4,"a");
+        facade.login(0,"a");
+        facade.addWorkerToBranch(1);
+        facade.addWorkerToBranch(2);
+        facade.addWorkerToBranch(3);
+        facade.addWorkerToBranch(4);
 
-        connector.createShift(1,"01.01.2021",true,1);
+        facade.createShift(1,"01.01.2021",true,1);
 
     }
 
 
     @Test
     void createShiftTest() {
-        Assertions.assertTrue(connector.createShift(1,"12.12.21",true,1),"Shift added successfully");
-        Assertions.assertFalse(connector.createShift(1,"12.12.21",true,1),"Shift already exist");
+        Assertions.assertTrue(facade.createShift(1,"12.12.21",true,1),"Shift added successfully");
+        Assertions.assertFalse(facade.createShift(1,"12.12.21",true,1),"Shift already exist");
     }
     @Test
     void selectShiftTest() {
-        connector.createShift(1,"12.12.21",true,1);
-        Assertions.assertTrue(connector.selectShift("12.12.21",true),"Does exist");
-        Assertions.assertFalse(connector.selectShift("11.12.21",true),"Does not exist");
+        facade.createShift(1,"12.12.21",true,1);
+        Assertions.assertTrue(facade.selectShift("12.12.21",true),"Does exist");
+        Assertions.assertFalse(facade.selectShift("11.12.21",true),"Does not exist");
     }
     @Test
     void setHourlyWage() {
-        connector.setHourlyWage(2,1000);
-        connector.setHourlyWage(3,100);
-        connector.login(2,"worker2");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Hourly wage:1000"),true);
-        connector.login(3,"worker3");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Hourly wage:100"),true);
+        facade.setHourlyWage(2,1000);
+        facade.setHourlyWage(3,100);
+        facade.login(2,"worker2");
+        Assertions.assertEquals(facade.showWorkerInfo().contains("Hourly wage:1000"),true);
+        facade.login(3,"worker3");
+        Assertions.assertEquals(facade.showWorkerInfo().contains("Hourly wage:100"),true);
     }
 
     @Test
     void setFullTimeJob() {
-        connector.setFullTimeJob(4,true);
-        connector.setFullTimeJob(1,false);
-        Assertions.assertTrue(connector.isFullTime(4));
-        Assertions.assertTrue(connector.isFullTime(1));
+        facade.setFullTimeJob(4,true);
+        facade.setFullTimeJob(1,false);
+        Assertions.assertTrue(facade.isFullTime(4));
+        Assertions.assertTrue(facade.isFullTime(1));
     }
 
     @Test
     void setVacationDays() {
-        connector.logOut();
-        connector.login(0,"a");
-        connector.setVacationDays(4,5);
-        connector.setVacationDays(1,5);
-        connector.login(4,"worker4");
-        String workerInfo = connector.showWorkerInfo();
+        facade.logOut();
+        facade.login(0,"a");
+        facade.setVacationDays(4,5);
+        facade.setVacationDays(1,5);
+        facade.login(4,"worker4");
+        String workerInfo = facade.showWorkerInfo();
         Assertions.assertTrue(workerInfo.contains("Total vacation days:5"));
-        connector.login(1,"worker1");
-        workerInfo = connector.showWorkerInfo();
+        facade.login(1,"worker1");
+        workerInfo = facade.showWorkerInfo();
         Assertions.assertTrue(workerInfo.contains("Total vacation days:5"));
     }
 
     @Test
     void resetVacationDays() {
-        connector.setVacationDays(4,10);
-        connector.ResetVacationDays(4);
-        connector.setVacationDays(1,10);
-        connector.ResetVacationDays(1);
-        connector.login(4,"a");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Total vacation days:10"),true);
-        connector.login(1,"a");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Total vacation days:10"),true);
+        facade.setVacationDays(4,10);
+        facade.ResetVacationDays(4);
+        facade.setVacationDays(1,10);
+        facade.ResetVacationDays(1);
+        facade.login(4,"a");
+        Assertions.assertEquals(facade.showWorkerInfo().contains("Total vacation days:10"),true);
+        facade.login(1,"a");
+        Assertions.assertEquals(facade.showWorkerInfo().contains("Total vacation days:10"),true);
     }
 
     @Test
     void setWorkerGlobal() {
 
-        connector.setGlobalWage(4,1000);
-        connector.setGlobalWage(1,100);
-        connector.login(4,"a");
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Global wage:1000"),true);
-        Assertions.assertEquals(connector.showWorkerInfo().contains("Global wage:1000"),true);
+        facade.setGlobalWage(4,1000);
+        facade.setGlobalWage(1,100);
+        facade.login(4,"a");
+        Assertions.assertEquals(facade.showWorkerInfo().contains("Global wage:1000"),true);
+        Assertions.assertEquals(facade.showWorkerInfo().contains("Global wage:1000"),true);
     }
 
     @Test
     void addWorkerToShift() {
-        connector.createShift(1,"12.12.21",true,1);
-        Assertions.assertTrue(connector.showShift().contains("worker1"));
-        connector.addWorkerToShift(2,"c");
-        String shift = connector.showShift();
+        facade.createShift(1,"12.12.21",true,1);
+        Assertions.assertTrue(facade.showShift().contains("worker1"));
+        facade.addWorkerToShift(2,"c");
+        String shift = facade.showShift();
         Assertions.assertTrue(shift.contains("worker2"));
-        connector.addWorkerToShift(3,"b");
-        Assertions.assertTrue(connector.showShift().contains("worker3"));
-        connector.addWorkerToShift(4,"a");
-        Assertions.assertTrue(connector.showShift().contains("worker4"));
+        facade.addWorkerToShift(3,"b");
+        Assertions.assertTrue(facade.showShift().contains("worker3"));
+        facade.addWorkerToShift(4,"a");
+        Assertions.assertTrue(facade.showShift().contains("worker4"));
     }
 
     @Test
     void setHalfDayShiftOff() {
-        connector.setHalfDayShiftOff("02.01.2021",true,1);
-        connector.selectShift("02.01.2021",true);
-        Assertions.assertTrue(connector.isInactive());
-        connector.login(1,"a");
-        Assertions.assertTrue(connector.getCons(1,true).equals(Constraints.inactive));
-        connector.login(2,"b");
-        Assertions.assertTrue(connector.getCons(1,true).equals(Constraints.inactive));
-        connector.login(3,"c");
-        Assertions.assertTrue(connector.getCons(1,true).equals(Constraints.inactive));
-        connector.login(4,"a");
-        Assertions.assertTrue(connector.getCons(1,true).equals(Constraints.inactive));
+        facade.setHalfDayShiftOff("02.01.2021",true,1);
+        facade.selectShift("02.01.2021",true);
+        Assertions.assertTrue(facade.isInactive());
+        facade.login(1,"a");
+        Assertions.assertTrue(facade.getCons(1,true).equals(Constraints.inactive));
+        facade.login(2,"b");
+        Assertions.assertTrue(facade.getCons(1,true).equals(Constraints.inactive));
+        facade.login(3,"c");
+        Assertions.assertTrue(facade.getCons(1,true).equals(Constraints.inactive));
+        facade.login(4,"a");
+        Assertions.assertTrue(facade.getCons(1,true).equals(Constraints.inactive));
 
     }
 
     @Test
     void addWorker() {
-        connector.logOut();
-        connector.login(-1,"1234");
-        connector.addWorker("worker5",5,5,true,0,0,"11.11.11",10,10);
-        Assertions.assertTrue(connector.login(5,"worker5"));
+        facade.logOut();
+        facade.login(-1,"1234");
+        facade.addWorker("worker5",5,5,true,0,0,"11.11.11",10,10);
+        Assertions.assertTrue(facade.login(5,"worker5"));
     }
 
     @Test
     void addRole() {
-        connector.addRole(1,"d");
-        connector.selectShift("01.01.2021",true);
-        Assertions.assertTrue(connector.getAvailableWorkersOfRole("d").contains("worker1"));
+        facade.addRole(1,"d");
+        facade.selectShift("01.01.2021",true);
+        Assertions.assertTrue(facade.getAvailableWorkersOfRole("d").contains("worker1"));
     }
 
     @Test
     void setAllDayShiftOff() {
-        connector.setAllDayOff("03.01.2021",1);
-        connector.selectShift("03.01.2021",true);
-        Assertions.assertTrue(connector.isInactive());
-        connector.selectShift("03.01.2021",false);
-        Assertions.assertTrue(connector.isInactive());
+        facade.setAllDayOff("03.01.2021",1);
+        facade.selectShift("03.01.2021",true);
+        Assertions.assertTrue(facade.isInactive());
+        facade.selectShift("03.01.2021",false);
+        Assertions.assertTrue(facade.isInactive());
     }
 
     @Test
     void removeRole() {
-        connector.addRole(1,"d");
-        connector.removeRole(1,"d");
-        Assertions.assertFalse(connector.getAvailableWorkersOfRole("d").contains("worker1"));
+        facade.addRole(1,"d");
+        facade.removeRole(1,"d");
+        Assertions.assertFalse(facade.getAvailableWorkersOfRole("d").contains("worker1"));
     }
 
     @Test
     void removeWorkerFromShift() {
-        connector.createShift(1,"12.12.21",true,1);
-        connector.addWorkerToShift(3,"b");
-        Assertions.assertTrue(connector.showShift().contains("worker3"));
-        connector.removeWorkerFromShift(3,"b");
-        Assertions.assertFalse(connector.showShift().contains("worker3"));
+        facade.createShift(1,"12.12.21",true,1);
+        facade.addWorkerToShift(3,"b");
+        Assertions.assertTrue(facade.showShift().contains("worker3"));
+        facade.removeWorkerFromShift(3,"b");
+        Assertions.assertFalse(facade.showShift().contains("worker3"));
     }
 }
