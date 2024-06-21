@@ -421,14 +421,15 @@ public class Facade {
 
         public boolean fireWorker( int id){
 
-            if(_worker.getIsBM()) {
+            if(_worker.getID() == -1 && id != -1 && loginInfos.containsKey(id)) {
                 ((HR)_worker).fireWorker(id);
+                loginInfos.remove(id);
                 return true;
             }
             return false;
         }
         public boolean endContranct30DaysFromNow( int id){
-            if(_worker.getIsBM()) {
+            if(_worker.getID() == -1 && id != -1 && loginInfos.containsKey(id)) {
                 ((HR)_worker).endContranct30DaysFromNow(id);
                 return true;
             }
@@ -462,7 +463,7 @@ public class Facade {
         }
 
         public boolean addBranch(String name, int id, String address, int headOfBranchID) {
-            if(!_worker.getIsBM()) {
+            if(_worker.getID() != -1) {
                 return false;
             }
             HeadOfBranch headOfBranch = (HeadOfBranch) HeadOfBranch.getWorker(headOfBranchID);
@@ -470,7 +471,7 @@ public class Facade {
         }
 
         public boolean removeBranch(int id) {
-            if(!_worker.getIsBM()) {
+            if(_worker.getID() != -1) {
                 return false;
             }
             return ((HR)_worker).removeBranch(id);
@@ -495,7 +496,7 @@ public class Facade {
         }
 
         public String showBranches () {
-            if(!_worker.getIsBM()) {
+            if(_worker.getID() != -1) {
                 return "Error: no permission to do that";
             }
             return ((HR)_worker).showBranches();
@@ -509,7 +510,7 @@ public class Facade {
             if(BM == null) {
                 return false;
             }
-            if(!_worker.getIsBM()) {
+            if(!BM.getIsBM()) {
                 return false;
             }
             return ((HR)_worker).setHeadOfBranch(branchID, BM);
