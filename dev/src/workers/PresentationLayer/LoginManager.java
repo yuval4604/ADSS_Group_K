@@ -1,14 +1,14 @@
 package workers.PresentationLayer;
 
-import workers.DomainLayer.Connector;
+import workers.DomainLayer.Facade;
 
 import java.util.Scanner;
 
 public class LoginManager {
-    private Connector _connector;
+    private Facade _facade;
     private Scanner scanner;
-    public LoginManager(Connector connector) {
-        _connector = connector;
+    public LoginManager(Facade facade) {
+        _facade = facade;
         scanner = new Scanner(System.in);
     }
     public boolean login() {
@@ -24,10 +24,10 @@ public class LoginManager {
         scanner.nextLine();
         System.out.println("Enter password");
         String password = scanner.nextLine();
-        boolean ans = _connector.login(id,password);
+        boolean ans = _facade.login(id,password);
         if (ans)
         {
-            if(!_connector.hasChangedPassword())
+            if(!_facade.hasChangedPassword())
             {
                 System.out.println("You must change your password");
                 while (!changePass());
@@ -36,7 +36,7 @@ public class LoginManager {
         return ans;
     }
     public void logOut() {
-        _connector.logOut();
+        _facade.logOut();
     }
 
     public boolean changePass() {
@@ -44,7 +44,7 @@ public class LoginManager {
         String oldPass = scanner.nextLine();
         System.out.println("Enter new password: the password must contains upper case lower case and number and be at least 8 characters");
         String newPass = scanner.nextLine();
-        boolean res = _connector.changePassword(oldPass,newPass);
+        boolean res = _facade.changePassword(oldPass,newPass);
         if(res) {
             System.out.println("password changed successfully");
             return true;

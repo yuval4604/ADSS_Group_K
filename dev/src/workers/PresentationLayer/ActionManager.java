@@ -1,16 +1,16 @@
 package workers.PresentationLayer;
-import workers.DomainLayer.Connector;
+import workers.DomainLayer.Facade;
 import workers.DomainLayer.Constraints;
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ActionManager {
-    private final Connector _connector;
+    private final Facade _facade;
     private final Scanner scanner;
 
-    public ActionManager(Connector connector) {
-        _connector = connector;
+    public ActionManager(Facade facade) {
+        _facade = facade;
         scanner = new Scanner(System.in);
     }
 
@@ -32,7 +32,7 @@ public class ActionManager {
             System.out.println("Can't have negative bank number");
             return;
         }
-        _connector.setBank(bankNum);
+        _facade.setBank(bankNum);
 
     }
     public void setWage() {
@@ -47,7 +47,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        if(!_connector.isFullTime(id)) {
+        if(!_facade.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is not full time");
             return;
         }
@@ -66,13 +66,13 @@ public class ActionManager {
             System.out.println("Can't have negative global wage");
             return;
         }
-        boolean res = _connector.setGlobalWage(id,wage);
+        boolean res = _facade.setGlobalWage(id,wage);
         if(!res) {
             System.out.println("User does not exist");
         }
         else {
             System.out.println("changed successfully");
-            _connector.setHourlyWage(id,0);
+            _facade.setHourlyWage(id,0);
         }
     }
     public void setHWage() {
@@ -87,7 +87,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        if(_connector.isFullTime(id)) {
+        if(_facade.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is full time");
             return;
         }
@@ -106,13 +106,13 @@ public class ActionManager {
             System.out.println("Can't have negative hourly wage");
             return;
         }
-        boolean res = _connector.setHourlyWage(id,wage);
+        boolean res = _facade.setHourlyWage(id,wage);
         if(!res) {
             System.out.println("User does not exist");
         }
         else {
             System.out.println("changed successfully");
-            _connector.setGlobalWage(id,0);
+            _facade.setGlobalWage(id,0);
         }
     }
 
@@ -132,12 +132,12 @@ public class ActionManager {
         String c = scanner.nextLine();
         boolean res;
         if(c.equals("t")) {
-            res = _connector.setFullTimeJob(id,true);
+            res = _facade.setFullTimeJob(id,true);
             System.out.println("update the global wage of this employee: ");
             setWage();
         }
         else if(c.equals("f")){
-            res = _connector.setFullTimeJob(id,false);
+            res = _facade.setFullTimeJob(id,false);
             System.out.println("update the hourly wage of this employee: ");
             setHWage();
         }
@@ -182,7 +182,7 @@ public class ActionManager {
             System.out.println("Can't have negative vacation days");
             return;
         }
-        boolean res = _connector.setVacationDays(id,days);
+        boolean res = _facade.setVacationDays(id,days);
         if(!res) {
             System.out.println("User does not exist");
         }
@@ -190,7 +190,7 @@ public class ActionManager {
             System.out.println("changed successfully\nDo you want to reset the vacation days too? : y/n");
             String choice = scanner.nextLine();
             if(choice.equals("y")) {
-                _connector.ResetVacationDays(id);
+                _facade.ResetVacationDays(id);
             }
         }
     }
@@ -206,7 +206,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.ResetVacationDays(id);
+        boolean res = _facade.ResetVacationDays(id);
         if(!res) {
             System.out.println("User does not exist");
         }
@@ -230,7 +230,7 @@ public class ActionManager {
             System.out.println("Can't use negative vacation days");
             return;
         }
-        boolean res = _connector.useVacationDays(days);
+        boolean res = _facade.useVacationDays(days);
         if(!res) {
             System.out.println("Not enough vacation days");
         }
@@ -242,7 +242,7 @@ public class ActionManager {
     public void ShowAvailableWorkersOfRole() {
         System.out.println("Which role?: ");
         String res = scanner.nextLine();
-        String list = _connector.getAvailableWorkersOfRole(res);
+        String list = _facade.getAvailableWorkersOfRole(res);
         System.out.println(list);
     }
     public void addWorkerToShift() {
@@ -260,7 +260,7 @@ public class ActionManager {
         System.out.println("Which role?: ");
         String role = scanner.nextLine();
 
-        boolean res = _connector.addWorkerToShift(id,role);
+        boolean res = _facade.addWorkerToShift(id,role);
         if(res) {
             System.out.println("Worker has been added!");
         }
@@ -295,7 +295,7 @@ public class ActionManager {
             System.out.println("Didnt choose one of the options");
             return false;
         }
-        boolean res = _connector.selectShift(date,dayShift);
+        boolean res = _facade.selectShift(date,dayShift);
         if(res) {
             System.out.println("selected successfully");
             return true;
@@ -307,7 +307,7 @@ public class ActionManager {
     }
 
     public boolean createShift() {
-        System.out.println(_connector.getShiftManagers());
+        System.out.println(_facade.getShiftManagers());
         System.out.println("Enter the shift manager's id: ");
         int id;
         try {
@@ -362,7 +362,7 @@ public class ActionManager {
         }
         scanner.nextLine();
 
-        boolean res = _connector.createShift(id, date, dayShift, dayOfWeek);
+        boolean res = _facade.createShift(id, date, dayShift, dayOfWeek);
         if(res) {
             System.out.println("created successfully");
             return true;
@@ -373,11 +373,11 @@ public class ActionManager {
         }
     }
     public void showWorkerInfo() {
-        String res = _connector.showWorkerInfo();
+        String res = _facade.showWorkerInfo();
         System.out.println(res);
     }
     public void showWorkerConstraints() {
-        String res = _connector.showWorkerConstraints();
+        String res = _facade.showWorkerConstraints();
         System.out.println(res);
     }
     public void setHalfDayOff() {
@@ -408,7 +408,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.setHalfDayShiftOff(date,dayShift,dayOfWeek);
+        boolean res = _facade.setHalfDayShiftOff(date,dayShift,dayOfWeek);
         if(res) {
             System.out.println("updated successfully");
         }
@@ -433,7 +433,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.setAllDayOff(date,dayOfWeek);
+        boolean res = _facade.setAllDayOff(date,dayOfWeek);
         if(res) {
             System.out.println("updated successfully");
         }
@@ -443,7 +443,7 @@ public class ActionManager {
     }
 
     public void addConstraints() {
-        if(_connector.lastDayToSetConstraints() < LocalDate.now().getDayOfWeek().getValue()) {
+        if(_facade.lastDayToSetConstraints() < LocalDate.now().getDayOfWeek().getValue()) {
             System.out.println("Can't set constraints for past days");
             return;
         }
@@ -492,7 +492,7 @@ public class ActionManager {
         } else{
             cons = Constraints.cant;
         }
-        _connector.addConstraints(day - 1,dayShift,cons);
+        _facade.addConstraints(day - 1,dayShift,cons);
 
     }
 
@@ -506,7 +506,7 @@ public class ActionManager {
                 cOrS = createShift();
             } else if (choice.equals("s")) {
                 cOrS = selectShift();
-                if (_connector.isInactive()) {
+                if (_facade.isInactive()) {
                     System.out.println("Shift is inactive");
                     return;
                 }
@@ -535,10 +535,10 @@ public class ActionManager {
                 case 1 -> addWorkerToShift();
                 case 2 -> removeWorkerFromShift();
                 case 3 -> ShowAvailableWorkersOfRole();
-                case 4 -> System.out.println(_connector.showShift());
+                case 4 -> System.out.println(_facade.showShift());
                 case 5 -> checkIfRoleHasMinimalWorkers();
                 case 6 -> {
-                    if(_connector.checkIfRoleHasMinimalWorkers())
+                    if(_facade.checkIfRoleHasMinimalWorkers())
                     {
                         System.out.println("Shift is ready to go!");
                         keepWorking = false;
@@ -568,7 +568,7 @@ public class ActionManager {
         System.out.println("Which role?: ");
         String role = scanner.nextLine();
 
-        boolean res = _connector.removeWorkerFromShift(id,role);
+        boolean res = _facade.removeWorkerFromShift(id,role);
         if(res) {
             System.out.println("Worker has been removed!");
         }
@@ -650,7 +650,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
+        boolean res = _facade.addWorker(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
         if(res) {
             System.out.println("Worker has been added!");
         }
@@ -677,7 +677,7 @@ public class ActionManager {
         if(aORr.equals("a")){
             System.out.println("Enter Worker's new role: ");
             String role = scanner.nextLine();
-            boolean res = _connector.addRole(id, role);
+            boolean res = _facade.addRole(id, role);
             if(res) {
                 System.out.println("Worker's role has been added!");
             }
@@ -687,7 +687,7 @@ public class ActionManager {
         } else if (aORr.equals("r")) {
             System.out.println("Enter Worker's role to remove: ");
             String role = scanner.nextLine();
-            boolean res = _connector.removeRole(id, role);
+            boolean res = _facade.removeRole(id, role);
             if(res) {
                 System.out.println("Worker's role has been removed!");
             }
@@ -703,16 +703,16 @@ public class ActionManager {
 
     public void showWorkerRoles()
     {
-        String roles = _connector.getRoles();
+        String roles = _facade.getRoles();
         System.out.println(roles);
     }
 
     public boolean isBM() {
-        return _connector.getIsBM();
+        return _facade.getIsBM();
     }
 
     public void getBranch() {
-        System.out.println(_connector.getBranch());
+        System.out.println(_facade.getBranch());
     }
 
     public void setLastDayForConstraints() {
@@ -727,7 +727,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.setLastDayForConstraints(day);
+        boolean res = _facade.setLastDayForConstraints(day);
         if(res) {
             System.out.println("updated successfully");
         }
@@ -737,7 +737,7 @@ public class ActionManager {
     }
 
     public void load() {
-        _connector.load();
+        _facade.load();
     }
 
     public void showWorkerShifts() {
@@ -746,7 +746,7 @@ public class ActionManager {
             String date = scanner.nextLine();
             System.out.println("Choose An ending date from this order: dd.mm.yyyy");
             String date1 = scanner.nextLine();
-            System.out.println(_connector.showWorkerShifts(date,date1));
+            System.out.println(_facade.showWorkerShifts(date,date1));
         }
         catch (Exception e) {
             System.out.println("Invalid information");
@@ -767,7 +767,7 @@ public class ActionManager {
             return;
         }
         try {
-            boolean res = _connector.fireWorker(id);
+            boolean res = _facade.fireWorker(id);
             if(res) {
                 System.out.println("Worker has been fired!");
             }
@@ -792,7 +792,7 @@ public class ActionManager {
             return;
         }
         try {
-            boolean res = _connector.endContranct30DaysFromNow(id);
+            boolean res = _facade.endContranct30DaysFromNow(id);
             if(res) {
                 System.out.println("Worker's contract has been ended!");
             }
@@ -825,7 +825,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.setMinimalWorkers(role,num);
+        boolean res = _facade.setMinimalWorkers(role,num);
         if(res) {
             System.out.println("Minimal workers has been set!");
         }
@@ -835,7 +835,7 @@ public class ActionManager {
     }
 
     public void checkIfRoleHasMinimalWorkers() {
-        boolean res = _connector.checkIfRoleHasMinimalWorkers();
+        boolean res = _facade.checkIfRoleHasMinimalWorkers();
         if(res) {
             System.out.println("All roles have reached the mimnimal requirement of workers");
         }
@@ -845,11 +845,11 @@ public class ActionManager {
     }
 
     public void showBranch() {
-        System.out.println(_connector.showBranch());
+        System.out.println(_facade.showBranch());
     }
 
     public void showBranches() {
-        System.out.println(_connector.showBranches());
+        System.out.println(_facade.showBranches());
     }
 
     public void setHeadOfBranch() {
@@ -873,7 +873,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.setHeadOfBranch(branchID,workerID);
+        boolean res = _facade.setHeadOfBranch(branchID,workerID);
         if(res) {
             System.out.println("Branch manager has been set!");
         }
@@ -893,7 +893,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.removeWorkerFromBranch(workerID);
+        boolean res = _facade.removeWorkerFromBranch(workerID);
         if(res) {
             System.out.println("Worker has been removed from branch!");
         }
@@ -913,7 +913,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.addWorkerToBranch(workerID);
+        boolean res = _facade.addWorkerToBranch(workerID);
         if(res) {
             System.out.println("Worker has been added to branch!");
         }
@@ -933,7 +933,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.removeBranch(branchID);
+        boolean res = _facade.removeBranch(branchID);
         if(res) {
             System.out.println("Branch has been removed!");
         }
@@ -974,7 +974,7 @@ public class ActionManager {
             System.out.println("Invalid id");
             return;
         }
-        boolean res = _connector.addBranch(branchName, branchID, adress, BMID);
+        boolean res = _facade.addBranch(branchName, branchID, adress, BMID);
         if(res) {
             System.out.println("Branch has been added!");
         }
@@ -1008,7 +1008,7 @@ public class ActionManager {
             scanner.nextLine();
             return;
         }
-        boolean res = _connector.altarOnGoingShift(id,role,bID);
+        boolean res = _facade.altarOnGoingShift(id,role,bID);
         if(res) {
             System.out.println("changed successfully");
         }
@@ -1018,7 +1018,7 @@ public class ActionManager {
     }
 
     public boolean isHR() {
-        return _connector.getIsHR();
+        return _facade.getIsHR();
     }
 
     public void createBM() {
@@ -1093,7 +1093,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
-        boolean res = _connector.createBM(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
+        boolean res = _facade.createBM(name, id, bankNum, fullTime, globalWage, hourlyWage, dateOfStart, totalVacationDays, totalVacationDays);
         if(res) {
             System.out.println("Worker has been added!");
         }

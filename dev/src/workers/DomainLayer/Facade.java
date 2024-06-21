@@ -8,13 +8,13 @@ import java.util.Map;
 
 import static java.lang.Character.*;
 
-public class Connector {
+public class Facade {
     private Worker _worker;
     private Map<Integer,String> loginInfos;
 
     private LocalDate _lastUpdate;
 
-    public Connector(String password) {
+    public Facade(String password) {
         _lastUpdate = LocalDate.now();
         loginInfos = new HashMap<>();
         loginInfos.put(-1, password);
