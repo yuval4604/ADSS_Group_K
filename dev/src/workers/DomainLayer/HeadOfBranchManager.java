@@ -74,6 +74,9 @@ public class HeadOfBranchManager extends WorkerManager {
         Shift currentShift = hb.getCurrentShift();
         if(currentShift != null && currentShift.getActive() &&  ShiftManager.notIn(currentShift,worker) && (worker.getCons(currentShift.getDayOfWeek(),currentShift.getDayShift()).equals(Constraints.can) || worker.getCons(currentShift.getDayOfWeek(),currentShift.getDayShift()).equals(Constraints.want))){
             currentShift.addWorker(worker,role);
+            if(role.equals("Driver") && !hb.getMinimalWorkers().containsKey("Quartermaster")) {
+                setMinimalAmount(hb,"Quartermaster",1);
+            }
             return true;
         }
         return false;
@@ -206,12 +209,18 @@ public class HeadOfBranchManager extends WorkerManager {
     public static void setMinimalAmount(HeadOfBranch hb, String role, int amount) {
         Map<String,Integer> minimalWorkers = hb.getMinimalWorkers();
         if(minimalWorkers.containsKey(role)) {
-            minimalWorkers.replace(role,amount);
+            if(amount == 0)
+                minimalWorkers.remove(role);
+            else
+                minimalWorkers.replace(role,amount);
         }
         else if(amount == 0)
             minimalWorkers.remove(role);
         else if(amount > 0)
             minimalWorkers.put(role,amount);
+        if(role.equals("Driver") && amount > 0 && !minimalWorkers.containsKey("Quartermaster")) {
+            setMinimalAmount(hb,"Quartermaster",1);
+        }
     }
 
     public static boolean addWorkerToBranch(HeadOfBranch hb, Worker worker) {
