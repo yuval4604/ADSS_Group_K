@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class HeadOfBranchManager extends WorkerManager {
+public class HeadOfBranchManager {
     public static boolean setWorkerGlobal(int id,int wage) {
         Worker worker = HeadOfBranch.getWorker(id);
         if(worker != null && !worker.getFullTimeJob())

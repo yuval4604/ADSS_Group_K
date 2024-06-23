@@ -1,4 +1,4 @@
 package workers.DataAcsessLayer;
 
-public class WorkerDBA {
+public class ShiftDTO {
 }
