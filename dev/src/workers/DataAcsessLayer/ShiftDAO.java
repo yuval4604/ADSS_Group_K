@@ -1,4 +1,4 @@
 package workers.DataAcsessLayer;
 
-public class ShiftDAO extends IDataBaseAcsess{
+public class ShiftDAO {
 }

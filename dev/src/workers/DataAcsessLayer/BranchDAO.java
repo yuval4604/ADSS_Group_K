@@ -1,4 +1,4 @@
 package workers.DataAcsessLayer;
 
-public class BranchDAO extends IDataBaseAcsess{
+public class BranchDAO {
 }
