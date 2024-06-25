@@ -102,14 +102,6 @@ public class HeadOfBranch extends Worker {
         return minimalWorkers;
     }
 
-    public boolean checkIfRoleHasMinimalWorkers() {
-        for (Map.Entry<String,Integer> entry : minimalWorkers.entrySet()) {
-            if(currentShift.getWorkers().get(entry.getKey()).size() < entry.getValue())
-                return false;
-        }
-        return true;
-    }
-
     public Branch getBranchO() {
         return _branch;
     }

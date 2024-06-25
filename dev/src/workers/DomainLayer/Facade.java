@@ -444,7 +444,7 @@ public class Facade {
         }
         public boolean checkIfRoleHasMinimalWorkers() {
             if(_worker.getIsBM()) {
-                return ((HeadOfBranch)_worker).checkIfRoleHasMinimalWorkers();
+                return HeadOfBranchManager.checkIfRoleHasMinimalWorkers(((HeadOfBranch)_worker));
             }
             return false;
         }

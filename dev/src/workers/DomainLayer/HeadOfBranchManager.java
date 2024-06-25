@@ -75,17 +75,25 @@ public class HeadOfBranchManager {
         if(currentShift != null && currentShift.getActive() &&  ShiftManager.notIn(currentShift,worker) && (worker.getCons(currentShift.getDayOfWeek(),currentShift.getDayShift()).equals(Constraints.can) || worker.getCons(currentShift.getDayOfWeek(),currentShift.getDayShift()).equals(Constraints.want))){
             currentShift.addWorker(worker,role);
             if(role.equals("Driver") && !hb.getMinimalWorkers().containsKey("Quartermaster")) {
-                setMinimalAmount(hb,"Quartermaster",1);
+                needQuartermaster(hb, true);
             }
             return true;
         }
         return false;
     }
 
+    private static void needQuartermaster(HeadOfBranch hb, boolean need) {
+        Shift currentShift = hb.getCurrentShift();
+        currentShift.setNeedQuartermaster(need);
+    }
+
     public static boolean createShift(HeadOfBranch hb, Worker shiftManager,String date,boolean dayShift,int dayOfWeek) {
         if(!hb.selectShift(date,dayShift)) {
             Shift shift = new Shift(shiftManager,date,dayShift,dayOfWeek,true,hb.getBranchO());
             hb.addShift(shift);
+            if(hb.getMinimalWorkers().containsKey("Driver") && !hb.getMinimalWorkers().containsKey("Quartermaster")) {
+                needQuartermaster(hb, true);
+            }
             return true;
         }
         return false;
@@ -186,6 +194,9 @@ public class HeadOfBranchManager {
                     currentShift.getWorkers().get(role).remove(worker);
                 else
                     return false;
+                if(role.equals("Driver") && !hb.getMinimalWorkers().containsKey("Driver") && !hb.getMinimalWorkers().containsKey("Quartermaster")) {
+                    needQuartermaster(hb, false);
+                }
                 return true;
             }
         }
@@ -237,6 +248,22 @@ public class HeadOfBranchManager {
         if(!branch.getWorkers().contains(worker))
             return false;
         branch.removeWorker(worker);
+        return true;
+    }
+
+    public static boolean checkIfRoleHasMinimalWorkers(HeadOfBranch bm) {
+        Shift currentShift = bm.getCurrentShift();
+        if(currentShift.getNeedQuartermaster() && !currentShift.getWorkers().containsKey("Quartermaster"))
+            return false;
+        Map<String,Integer> minimalWorkers = bm.getMinimalWorkers();
+        if(minimalWorkers.isEmpty())
+            return true;
+        if(currentShift.getWorkers().isEmpty())
+            return false;
+        for (Map.Entry<String,Integer> entry : minimalWorkers.entrySet()) {
+            if(currentShift.getWorkers().containsKey(entry.getKey()) || currentShift.getWorkers().get(entry.getKey()).size() < entry.getValue())
+                return false;
+        }
         return true;
     }
 }
