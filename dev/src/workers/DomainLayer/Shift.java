@@ -20,6 +20,7 @@ public class Shift {
     private boolean _dayShift; // true - morning / false - evening
     private Map<String, List<Worker>> workers; // map contains a role and a list of workers
     private Branch _branch;
+    private boolean needQuartermaster;
     public Shift(Worker sManager,String date, boolean dayShift,int dayOfWeek, boolean active, Branch branch) {
         shiftManager = sManager;
         _date = date;
@@ -29,6 +30,7 @@ public class Shift {
         _active = active;
         _localDate = LocalDate.of(Integer.parseInt(date.split("\\.")[2]),Integer.parseInt(date.split("\\.")[1]),Integer.parseInt(date.split("\\.")[0]));
         _branch = branch;
+        needQuartermaster = false;
     }
 
     public String getDate() {
@@ -98,6 +100,14 @@ public class Shift {
 
     public Branch getBranch() {
         return _branch;
+    }
+
+    public void setNeedQuartermaster(boolean b) {
+        needQuartermaster = b;
+    }
+
+    public boolean getNeedQuartermaster() {
+        return needQuartermaster;
     }
 
 //    public boolean isWorkerInShift(int id) {
