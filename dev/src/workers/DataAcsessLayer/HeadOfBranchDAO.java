@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class HeadOfBranchDAO {
     private static final String DB_URL = "../WorkersDB.db";
@@ -54,7 +56,7 @@ public class HeadOfBranchDAO {
                     "(Role VARCHAR(255)," +
                     "WorkerID INTEGER," +
                     " PRIMARY KEY ( WorkerID, Role )," +
-                    " FOREIGN KEY (WorkerID) REFERENCES Workers(WorkerID))";
+                    " FOREIGN KEY (WorkerID) REFERENCES Workers(ID))";
             stmt.executeUpdate(sql);
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +143,7 @@ public class HeadOfBranchDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "UPDATE HeadOfBranch SET BranchID = " + headOfBranch.getBranchID() + " WHERE ID = " + headOfBranch.getId();
+            String sql = "UPDATE HeadOfBranch SET BranchID = " + headOfBranch.getBranchID() + " WHERE ID = " + headOfBranch.getID();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,7 +154,7 @@ public class HeadOfBranchDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "UPDATE HeadOfBranch SET  LastDayForPrefs = " + headOfBranch.getLastDayForPrefs() + " WHERE ID = " + headOfBranch.getId();
+            String sql = "UPDATE HeadOfBranch SET  LastDayForPrefs = " + headOfBranch.getLastDayForPrefs() + " WHERE ID = " + headOfBranch.getID();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,5 +239,53 @@ public class HeadOfBranchDAO {
             e.printStackTrace();
         }
         return roles;
+    }
+
+    public static List<String> getAllRoles() {
+        List<String> roles = new LinkedList<>();
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "SELECT DISTINCT Role FROM RoleList";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                roles.add(rs.getString("Role"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return roles;
+    }
+
+    public static Map<String, Integer> getMinimalWorkers(int branchID) {
+        Map<String, Integer> minimalWorkers = new HashMap<>();
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "SELECT * FROM minimalWorkers WHERE BranchID = " + branchID;
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                minimalWorkers.put(rs.getString("Role"), rs.getInt("Amount"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return minimalWorkers;
+    }
+
+    public static List<Integer> getAllHeadOfBranch() {
+        List<Integer> headOfBranches = new LinkedList<>();
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "SELECT ID FROM HeadOfBranch";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                headOfBranches.add(rs.getInt("ID"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return headOfBranches;
     }
 }
