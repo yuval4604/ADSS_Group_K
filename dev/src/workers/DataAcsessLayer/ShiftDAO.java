@@ -21,14 +21,18 @@ public class ShiftDAO {
                     " dayOfWeek INTEGER, " +
                     " managerID INTEGER, " +
                     " branchID INTEGER, " +
-                    " PRIMARY KEY ( date, dayShift), " +
-                    " FOREIGN KEY (managerID) REFERENCES Branches(id), " + // TODO: change table of FK
-                    " FOREIGN KEY (branchID) REFERENCES Workers(id))"; // Same here
+                    " PRIMARY KEY ( date, dayShift,branchID), " +
+                    " FOREIGN KEY (managerID) REFERENCES Branches(id), " +
+                    " FOREIGN KEY (branchID) REFERENCES Workers(id))";
             stmt.executeUpdate(sql);
             String sql1 = "CREATE TABLE Roles" +
                     "(role VARCHAR(30), " +
                     " workerID INTEGER, " +
-                    "FOREIGN KEY(role) REFERENCES Shifts(date, dayShift)"; // TODO: fix FK
+                    "branchID INTEGER," +
+                    "date VARCHAR(30), " +
+                    " dayShift BIT(1), " +
+                    "PRIMARY KEY(role,workerID), " +
+                    "FOREIGN KEY(date,dayShift,branchID) REFERENCES Shifts(date, dayShift,branchID)";
             stmt.executeUpdate(sql1);
 
         }
@@ -54,7 +58,8 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET active = " + shiftDTO.getActive() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift();
+            String sql = "UPDATE INTO SHIFT SET active = " + shiftDTO.getActive() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -65,7 +70,8 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET managerID = " + shiftDTO.getManagerId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift();
+            String sql = "UPDATE INTO SHIFT SET managerID = " + shiftDTO.getManagerId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -76,7 +82,8 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift();
+            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -87,22 +94,35 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "DELETE FROM Shifts WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift();
+            String sql = "DELETE FROM Shifts WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public static void getShift(String date, boolean dayShift) {
+    public static void getShift(String date, boolean dayShift, int branchId) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "SELECT * FROM Shifts WHERE date = " + date + " AND dayShift = " + dayShift;
+            String sql = "SELECT * FROM Shifts WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 System.out.println(rs.getString("date") + " " + rs.getBoolean("dayShift") + " " + rs.getBoolean("active") + " " + rs.getInt("dayOfWeek") + " " + rs.getInt("managerID") + " " + rs.getInt("branchID"));
             }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static  void setBranchID(ShiftDTO shiftDTO) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift();
+            stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
