@@ -1102,4 +1102,16 @@ public class ActionManager {
         }
 
     }
+
+    public void addLicense() {
+        System.out.println("Enter Worker's license: ");
+        String license = scanner.nextLine();
+        boolean res = _facade.addLicense(license);
+        if(res) {
+            System.out.println("License has been added!");
+        }
+        else {
+            System.out.println("Error: Something went wrong :(");
+        }
+    }
 }

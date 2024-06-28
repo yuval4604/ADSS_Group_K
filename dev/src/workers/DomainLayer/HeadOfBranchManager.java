@@ -115,6 +115,10 @@ public class HeadOfBranchManager {
         Worker worker = hb.getAllWorkers().get(id);
         Map<String, List<Worker>> roleList = HeadOfBranch.getRoleList();
         if (worker != null) {
+            List<License> lList = worker.getLicenses();
+            if (role.equals("Driver") && !lList.contains(License.C) && !lList.contains(License.D)) {
+                return false;
+            }
             if (roleList.containsKey(role)) {
                 HeadOfBranch.addWorkerToRole(role, worker);
             } else {

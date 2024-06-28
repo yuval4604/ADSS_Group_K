@@ -113,14 +113,16 @@ public class Facade {
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
-                + "Branch: " + _worker.getBranch();
+                + "Branch: " + _worker.getBranch() + "\n"
+                + "Licenses: " + WorkerManager.getWorkerLicense(_worker);
         String HRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Hourly wage:" + _worker.getHWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
                 + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
                 + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
-                + "Branch: " + _worker.getBranch();;
+                + "Branch: " + _worker.getBranch() + "\n"
+                + "Licenses: " + WorkerManager.getWorkerLicense(_worker);
         return _worker.getFullTimeJob() ? GRes : HRes;
     }
 
@@ -243,7 +245,7 @@ public class Facade {
         loginInfos.put(7,"George");
         loginInfos.put(8,"Hanna");
         loginInfos.put(9,"Ian");
-        loginInfos.put(10,"Kelly");
+        loginInfos.put(10,"John");
         loginInfos.put(11,"Kelly");
         loginInfos.put(12,"Louis");
         loginInfos.put(13,"Margo");
@@ -264,6 +266,12 @@ public class Facade {
         ((HR)_worker).addWorker(new Worker("Margo",13,13,13,13,"02.02.2022",true,13,13,false));
         ((HR)_worker).addWorker(new Worker("Nathan",14,14,14,14,"02.02.2022",true,14,14,false));
         ((HR)_worker).addWorker(new Worker("Oliver",15,15,15,15,"02.02.2022",true,15,15,false));
+        logOut();
+        login(3, "Casey");
+        addLicense("C");
+        logOut();
+        login(10, "John");
+        addLicense("C");
         logOut();
         login(22,"Benjamin");
         HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 1,"Cashier");
@@ -549,6 +557,19 @@ public class Facade {
             res += worker.getName() + ", " + worker.getID() + "\n";
         }
         return res;
+    }
+
+    public boolean addLicense(String license) {
+        int id = _worker.getID();
+        if(license.equals("A"))
+            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.A);
+        if(license.equals("B"))
+            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.B);
+        if(license.equals("C"))
+            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.C);
+        if(license.equals("D"))
+            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.D);
+        return false;
     }
 }
 

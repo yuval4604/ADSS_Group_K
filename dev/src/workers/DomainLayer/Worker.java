@@ -1,5 +1,6 @@
 package workers.DomainLayer;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Worker {
@@ -17,6 +18,7 @@ public class Worker {
     private List<Constraints[][]> _constraints;
     private boolean _changedPassword;
     protected String branch;
+    private List<License> _licenses;
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays,boolean isBM) {
         _name = name;
@@ -39,6 +41,7 @@ public class Worker {
         _prefList[6][1] = Constraints.inactive;
         _isBM = isBM;
         _changedPassword = false;
+        _licenses = new LinkedList<License>();
     }
     public String getName() {
         return _name;
@@ -72,6 +75,10 @@ public class Worker {
     }
     public int getCurrVacationDays() {
         return _currentVacationDays;
+    }
+
+    public List<License> getLicenses() {
+        return _licenses;
     }
 
     public void setBankNum(int newBankNum) {
@@ -141,5 +148,9 @@ public class Worker {
 
     public void setCurrvacationDays(int days) {
         _currentVacationDays = days;
+    }
+
+    public boolean addLicense(License license) {
+        return _licenses.add(license);
     }
 }

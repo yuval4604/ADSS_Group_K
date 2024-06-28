@@ -22,4 +22,20 @@ public class WorkerManager {
         worker.createNewConstraints();
     }
 
+    public static String getWorkerLicense(Worker worker) {
+        String licenses = "";
+        for (License license : worker.getLicenses()) {
+            licenses += license.toString() + ", ";
+        }
+        if(licenses.length() > 0)
+            licenses = licenses.substring(0, licenses.length() - 2);
+        else
+            licenses = "None";
+        return licenses;
+    }
+
+    public static boolean addLicense(Worker worker, License license) {
+        return worker.addLicense(license);
+    }
+
 }
