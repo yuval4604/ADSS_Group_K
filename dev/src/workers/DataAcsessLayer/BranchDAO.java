@@ -8,7 +8,7 @@ public class BranchDAO {
     private ResultSet resultSet;
 
 
-    private static final String DB_URL = "jdbc:sqlite:./src/workers/DataAcsessLayer/branches.db";
+    private static final String DB_URL = "jdbc:sqlite:WorkersDB.db";
     public static void createBranchTable() {
         try {
             Connection conn = DriverManager.getConnection(DB_URL);
@@ -18,7 +18,7 @@ public class BranchDAO {
                     " Name VARCHAR(30), " +
                     " Address VARCHAR(30), " +
                     " HeadOfBranchId INTEGER, " +
-                    "FOREIGN KEY (headOfBranchId) REFERENCES Workers(Id))";
+                    " FOREIGN KEY (headOfBranchId) REFERENCES Workers(Id))";
             stmt.executeUpdate(sql);
             String sql1 = "CREATE TABLE branchWorkers" +
                     "(BranchID INTEGER, " +
@@ -32,7 +32,7 @@ public class BranchDAO {
                     " Date VARCHAR(30), " +
                     " DayShift BIT(1), " +
                     " PRIMARY KEY (BranchID, Date, DayShift), " +
-                    " FOREIGN KEY (BranchID) REFERENCES Branches(Id))," +
+                    " FOREIGN KEY (BranchID) REFERENCES Branches(Id)," +
                     " FOREIGN KEY (date, dayShift, branchID) REFERENCES Shifts(date, dayShift, branchID))";
             stmt.executeUpdate(sql2);
         }
