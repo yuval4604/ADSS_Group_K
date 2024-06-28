@@ -7,7 +7,7 @@ public class ShiftDAO {
     private ResultSet resultSet;
 
 
-    private static final String DB_URL = "jdbc:sqlite:./src/workers/DataAcsessLayer/shifts.db";
+    private static final String DB_URL = "jdbc:sqlite:./src/workers/WorkersDB.db";
 
 
     public static void createShiftTable() {
@@ -22,7 +22,7 @@ public class ShiftDAO {
                     " managerID INTEGER, " +
                     " branchID INTEGER, " +
                     " PRIMARY KEY ( date, dayShift,branchID), " +
-                    " FOREIGN KEY (managerID) REFERENCES Branches(id), " +
+                    " FOREIGN KEY (managerID) REFERENCES Workers(id), " +
                     " FOREIGN KEY (branchID) REFERENCES Workers(id))";
             stmt.executeUpdate(sql);
             String sql1 = "CREATE TABLE Roles" +
@@ -32,7 +32,7 @@ public class ShiftDAO {
                     "date VARCHAR(30), " +
                     " dayShift BIT(1), " +
                     "PRIMARY KEY(role,workerID), " +
-                    "FOREIGN KEY(date,dayShift,branchID) REFERENCES Shifts(date, dayShift,branchID)";
+                    "FOREIGN KEY(date,dayShift,branchID) REFERENCES Shifts(date, dayShift,branchID))";
             stmt.executeUpdate(sql1);
 
         }

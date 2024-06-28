@@ -1,4 +1,9 @@
 package workers.DomainLayer;
+import workers.DataAcsessLayer.BranchDAO;
+import workers.DataAcsessLayer.HeadOfBranchDAO;
+import workers.DataAcsessLayer.ShiftDAO;
+import workers.DataAcsessLayer.WorkerDAO;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -22,6 +27,14 @@ public class Facade {
         _worker = new HR(ABranch);
         ABranch.setHeadOfBranch(_worker);
         HeadOfBranch.allWorkers.put(-1, _worker);
+
+        WorkerDAO.createWorkerTable();
+        ShiftDAO.createShiftTable();
+        BranchDAO.createBranchTable();
+        WorkerDAO.createPrefsTable();
+        HeadOfBranchDAO.createHeadOfBranchTable();
+        HeadOfBranchDAO.createMinimalWorkersTable();
+        HeadOfBranchDAO.createRoleListTable();
     }
     public boolean login(int id,String password) {
         if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {

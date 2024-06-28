@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDAO  {
-    private static final String DB_URL = "../WorkersDB.db";
+    private static final String DB_URL = "jdbc:sqlite:./src/workers/WorkersDB.db";
 
     public static void createWorkerTable() {
         try (Connection conn = DriverManager.getConnection(DB_URL);
