@@ -12,7 +12,6 @@ public class WorkerDAO  {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-
             String sql = "CREATE TABLE Workers " +
                     "(ID INTEGER not NULL, " +
                     " Name VARCHAR(255), " +
@@ -26,6 +25,8 @@ public class WorkerDAO  {
                     " isBM BIT(1), " +
                     " Changed BIT(1), " +
                     "BranchName VARCHAR(255)," +
+                    "Licenses VARCHAR(255)," +
+                    " FOREIGN KEY (BranchName) REFERENCES Branches(Name)," +
                     " PRIMARY KEY ( id ))";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
@@ -107,6 +108,12 @@ public class WorkerDAO  {
             worker.setIsHeadOfBranch(rs.getBoolean("isBM"));
             worker.setChange(rs.getBoolean("Changed"));
             worker.setBranchName(rs.getString("BranchName"));
+            String[] licenses = rs.getString("Licenses").split(", ");
+            List<String> licensesList = new LinkedList<>();
+            for (String license : licenses) {
+                licensesList.add(license);
+            }
+            worker.setLicenses(licensesList);
             String sql2 = "SELECT * " +
                     "FROM Prefs " +
                     "WHERE ID = " + id;
@@ -225,6 +232,25 @@ public class WorkerDAO  {
              Statement stmt = conn.createStatement();
         ) {
             String sql = "UPDATE Prefs SET SUNDAY = " + worker.getPref()[0][0] + ", MONDAY = " + worker.getPref()[1][0] + ", TUEDAY = " + worker.getPref()[2][0] + ", WEDDAY = " + worker.getPref()[3][0] + ", THURDAY = " + worker.getPref()[4][0] + ", FRIDAY = " + worker.getPref()[5][0] + ", SUNNIGHT = " + worker.getPref()[0][1] + ", MONNIGHT = " + worker.getPref()[1][1] + ", TUENIGHT = " + worker.getPref()[2][1] + ", WEDNIGHT = " + worker.getPref()[3][1] + ", THURNIGHT = " + worker.getPref()[4][1] + ", FRINIGHT = " + worker.getPref()[5][1] + " WHERE ID = " + worker.getID();
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateWorkerLicenses(WorkerDTO worker) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String licenses = "";
+            for (String license : worker.getLicenses()) {
+                licenses += license + ", ";
+            }
+            if(licenses.length() > 0)
+                licenses = licenses.substring(0, licenses.length() - 2);
+            else
+                licenses = "None";
+            String sql = "UPDATE Workers SET Licenses = " + licenses + " WHERE ID = " + worker.getID();
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();

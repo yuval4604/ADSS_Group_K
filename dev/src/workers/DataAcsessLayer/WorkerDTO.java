@@ -1,6 +1,7 @@
 package workers.DataAcsessLayer;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class WorkerDTO {
@@ -17,6 +18,7 @@ public class WorkerDTO {
     private boolean isHeadOfBranch;
     private boolean change;
     private String[][] pref;
+    private List<String> licenses;
     public int getID() {
         return id;
     }
@@ -52,6 +54,9 @@ public class WorkerDTO {
     }
     public boolean getChange() {
         return change;
+    }
+    public List<String> getLicenses() {
+        return licenses;
     }
     public void setID(int id) {
         this.id = id;
@@ -89,6 +94,11 @@ public class WorkerDTO {
     public void setChange(boolean change) {
         this.change = change;
     }
+    public void setLicenses(List<String> licenses) {
+        this.licenses = licenses;
+    }
+
+
 
     public String[][] getPref() {
         return pref;
@@ -97,4 +107,5 @@ public class WorkerDTO {
     public void setPref(String[][] pref) {
         this.pref = pref;
     }
+
 }
