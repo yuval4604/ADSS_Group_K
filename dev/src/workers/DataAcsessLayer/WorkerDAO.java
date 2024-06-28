@@ -89,7 +89,7 @@ public class WorkerDAO  {
         }
     }
 
-    public static WorkerDTO getWorkerByID(int id) throws SQLException{
+    public static WorkerDTO getWorker(int id) throws SQLException{
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
@@ -281,22 +281,6 @@ public class WorkerDAO  {
             e.printStackTrace();
         }
         return prefs;
-    }
-
-    public static List<Integer> getWorkersID() {
-        List<Integer> workerIDs = new LinkedList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "SELECT ID FROM Workers";
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                workerIDs.add(rs.getInt("ID"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return workerIDs;
     }
 
 }

@@ -1,5 +1,8 @@
 package workers.DataAcsessLayer;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ShiftDAO {
     private Connection connection;
@@ -89,32 +92,55 @@ public class ShiftDAO {
             e.printStackTrace();
         }
     }
-    public static void deleteShift(ShiftDTO shiftDTO) {
+    public static void deleteShift(String date, boolean dayShift, int branchId) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "DELETE FROM Shifts WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            String sql = "DELETE FROM Shifts WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    public static void getShift(String date, boolean dayShift, int branchId) {
+    public static ShiftDTO getShift(String date, boolean dayShift, int branchId) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         )
         {
             String sql = "SELECT * FROM Shifts WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
             ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                System.out.println(rs.getString("date") + " " + rs.getBoolean("dayShift") + " " + rs.getBoolean("active") + " " + rs.getInt("dayOfWeek") + " " + rs.getInt("managerID") + " " + rs.getInt("branchID"));
+            ShiftDTO shiftDTO = new ShiftDTO();
+            shiftDTO.setDate(rs.getString("date"));
+            shiftDTO.setDayShift(rs.getBoolean("dayShift"));
+            shiftDTO.setActive(rs.getBoolean("active"));
+            shiftDTO.setDayOfWeek(rs.getInt("dayOfWeek"));
+            shiftDTO.setManagerId(rs.getInt("managerID"));
+            shiftDTO.setBranchId(rs.getInt("branchID"));
+
+            String sql1 = "SELECT * FROM Roles WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
+            ResultSet rs1 = stmt.executeQuery(sql1);
+            Map<String, List<Integer>> workers = new HashMap<>();
+            while (rs1.next()) {
+                String role = rs1.getString("role");
+                int workerId = rs1.getInt("workerID");
+                if (workers.containsKey(role)) {
+                    workers.get(role).add(workerId);
+                }
+                else {
+                    workers.put(role, List.of(workerId));
+                }
             }
+            shiftDTO.setWorkers(workers);
+
+            return shiftDTO;
+
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
     public static  void setBranchID(ShiftDTO shiftDTO) {
         try (Connection conn = DriverManager.getConnection(DB_URL);

@@ -103,16 +103,49 @@ public class BranchDAO {
             e.printStackTrace();
         }
     }
-    public static void deleteBranch(BranchDTO branchDTO) {
+    public static void deleteBranch(int id) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "DELETE FROM Branches WHERE id = " + branchDTO.getId();
+            String sql = "DELETE FROM Branches WHERE id = " + id;
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static BranchDTO getBranch(int id) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "SELECT * FROM Branches WHERE id = " + id;
+            ResultSet rs = stmt.executeQuery(sql);
+            BranchDTO branchDTO = new BranchDTO();
+            branchDTO.setId(rs.getInt("id"));
+            branchDTO.setName(rs.getString("Name"));
+            branchDTO.setAddress(rs.getString("Address"));
+            branchDTO.setHeadOfBranchId(rs.getInt("HeadOfBranchId"));
+
+            String sql1 = "SELECT * FROM branchWorkers WHERE BranchID = " + id;
+            ResultSet rs1 = stmt.executeQuery(sql1);
+            while (rs1.next()) {
+                branchDTO.getWorkers().add(rs1.getInt("WorkerID"));
+            }
+
+            String sql2 = "SELECT * FROM branchShifts WHERE BranchID = " + id;
+            ResultSet rs2 = stmt.executeQuery(sql2);
+            while (rs2.next()) {
+                branchDTO.getShifts().add(rs2.getInt("BranchID"));
+            }
+
+            return branchDTO;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
