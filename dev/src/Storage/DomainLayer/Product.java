@@ -293,4 +293,24 @@ public class Product {
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
     }
+
+    public void setStorageQuantity(int storageQuantity) {
+        this.storageQuantity = storageQuantity;
+    }
+
+    public void setDamagedQuantity(int damagedQuantity) {
+        this.damageQuantity = damagedQuantity;
+    }
+
+    public void setExpirationDates(Map<LocalDate, Map.Entry<Integer, Integer>> expirationDates) {
+        this.expirationDates = expirationDates;
+    }
+
+    public void setExpiredProducts(Map<LocalDate, Integer> expiredProducts) {
+        this.expiredProducts = expiredProducts;
+    }
+
+    public int getDamagedQuantity() {
+        return damageQuantity;
+    }
 }
