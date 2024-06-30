@@ -1,27 +1,30 @@
 package Storage.DomainLayer;
 
-import Storage.DomainLayer.Enums.Category;
-import Storage.DomainLayer.Enums.SubCategory;
-import Storage.DomainLayer.Enums.SubSubCategory;
-import Storage.DomainLayer.Facades.DomainFacade;
+import Storage.DataAccessLayer.Repository;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class DomainManager {
 
     private Map<Integer, Product> productMap;
+    private Repository repo;
 
-    private DomainFacade domainFacade;
+    private List<String> categories;
+    private List<String> subCategories;
+    private List<String> sizes;
 
-    public DomainManager(DomainFacade domainFacade) {
-        this.domainFacade = domainFacade;
+    public DomainManager(Repository repo) {
+        this.repo = repo;
         this.productMap = new HashMap<Integer, Product>();
     }
 
-    public DomainManager(Map<Integer, Product> productMap, DomainFacade domainFacade) {
+    public DomainManager(Map<Integer, Product> productMap, Repository repo) {
         this.productMap = productMap;
-        this.domainFacade = domainFacade;
+        this.repo = repo;
     }
 
     public void addProduct(Product product) throws Exception {
@@ -29,7 +32,7 @@ public class DomainManager {
             if (this.productMap.containsKey(product.getCatalogNumber())) {
                 throw new IllegalArgumentException("Product with this catalog number already exists");
             }
-            this.domainFacade.addProduct(product);
+            this.repo.addProduct(product);
             this.productMap.put(product.getCatalogNumber(), product);
         } catch (Exception e) {
             throw e;
@@ -38,10 +41,12 @@ public class DomainManager {
 
     public Product getProduct(int catalogNumber) throws Exception {
         try {
-            if (!this.productMap.containsKey(catalogNumber)) {
-                return null;
-            }
-            return this.productMap.get(catalogNumber);
+            if(this.productMap.containsKey(catalogNumber))
+                return this.productMap.get(catalogNumber);
+            Product p = this.repo.getProduct(catalogNumber);
+            if(p != null)
+                this.productMap.put(catalogNumber, p);
+            return p;
         } catch (Exception e) {
             throw e;
         }
@@ -55,42 +60,32 @@ public class DomainManager {
         try {
             if(product == null)
                 throw new IllegalArgumentException("Product does not exist");
-            if (!this.productMap.containsKey(product.getCatalogNumber())) {
+            if (!this.productMap.containsKey(product.getCatalogNumber()) || this.repo.getProduct(product.getCatalogNumber()) == null) {
                 throw new IllegalArgumentException("Product with this catalog number does not exist");
             }
             this.productMap.remove(product.getCatalogNumber());
-            this.domainFacade.removeProduct(product);
+            this.repo.deleteProduct(product.getCatalogNumber());
         } catch (Exception e) {
             throw e;
         }
     }
 
     // in the presentaion we will force the user to choose all the higher level categories of a chosen category
-    public List<Product> getProductsByCategories(List<String> categories) throws Exception {
+    public List<Product> getProductsByCategories(List<String> categoriesList) throws Exception {
         try {
-            List<Product> products = new LinkedList<>();
-            for (String category : categories) {
+            for (String category : categoriesList) {
                 String[] divided = category.split(",");
                 if (divided.length == 0 || divided.length > 3)
                     throw new IllegalArgumentException("invalid entry");
-                if (Category.contains(divided[0])) {
-                    if (divided.length == 1)
-                        products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getAllProducts());
-                    else if (SubCategory.contains(divided[1])) {
-                        if (domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategories().containsKey(SubCategory.valueOf(divided[1]))) {
-                            if (divided.length == 2)
-                                products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getAllProducts());
-                            else if (SubSubCategory.contains(divided[2])) {
-                                if (domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).getSubSubCategories().containsKey(SubSubCategory.valueOf(divided[2])))
-                                    products.addAll(domainFacade.getCategoryFacade(Category.valueOf(divided[0])).getSubCategoryFacade(SubCategory.valueOf(divided[1])).
-                                            getSubSubCategoryFacade(SubSubCategory.valueOf(divided[2])).getAllProducts());
-                                else throw new NoSuchElementException("sub category does not have this size");
-                            } else throw new NoSuchElementException("Size doesn't exist");
-                        } else throw new NoSuchElementException("category does not have this sub category");
-                    } else throw new NoSuchElementException("Sub Category doesn't exist");
+                if (categories.contains(divided[0])) {
+                    if (divided.length > 1) {
+                        if(!subCategories.contains(divided[1])) throw new NoSuchElementException("Sub Category doesn't exist");
+                        if (divided.length > 2)
+                            if (!sizes.contains(divided[2])) throw new NoSuchElementException("sub category does not have this size");
+                        } else throw new NoSuchElementException("Size doesn't exist");
                 } else throw new NoSuchElementException("Category doesn't exist");
             }
-            return products;
+            return this.repo.getProductsByCategories(categoriesList);
         } catch (Exception e) {
             throw e;
         }
@@ -98,10 +93,12 @@ public class DomainManager {
 
     public void moveProductToStore(int catalogNumber, LocalDate expirationDate, int quantity) throws Exception {
         try {
-            Product product = this.productMap.get(catalogNumber);
-            if(product != null)
-                product.moveProductToStore(expirationDate, quantity);
-            else throw new IllegalArgumentException("Product does not exist");
+            Product product = this.productMap.remove(catalogNumber);
+            if(product == null) product = this.repo.deleteProduct(catalogNumber);
+            if(product == null) throw new IllegalArgumentException("Product does not exist");
+            product.moveProductToStore(expirationDate, quantity);
+            this.productMap.put(catalogNumber, product);
+            this.repo.addProduct(product);
         } catch (Exception e) {
             throw e;
         }
@@ -109,7 +106,8 @@ public class DomainManager {
 
     public void subtractFromStore(int catalogNumber, Map<LocalDate, Integer> products) throws Exception {
         try {
-            Product product = this.productMap.get(catalogNumber);
+            Product product = this.productMap.remove(catalogNumber);
+            if(product == null) product = this.repo.deleteProduct(catalogNumber);
             if(product == null) throw new IllegalArgumentException("Product does not exist");
             for (Map.Entry<LocalDate, Integer> entry : products.entrySet()) {
                 if (product.getStoreQuantity() < entry.getValue())
@@ -118,38 +116,38 @@ public class DomainManager {
                     product.removeOne(false, entry.getKey());
                 }
             }
+            this.productMap.put(catalogNumber, product);
+            this.repo.addProduct(product);
         } catch (Exception e) {
             throw e;
         }
     }
 
     public Map<Integer, Integer> expiredCount() throws Exception {
-        Map<Integer, Integer> expiredProducts = new HashMap<>();
-        for (Integer catalogNumber : productMap.keySet()) {
-            expiredProducts.put(catalogNumber, productMap.get(catalogNumber).expiredCount());
+        try {
+            return this.repo.expiredCount();
+        } catch (Exception e) {
+            throw e;
         }
-        return expiredProducts;
     }
 
 
     public String alertOnMinimalQuantity() throws Exception {
-        String alert = "";
-        if(this.productMap == null) return alert;
-        for (Product product : this.productMap.values()) {
-            if (product.getStorageQuantity() + product.getStoreQuantity() <= product.getMinimalQuantity()) {
-                alert += product.getName() + "\n";
-            }
+        try {
+            return this.repo.alertOnMinimalQuantity();
+        } catch (Exception e) {
+            throw e;
         }
-        if (this.productMap.values().size() > 0 && !alert.equals(""))
-            alert = alert.substring(0, alert.length() - 1);
-        return alert;
     }
 
     public void addToProduct(LocalDate expirationDate, int catalogNumber, int inStore, int inStorage) throws Exception {
         try {
-            Product product = this.productMap.get(catalogNumber);
+            Product product = this.productMap.remove(catalogNumber);
+            if(product == null) product = this.repo.deleteProduct(catalogNumber);
             if(product == null) throw new IllegalArgumentException("Product does not exist");
             product.addByExpirationDate(inStore, inStorage, expirationDate);
+            this.productMap.put(catalogNumber, product);
+            this.repo.addProduct(product);
         } catch (Exception e) {
             throw e;
         }
@@ -157,9 +155,12 @@ public class DomainManager {
 
     public void moveToExpired(int catalogNumber, LocalDate expirationDate, int inStore, int inStorage) throws Exception {
         try {
-            Product product = this.productMap.get(catalogNumber);
+            Product product = this.productMap.remove(catalogNumber);
+            if(product == null) product = this.repo.deleteProduct(catalogNumber);
             if(product == null) throw new IllegalArgumentException("Product does not exist");
             product.moveToExpired(inStore, inStorage, expirationDate);
+            this.productMap.put(catalogNumber, product);
+            this.repo.addProduct(product);
         } catch (Exception e) {
             throw e;
         }
@@ -167,9 +168,12 @@ public class DomainManager {
 
     public void setDiscount(int catalogNumber, double discount) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setDiscount(discount);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw e;
         }
@@ -177,9 +181,12 @@ public class DomainManager {
 
     public void updateBuyPriceForProduct(int catalogNumber, double buyPrice) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setBuyPrice(buyPrice);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -187,9 +194,12 @@ public class DomainManager {
 
     public void updateSalePriceForProduct(int catalogNumber, double salePrice) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setSalePrice(salePrice);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -197,9 +207,12 @@ public class DomainManager {
 
     public void updateSupplierDiscountForProduct(int catalogNumber, double supplierDiscount) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setSupplierDiscount(supplierDiscount);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -207,9 +220,12 @@ public class DomainManager {
 
     public void updateManufacturerForProduct(int catalogNumber, String manufacturer) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setManufacturer(manufacturer);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -217,9 +233,12 @@ public class DomainManager {
 
     public void updateAisleForProduct(int catalogNumber, String aisle) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setAisle(aisle);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -227,9 +246,12 @@ public class DomainManager {
 
     public void updateMinimalQuantityForProduct(int catalogNumber, int minimalQuantity) {
         try {
-            Product p = this.productMap.get(catalogNumber);
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.deleteProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setMinimalQuantity(minimalQuantity);
+            this.productMap.put(catalogNumber, p);
+            this.repo.addProduct(p);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

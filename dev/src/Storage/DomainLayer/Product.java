@@ -1,9 +1,5 @@
 package Storage.DomainLayer;
 
-import Storage.DomainLayer.Enums.Category;
-import Storage.DomainLayer.Enums.SubCategory;
-import Storage.DomainLayer.Enums.SubSubCategory;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,9 +8,9 @@ public class Product {
 
     private int catalogNumber;
     private String name;
-    private Category category;
-    private SubCategory subCategory;
-    private SubSubCategory size;
+    private String category;
+    private String subCategory;
+    private String size;
     private Map<LocalDate, Map.Entry<Integer,Integer>> expirationDates;//First in pair is storage, Second is store
     private Map<LocalDate, Integer> expiredProducts;
     private double buyPrice;
@@ -31,7 +27,7 @@ public class Product {
     private int minimalQuantity;
 
     private String aisle;
-    public Product(int catalogNumber, String name, Category category, SubCategory subCategory, SubSubCategory size, double buyPrice, double salePrice, double discount, double supplierDiscount, String manufacturer, String aisle, int minimalQuantity) {
+    public Product(int catalogNumber, String name, String category, String subCategory, String size, double buyPrice, double salePrice, double discount, double supplierDiscount, String manufacturer, String aisle, int minimalQuantity) {
         this.catalogNumber = catalogNumber;
         this.name = name;
         this.category = category;
@@ -59,15 +55,15 @@ public class Product {
         return name;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public SubCategory getSubCategory() {
+    public String getSubCategory() {
         return subCategory;
     }
 
-    public SubSubCategory getSize() {
+    public String getSize() {
         return size;
     }
 
@@ -202,7 +198,7 @@ public class Product {
             this.storageQuantity -= inStorage;
             Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate);
             this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - inStorage, oldValues.getValue() - inStore));
-            this.expiredProducts.put(expirationDate, inStorage + inStorage);
+            this.expiredProducts.put(expirationDate, inStorage + inStore);
         }
         else throw new IllegalArgumentException("Not enough quantity to move to expired");
     }
