@@ -69,7 +69,8 @@ public class ProductDAO {
                 stmt.setString(13, product.getManufacturer());
                 stmt.setInt(14, product.getMinimalQuantity());
                 stmt.setString(15, product.getAisle());
-                ResultSet rs = stmt.executeQuery();
+                stmt.executeUpdate();
+
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
