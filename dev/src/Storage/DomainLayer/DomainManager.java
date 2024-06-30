@@ -13,9 +13,9 @@ public class DomainManager {
     private Map<Integer, Product> productMap;
     private Repository repo;
 
-    private List<String> categories;
-    private List<String> subCategories;
-    private List<String> sizes;
+    public static List<String> categories;
+    public static List<String> subCategories;
+    public static List<String> sizes;
 
     public DomainManager(Repository repo) {
         this.repo = repo;

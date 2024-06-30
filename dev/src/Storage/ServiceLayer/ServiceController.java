@@ -1,10 +1,7 @@
 package Storage.ServiceLayer;
 
+import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.DomainManager;
-import Storage.DomainLayer.Enums.Category;
-import Storage.DomainLayer.Enums.SubCategory;
-import Storage.DomainLayer.Enums.SubSubCategory;
-import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
@@ -15,17 +12,17 @@ import java.util.Map;
 public class ServiceController {
     private DomainManager manager;
 
-    public ServiceController(Map<Integer, Product> productMap, DomainFacade facade) {
-        this.manager = new DomainManager(productMap, facade);
+    public ServiceController(Map<Integer, Product> productMap, Repository repository) {
+        this.manager = new DomainManager(productMap, repository);
     }
 
     public void addProduct(int catalogNumber, String name, String category, String subCategory, String size, double buyPrice, double salePrice, double discount, double supplierDiscount, String manufacturer, String aisle, int minimalQuantity) throws Exception {
         try {
             if (this.manager.getProduct(catalogNumber) != null)
                 throw new IllegalArgumentException("Product with this catalog number already exists");
-            if (!(Category.contains(category) && SubCategory.contains(subCategory) && SubSubCategory.contains(size)))
+            if (!(DomainManager.categories.contains(category) && DomainManager.subCategories.contains(subCategory) && DomainManager.sizes.contains(size)))
                 throw new IllegalArgumentException("Invalid category");
-            Product product = new Product(catalogNumber, name, Category.valueOf(category), SubCategory.valueOf(subCategory), SubSubCategory.valueOf(size), buyPrice, salePrice, discount, supplierDiscount, manufacturer, aisle, minimalQuantity);
+            Product product = new Product(catalogNumber, name, category, subCategory, size, buyPrice, salePrice, discount, supplierDiscount, manufacturer, aisle, minimalQuantity);
             this.manager.addProduct(product);
         } catch (Exception e) {
             throw new Exception(e.getMessage());

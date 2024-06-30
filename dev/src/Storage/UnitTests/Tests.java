@@ -1,11 +1,8 @@
 package Storage.UnitTests;
 
 
+import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.DomainManager;
-import Storage.DomainLayer.Enums.Category;
-import Storage.DomainLayer.Enums.SubCategory;
-import Storage.DomainLayer.Enums.SubSubCategory;
-import Storage.DomainLayer.Facades.DomainFacade;
 import Storage.DomainLayer.Product;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,10 +20,10 @@ public class Tests {
 
     @Before
     public void initTest() throws Exception {
-        milk = new Product(100,"Tnuva-milk 500ml", Category.Dairy, SubCategory.Milk, SubSubCategory.Small,6,8.5,0,0,"Tnuva","14",15);
-        beef = new Product(101,"Beef-Steak 500gr", Category.Meat, SubCategory.Beef, SubSubCategory.Large,50,74.95,0,0,"Joes' Meats","10",20);
-        soap = new Product(102,"Hand-Soap 200ml", Category.Cleaning, SubCategory.Soap, SubSubCategory.Medium,10,15,0,0,"Soapy","7",13);
-        manager = new DomainManager(new DomainFacade());
+        milk = new Product(100,"Tnuva-milk 500ml", "Dairy", "Milk", "Small",6,8.5,0,0,"Tnuva","14",15);
+        beef = new Product(101,"Beef-Steak 500gr", "Meat", "Beef", "Large",50,74.95,0,0,"Joes' Meats","10",20);
+        soap = new Product(102,"Hand-Soap 200ml", "Cleaning", "Soap", "Medium",10,15,0,0,"Soapy","7",13);
+        manager = new DomainManager(new Repository());
         manager.addProduct(milk);
         manager.addProduct(beef);
         manager.addProduct(soap);
@@ -119,7 +116,7 @@ public class Tests {
 
     @Test
     public void getProductsByCategoriesTest() throws Exception {
-        Product otherMilk = new Product(103,"Tara-milk 500ml", Category.Dairy, SubCategory.Milk, SubSubCategory.Small,5,7.5,0,0,"Tnuva","12",6);
+        Product otherMilk = new Product(103,"Tara-milk 500ml", "Dairy", "Milk", "Small",5,7.5,0,0,"Tnuva","12",6);
         manager.addProduct(otherMilk);
         List<String> stuff = new LinkedList<>();
         stuff.add("Meat");

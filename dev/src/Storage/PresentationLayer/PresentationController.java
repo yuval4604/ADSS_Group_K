@@ -1,6 +1,7 @@
 package Storage.PresentationLayer;
 
-import Storage.DomainLayer.Facades.DomainFacade;
+
+import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.Product;
 import Storage.ServiceLayer.ServiceController;
 
@@ -12,8 +13,8 @@ import java.util.Map;
 public class PresentationController {
     private ServiceController serviceController;
 
-    public PresentationController(Map<Integer, Product> productMap, DomainFacade facade) {
-        this.serviceController = new ServiceController(productMap, facade);
+    public PresentationController(Map<Integer, Product> productMap, Repository repo) {
+        this.serviceController = new ServiceController(productMap, repo);
     }
 
     public PresentationController(ServiceController serviceController) {

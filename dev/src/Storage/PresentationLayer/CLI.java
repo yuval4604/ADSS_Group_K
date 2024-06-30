@@ -1,9 +1,7 @@
 package Storage.PresentationLayer;
 
-import Storage.DomainLayer.Enums.Category;
-import Storage.DomainLayer.Enums.SubCategory;
-import Storage.DomainLayer.Enums.SubSubCategory;
-import Storage.DomainLayer.Facades.DomainFacade;
+import Storage.DataAccessLayer.Repository;
+import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
@@ -298,7 +296,7 @@ public class CLI {
                 if (!next.equals("all")) {
                     info += next + ",";
                     System.out.println("Please enter the size you wish to produce a report for: ");
-                    System.out.println(getSubSubCategories());
+                    System.out.println(getSizes());
                     System.out.println("If you wish to get the entire sub category, please enter 'all'.");
                     next = scan.nextLine();
                     if (!next.equals("all"))
@@ -312,8 +310,8 @@ public class CLI {
             }
             else {
                 String categories = "";
-                for(Category category : Category.values()){
-                    categories += category.toString() + ";";
+                for(String category : DomainManager.categories){
+                    categories += category + ";";
                 }
                 return categories.substring(0, categories.length());
             }
@@ -323,32 +321,32 @@ public class CLI {
 
     public static String getCategories(){
         String categories = "";
-        for(Category category : Category.values()){
-            categories += category.toString() + "\n";
+        for(String category : DomainManager.categories){
+            categories += category + "\n";
         }
         return categories.substring(0,categories.length()-1);
     }
 
     public static String getSubCategories(){
         String subCategories = "";
-        for(SubCategory subCategory : SubCategory.values()){
-            subCategories += subCategory.toString() + "\n";
+        for(String subCategory : DomainManager.subCategories){
+            subCategories += subCategory + "\n";
         }
         return subCategories.substring(0,subCategories.length()-1);
     }
 
-    public static String getSubSubCategories(){
-        String subSubCategories = "";
-        for(SubSubCategory subSubCategory : SubSubCategory.values()){
-            subSubCategories += subSubCategory.toString() + "\n";
+    public static String getSizes(){
+        String sizes = "";
+        for(String size : DomainManager.sizes){
+            sizes += size + "\n";
         }
-        return subSubCategories.substring(0,subSubCategories.length()-1);
+        return sizes.substring(0,sizes.length()-1);
     }
 
     public static void resetFactory() throws Exception{
         Map<Integer, Product> products = new HashMap<>();
-        DomainFacade facade = new DomainFacade();
-        presentationController = new PresentationController(products, facade);
+        Repository repo = new Repository();
+        presentationController = new PresentationController(products, repo);
     }
 
     public static void productFactory() throws Exception{
