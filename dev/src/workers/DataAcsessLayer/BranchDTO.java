@@ -51,7 +51,7 @@ public class BranchDTO {
     public void setWorkers(List<Integer> workers) {
         this.workers = workers;
     }
-    public void setShifts(List<Shift> shifts) {
-        this.shifts = shifts;
+    public void setShifts(List<Integer> lshifts) {
+        this.shifts = lshifts;
     }
 }

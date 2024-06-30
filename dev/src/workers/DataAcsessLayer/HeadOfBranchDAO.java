@@ -1,5 +1,6 @@
 package workers.DataAcsessLayer;
 
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HeadOfBranchDAO {
-    private static final String DB_URL = "jdbc:sqlite:./src/workers/WorkersDB.db";
+    private static final String DB_URL = "jdbc:sqlite:" + Paths.get("workers/DataAcsessLayer/WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
 
     public static void createHeadOfBranchTable() {
         try (Connection conn = DriverManager.getConnection(DB_URL);

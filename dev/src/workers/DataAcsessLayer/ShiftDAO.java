@@ -1,4 +1,5 @@
 package workers.DataAcsessLayer;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ public class ShiftDAO {
     private ResultSet resultSet;
 
 
-    private static final String DB_URL = "jdbc:sqlite:./src/workers/WorkersDB.db";
+    private static final String DB_URL = "jdbc:sqlite:" + Paths.get("workers/DataAcsessLayer/WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
 
 
     public static void createShiftTable() {
