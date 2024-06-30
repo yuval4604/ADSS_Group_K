@@ -161,6 +161,7 @@ public class DomainManager {
             if(product == null) throw new IllegalArgumentException("Product does not exist");
             product.moveToExpired(inStore, inStorage, expirationDate);
             this.productMap.put(catalogNumber, product);
+            this.repo.updateExpiration(product.getCatalogNumber(), expirationDate, product.getStoreQuantity(), product.getStorageQuantity());
             this.repo.updateExpired(product.getCatalogNumber(), expirationDate, product.getExpiredProducts().get(expirationDate) + inStore + inStorage);
         } catch (Exception e) {
             throw e;

@@ -198,7 +198,7 @@ public class Product {
             this.storageQuantity -= inStorage;
             Map.Entry<Integer,Integer> oldValues = this.expirationDates.remove(expirationDate);
             this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - inStorage, oldValues.getValue() - inStore));
-            this.expiredProducts.put(expirationDate, inStorage + inStore);
+            this.expiredProducts.put(expirationDate, expiredProducts.remove(expirationDate) + inStorage + inStore);
         }
         else throw new IllegalArgumentException("Not enough quantity to move to expired");
     }
