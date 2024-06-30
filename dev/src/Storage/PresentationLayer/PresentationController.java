@@ -416,4 +416,43 @@ public class PresentationController {
             return false;
         }
     }
+
+    public boolean parseAddCategoryMessage(String info) {
+        try {
+            addCategory(info);
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    private void addCategory(String info) {
+        this.serviceController.addCategory(info);
+    }
+
+    public boolean parseAddSubCategoryMessage(String info) {
+        try {
+            addSubCategory(info);
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    private void addSubCategory(String info) {
+        this.serviceController.addSubCategory(info);
+    }
+
+    public boolean parseAddSizeMessage(String info) {
+        try {
+            addSize(info);
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    private void addSize(String info) {
+        this.serviceController.addSize(info);
+    }
 }

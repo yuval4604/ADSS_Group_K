@@ -200,4 +200,28 @@ public class ServiceController {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
+
+    public void addCategory(String category) {
+        try {
+            this.manager.addCategory(category);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void addSubCategory(String subCategory) {
+        try {
+            this.manager.addSubCategory(subCategory);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void addSize(String size) {
+        try {
+            this.manager.addSize(size);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
 }

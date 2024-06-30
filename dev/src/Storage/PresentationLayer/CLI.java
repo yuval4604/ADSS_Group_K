@@ -66,7 +66,10 @@ public class CLI {
                     "18. Produce damaged and expired report.\n" +
                     "19. Check for products below minimal quantity.\n" +
                     "20. Check for expired products.\n" +
-                    "21. Exit program.");
+                    "21. Add category.\n" +
+                    "22. Add sub category" +
+                    "23. Add size" +
+                    "24. Exit program.");
             choice = scan.nextLine();
             switch (choice){
                 case "1":{
@@ -270,8 +273,25 @@ public class CLI {
                     break;
                 }
                 case "21":{
+                    System.out.println("Please enter the name of the category you wish to add: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseAddCategoryMessage(info));
                     break;
                 }
+                case "22":{
+                    System.out.println("Please enter the name of the sub category you wish to add: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseAddSubCategoryMessage(info));
+                    break;
+                }
+                case "23":{
+                    System.out.println("Please enter the name of the size you wish to add: ");
+                    info += scan.nextLine();
+                    System.out.println(presentationController.parseAddSizeMessage(info));
+                    break;
+                }
+                case "24":
+                    break;
                 default:
                     System.out.println("Invalid choice, please choose again.");
                     break;

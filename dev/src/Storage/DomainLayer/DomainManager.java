@@ -28,10 +28,25 @@ public class DomainManager {
         this.repo = repo;
     }
 
+    public Repository getRepo() {
+        return repo;
+    }
+
+    public void setRepo(Repository repo) {
+        this.repo = repo;
+    }
+
     public void addProduct(Product product) throws Exception {
         try {
+            if(categories == null || subCategories == null || sizes == null)
+                throw new IllegalArgumentException("Categories not initialized");
+            if(product == null)
+                throw new IllegalArgumentException("Product does not exist");
             if (this.productMap.containsKey(product.getCatalogNumber())) {
                 throw new IllegalArgumentException("Product with this catalog number already exists");
+            }
+            if (!(categories.contains(product.getCategory()) && subCategories.contains(product.getSubCategory()) && sizes.contains(product.getSize()))) {
+                throw new IllegalArgumentException("Invalid category");
             }
             this.repo.addProduct(product);
             this.productMap.put(product.getCatalogNumber(), product);
@@ -254,6 +269,39 @@ public class DomainManager {
             p.setMinimalQuantity(minimalQuantity);
             this.productMap.put(catalogNumber, p);
             this.repo.updateProduct(catalogNumber, Map.of("minimalQuantity", String.valueOf(minimalQuantity)));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void addCategory(String category) {
+        try {
+            if(categories == null) categories = this.repo.getCategories();
+            if(categories.contains(category)) throw new IllegalArgumentException("Category already exists");
+            categories.add(category);
+            this.repo.addCategory(category);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void addSubCategory(String subCategory) {
+        try {
+            if(subCategories == null) subCategories = this.repo.getSubCategories();
+            if(subCategories.contains(subCategory)) throw new IllegalArgumentException("Sub Category already exists");
+            subCategories.add(subCategory);
+            this.repo.addSubCategory(subCategory);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void addSize(String size) {
+        try {
+            if(sizes == null) sizes = this.repo.getSizes();
+            if(sizes.contains(size)) throw new IllegalArgumentException("Size already exists");
+            sizes.add(size);
+            this.repo.addSize(size);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

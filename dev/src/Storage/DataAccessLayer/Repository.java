@@ -20,6 +20,14 @@ public class Repository {
         this.dao = dao;
     }
 
+    public ProductDAO getDao() {
+        return dao;
+    }
+
+    public void setDao(ProductDAO dao) {
+        this.dao = dao;
+    }
+
     public Product getProduct(int catalogNumber) throws SQLException {
         return dao.getProduct(catalogNumber);
     }
@@ -62,5 +70,29 @@ public class Repository {
 
     public void updateExpired(int catalogNumber, LocalDate expirationDate, int newAmount) throws SQLException {
         this.dao.updateExpired(catalogNumber, expirationDate, newAmount);
+    }
+
+    public List<String> getCategories() throws SQLException {
+        return dao.getCategories();
+    }
+
+    public void addCategory(String category) throws SQLException {
+        dao.addCategory(category);
+    }
+
+    public List<String> getSubCategories() throws SQLException {
+        return dao.getSubCategories();
+    }
+
+    public void addSubCategory(String subCategory) throws SQLException {
+        dao.addSubCategory(subCategory);
+    }
+
+    public List<String> getSizes() throws SQLException {
+        return dao.getSizes();
+    }
+
+    public void addSize(String size) throws SQLException {
+        dao.addSize(size);
     }
 }

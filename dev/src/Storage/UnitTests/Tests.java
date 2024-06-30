@@ -4,6 +4,7 @@ package Storage.UnitTests;
 import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Product;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,12 @@ public class Tests {
         manager.addProduct(beef);
         manager.addProduct(soap);
     }
+
+    @After
+    public void tearDown() {
+        manager.getRepo().getDao().rollback();
+    }
+
 
     @Test
     public void AddProductToBatchTest(){
@@ -82,12 +89,12 @@ public class Tests {
         milk.addByExpirationDate(0,25, LocalDate.parse("2024-07-10"));
         milk.addByExpirationDate(3,15, LocalDate.parse("2024-07-07"));
         milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
-        beef.addByExpirationDate(3,14, LocalDate.parse("2024-06-20"));
-        beef.addByExpirationDate(2,20, LocalDate.parse("2024-06-24"));
+        beef.addByExpirationDate(3,14, LocalDate.parse("2024-07-20"));
+        beef.addByExpirationDate(2,20, LocalDate.parse("2024-07-24"));
         soap.addByExpirationDate(10,0, LocalDate.parse("2024-12-12"));
 
        milk.moveProductToStore(LocalDate.parse("2024-07-10"), 14);
-       beef.moveProductToStore(LocalDate.parse("2024-06-24") ,20);
+       beef.moveProductToStore(LocalDate.parse("2024-07-24") ,20);
        try{
             soap.moveProductToStore(LocalDate.parse("2024-12-12") ,1);
        }
@@ -150,12 +157,12 @@ public class Tests {
         milk.addByExpirationDate(0,25, LocalDate.parse("2024-07-10"));
         milk.addByExpirationDate(3,15, LocalDate.parse("2024-07-07"));
         milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
-        beef.addByExpirationDate(3,14, LocalDate.parse("2024-06-20"));
-        beef.addByExpirationDate(2,20, LocalDate.parse("2024-06-24"));
+        beef.addByExpirationDate(3,14, LocalDate.parse("2024-07-20"));
+        beef.addByExpirationDate(2,20, LocalDate.parse("2024-07-24"));
         soap.addByExpirationDate(10,0, LocalDate.parse("2024-12-12"));
 
         milk.moveToDamage(new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
-        beef.moveToDamage(new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2024-06-20")});
+        beef.moveToDamage(new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2024-07-20")});
         soap.moveToDamage(new int[]{0},new int[]{0}, new LocalDate[]{LocalDate.parse("2024-12-12")});
 
         Assert.assertEquals(35,milk.getStorageQuantity());
