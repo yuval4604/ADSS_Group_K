@@ -313,4 +313,8 @@ public class Product {
     public int getDamagedQuantity() {
         return damageQuantity;
     }
+
+    public Map<LocalDate, Integer> getExpiredProducts() {
+        return this.expiredProducts;
+    }
 }

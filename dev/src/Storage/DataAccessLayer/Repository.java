@@ -2,6 +2,8 @@ package Storage.DataAccessLayer;
 
 import Storage.DomainLayer.Product;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,23 +20,23 @@ public class Repository {
         this.dao = dao;
     }
 
-    public Product getProduct(int catalogNumber) {
+    public Product getProduct(int catalogNumber) throws SQLException {
         return dao.getProduct(catalogNumber);
     }
 
-    public void addProduct(Product product) {
+    public void addProduct(Product product) throws SQLException {
         dao.addProduct(product);
     }
 
-    public void updateProduct(Product product) {
-        dao.updateProduct(product);
+    public void updateProduct(int catalogNumber, Map<String, String> updates) throws SQLException {
+        dao.updateProduct(catalogNumber, updates);
     }
 
-    public Product deleteProduct(int catalogNumber) {
-        return dao.deleteProduct(catalogNumber);
+    public void deleteProduct(int catalogNumber) throws SQLException {
+        dao.deleteProduct(catalogNumber);
     }
 
-    public List<Product> getProductsByCategories(List<String> categories) {
+    public List<Product> getProductsByCategories(List<String> categories) throws SQLException {
         List<String[]> categoriesList = new ArrayList<>();
         for (String category : categories) {
             categoriesList.add(category.split(","));
@@ -42,15 +44,23 @@ public class Repository {
         return dao.getProductsByCategories(categoriesList);
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts() throws SQLException {
         return dao.getAllProducts();
     }
 
-    public Map<Integer, Integer> expiredCount() {
+    public Map<Integer, Integer> expiredCount() throws SQLException {
         return dao.expiredCount();
     }
 
-    public String alertOnMinimalQuantity() {
+    public String alertOnMinimalQuantity() throws SQLException {
         return dao.alertOnMinimalQuantity();
+    }
+
+    public void updateExpiration(int catalogNumber, LocalDate expirationDate, int storeQuantity, int storageQuantity) throws SQLException {
+        dao.updateExpiration(catalogNumber, expirationDate, storeQuantity, storageQuantity);
+    }
+
+    public void updateExpired(int catalogNumber, LocalDate expirationDate, int newAmount) throws SQLException {
+        this.dao.updateExpired(catalogNumber, expirationDate, newAmount);
     }
 }
