@@ -135,37 +135,40 @@ public class ProductDAO {
                 for (String[] categoryList : categories) {
                     switch (categoryList.length) {
                         case 1:
-                            query += "(category = " + categoryList[0] + ") OR ";
+                            query += "(category = '" + categoryList[0] + "') OR ";
                             break;
                         case 2:
-                            query += "(category = " + categoryList[0] + " AND subCategory = " + categoryList[1] + ") OR ";
+                            query += "(category = '" + categoryList[0] + "' AND subCategory = '" + categoryList[1] + "') OR ";
                             break;
                         case 3:
-                            query += "(category = " + categoryList[0] + " AND subCategory = " + categoryList[1] + " AND size = " + categoryList[2] + ") OR ";
+                            query += "(category = '" + categoryList[0] + "' AND subCategory = '" + categoryList[1] + "' AND size = '" + categoryList[2] + "') OR ";
                             break;
                     }
                 }
                 query = query.substring(0, query.length() - 4);
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet rs = stmt.executeQuery();
+                System.out.println(rs.getFetchSize());
                 List<Product> products = new ArrayList<>();
                 while (rs.next()) {
                     Product p = new Product(rs.getInt("catalogNumber"), rs.getString("name"), rs.getString("category"), rs.getString("subCategory"), rs.getString("size"), rs.getDouble("buyPrice"), rs.getDouble("salePrice"), rs.getDouble("discount"), rs.getDouble("supplierDiscount"), rs.getString("manufacturer"), rs.getString("aisle"), rs.getInt("minimalQuantity"));
                     p.setStorageQuantity(rs.getInt("storageQuantity"));
                     p.setStoreQuantity(rs.getInt("storeQuantity"));
                     p.setDamagedQuantity(rs.getInt("damagedQuantity"));
-                    stmt = conn.prepareStatement("SELECT * FROM expirationDates WHERE catalogNumber = ?");
-                    stmt.setInt(1, rs.getInt("catalogNumber"));
+                    PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM expirationDates WHERE catalogNumber = ?");
+                    pstmt.setInt(1, rs.getInt("catalogNumber"));
                     Map<LocalDate, Map.Entry<Integer, Integer>> expirationDates = new HashMap<>();
-                    while (rs.next()) {
-                        expirationDates.put(LocalDate.parse(rs.getString("expirationDate")), Map.entry(rs.getInt("storageQuantity"), rs.getInt("storeQuantity")));
+                    ResultSet rs2 = pstmt.executeQuery();
+                    while (rs2.next()) {
+                        expirationDates.put(LocalDate.parse(rs2.getString("expirationDate")), Map.entry(rs2.getInt("storageQuantity"), rs2.getInt("storeQuantity")));
                     }
                     p.setExpirationDates(expirationDates);
-                    stmt = conn.prepareStatement("SELECT * FROM expiredProducts WHERE catalogNumber = ?");
-                    stmt.setInt(1, rs.getInt("catalogNumber"));
+                    pstmt = conn.prepareStatement("SELECT * FROM expiredProducts WHERE catalogNumber = ?");
+                    pstmt.setInt(1, rs.getInt("catalogNumber"));
                     Map<LocalDate, Integer> expiredProducts = new HashMap<>();
-                    while (rs.next()) {
-                        expiredProducts.put(LocalDate.parse(rs.getString("expiredDate")), rs.getInt("quantity"));
+                    rs2 = pstmt.executeQuery();
+                    while (rs2.next()) {
+                        expiredProducts.put(LocalDate.parse(rs2.getString("expiredDate")), rs2.getInt("quantity"));
                     }
                     p.setExpiredProducts(expiredProducts);
                     products.add(p);

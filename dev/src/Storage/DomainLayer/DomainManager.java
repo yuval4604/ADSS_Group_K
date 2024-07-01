@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class DomainManager {
 
@@ -18,9 +17,12 @@ public class DomainManager {
     public static List<String> subCategories;
     public static List<String> sizes;
 
-    public DomainManager(Repository repo) {
+    public DomainManager(Repository repo) throws SQLException {
         this.repo = repo;
         this.productMap = new HashMap<Integer, Product>();
+        categories = repo.getCategories();
+        subCategories = repo.getSubCategories();
+        sizes = repo.getSizes();
     }
 
     public DomainManager(Map<Integer, Product> productMap, Repository repo) {
@@ -91,15 +93,23 @@ public class DomainManager {
         try {
             for (String category : categoriesList) {
                 String[] divided = category.split(",");
-                if (divided.length == 0 || divided.length > 3)
-                    throw new IllegalArgumentException("invalid entry");
-                if (categories.contains(divided[0])) {
-                    if (divided.length > 1) {
-                        if(!subCategories.contains(divided[1])) throw new NoSuchElementException("Sub Category doesn't exist");
-                        if (divided.length > 2)
-                            if (!sizes.contains(divided[2])) throw new NoSuchElementException("sub category does not have this size");
-                        } else throw new NoSuchElementException("Size doesn't exist");
-                } else throw new NoSuchElementException("Category doesn't exist");
+                switch (divided.length){
+                    case 1:
+                        if(!categories.contains(divided[0]))
+                            throw new IllegalArgumentException("Invalid category");
+                        break;
+                    case 2:
+                        if(!categories.contains(divided[0]) || !subCategories.contains(divided[1]))
+                            throw new IllegalArgumentException("Invalid category");
+                        break;
+                    case 3:
+                        if(!categories.contains(divided[0]) || !subCategories.contains(divided[1]) || !sizes.contains(divided[2]))
+                            throw new IllegalArgumentException("Invalid category");
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid category");
+
+                }
             }
             return this.repo.getProductsByCategories(categoriesList);
         } catch (Exception e) {
