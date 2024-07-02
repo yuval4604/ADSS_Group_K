@@ -21,12 +21,35 @@ public class Branch {
         _shifts = new LinkedList<>();
         _address = address;
         _headOfBranch = headOfBranch;
-        BranchDTO bdto = new BranchDTO();
-        bdto.setName(name);
-        bdto.setId(id);
-        bdto.setAddress(address);
-        bdto.setHeadOfBranchId(headOfBranch.getID());
-        BranchDAO.insertBranch(bdto);
+            BranchDTO bdto = new BranchDTO();
+            bdto.setName(name);
+            bdto.setId(id);
+            bdto.setAddress(address);
+            if (headOfBranch == null)
+                bdto.setHeadOfBranchId(0);
+            else
+                bdto.setHeadOfBranchId(headOfBranch.getID());
+            BranchDAO.insertBranch(bdto);
+
+    }
+
+    public Branch(BranchDTO bdto) {
+        _name = bdto.getName();
+        _id = bdto.getId();
+        _address = bdto.getAddress();
+        _headOfBranch = HeadOfBranch.getWorker(bdto.getHeadOfBranchId());
+        _workers = new LinkedList<>();
+        _shifts = new LinkedList<>();
+    }
+
+    public static Branch getBranch(int branchID, Worker headOfBranch) {
+        try {
+            BranchDTO bdto = BranchDAO.getBranch(branchID);
+            return new Branch(bdto);
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     public String getName() {

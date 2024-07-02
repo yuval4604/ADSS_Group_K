@@ -18,18 +18,19 @@ public class ShiftDAO {
         try {
             Connection conn = DriverManager.getConnection(DB_URL);
             Statement stmt = conn.createStatement();
-            String sql = "CREATE TABLE Shifts " +
+            String sql = "CREATE TABLE IF NOT EXISTS Shifts " +
                     "(date VARCHAR(30), " +
                     " dayShift BIT(1), " +
                     " active BIT(1), " +
                     " dayOfWeek INTEGER, " +
                     " managerID INTEGER, " +
                     " branchID INTEGER, " +
+                    "needQM BIT(1)," +
                     " PRIMARY KEY ( date, dayShift,branchID), " +
                     " FOREIGN KEY (managerID) REFERENCES Workers(id), " +
                     " FOREIGN KEY (branchID) REFERENCES Workers(id))";
             stmt.executeUpdate(sql);
-            String sql1 = "CREATE TABLE Roles" +
+            String sql1 = "CREATE TABLE IF NOT EXISTS Roles" +
                     "(role VARCHAR(30), " +
                     " workerID INTEGER, " +
                     "branchID INTEGER," +
@@ -49,8 +50,8 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, managerID, branchID) " +
-                    "VALUES ('" + shiftDTO.getDate() + "', " + shiftDTO.getDayShift() + ", " + shiftDTO.getActive() + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getManagerId() + ", " + shiftDTO.getBranchId() + ")";
+            String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, managerID, branchID, needQM) " +
+                    "VALUES ('" + shiftDTO.getDate() + "', " + shiftDTO.getDayShift() + ", " + shiftDTO.getActive() + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getManagerId() + ", " + shiftDTO.getBranchId() + shiftDTO.getNeedQM() +")";
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -69,6 +70,20 @@ public class ShiftDAO {
             e.printStackTrace();
         }
     }
+
+    public static void updateNeedQM(ShiftDTO shiftDTO) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "UPDATE INTO SHIFT SET needQM = " + shiftDTO.getNeedQM() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void updateShiftManager(ShiftDTO shiftDTO) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -156,4 +171,17 @@ public class ShiftDAO {
         }
     }
 
+    public static void insertWorkerToShift(ShiftDTO shiftDTO, String role, int id) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "INSERT INTO Roles (role, workerID, branchID, date, dayShift) " +
+                    "VALUES ('" + role + "', " + id + ", " + shiftDTO.getBranchId() + ", " + shiftDTO.getDate() + ", " + shiftDTO.getDayShift() + ")";
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

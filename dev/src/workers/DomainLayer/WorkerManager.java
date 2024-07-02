@@ -19,7 +19,7 @@ public class WorkerManager {
 
     public static void checkUpdateDay(Worker worker) {
         worker.backupConstraints();
-        worker.createNewConstraints();
+        //worker.createNewConstraints();
     }
 
     public static String getWorkerLicense(Worker worker) {

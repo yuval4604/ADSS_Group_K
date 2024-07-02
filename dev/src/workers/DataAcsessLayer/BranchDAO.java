@@ -14,21 +14,21 @@ public class BranchDAO {
         try {
             Connection conn = DriverManager.getConnection(DB_URL);
             Statement stmt = conn.createStatement();
-            String sql = "CREATE TABLE Branches " +
+            String sql = "CREATE TABLE IF NOT EXISTS Branches " +
                     "(id INTEGER PRIMARY KEY, " +
                     " Name VARCHAR(30), " +
                     " Address VARCHAR(30), " +
                     " HeadOfBranchId INTEGER, " +
                     " FOREIGN KEY (headOfBranchId) REFERENCES Workers(Id))";
             stmt.executeUpdate(sql);
-            String sql1 = "CREATE TABLE branchWorkers" +
+            String sql1 = "CREATE TABLE IF NOT EXISTS branchWorkers" +
                     "(BranchID INTEGER, " +
                     " WorkerID INTEGER, " +
                     " PRIMARY KEY (branchID, workerID), " +
                     " FOREIGN KEY (branchID) REFERENCES Branches(id), " +
                     " FOREIGN KEY (workerID) REFERENCES Workers(id))";
             stmt.executeUpdate(sql1);
-            String sql2 = "CREATE TABLE branchShifts" +
+            String sql2 = "CREATE TABLE IF NOT EXISTS branchShifts" +
                     "(BranchID INTEGER, " +
                     " Date VARCHAR(30), " +
                     " DayShift BIT(1), " +
@@ -47,6 +47,12 @@ public class BranchDAO {
              Statement stmt = conn.createStatement();
         )
         {
+            if(branchDTO.getHeadOfBranchId() == 0) {
+                String sql = "INSERT OR IGNORE INTO Branches (id, Name, Address) " +
+                        "VALUES (" + branchDTO.getId() + ", '" + branchDTO.getName() + "', '" + branchDTO.getAddress() + "')";
+                stmt.executeUpdate(sql);
+                return;
+            }
             String sql = "INSERT INTO Branches (id, Name, Address, HeadOfBranchId) " +
                     "VALUES (" + branchDTO.getId() + ", '" + branchDTO.getName() + "', '" + branchDTO.getAddress() + "', " + branchDTO.getHeadOfBranchId() + ")";
             stmt.executeUpdate(sql);

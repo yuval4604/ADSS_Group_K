@@ -1,5 +1,8 @@
 package workers.DomainLayer;
+import workers.DataAcsessLayer.HeadOfBranchDAO;
 import workers.DataAcsessLayer.HeadOfBranchDTO;
+import workers.DataAcsessLayer.WorkerDAO;
+import workers.DataAcsessLayer.WorkerDTO;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,7 +20,7 @@ public class HeadOfBranch extends Worker {
 
     public HeadOfBranch(String name, int id, int bankNum, int globalWage, int hourlyWage, String dateOfStart, boolean fullTimeJob, int totalVacationDays, int currentVacationDays, Branch branch) {
         super(name, id, bankNum, globalWage, hourlyWage, dateOfStart, fullTimeJob, totalVacationDays, currentVacationDays, true);
-        if(id==-1) {
+        if(id==0) {
             allWorkers = new HashMap<>();
             allShifts = new LinkedList<>();
             roleList = new HashMap<>();
@@ -29,12 +32,53 @@ public class HeadOfBranch extends Worker {
         roleList.get("Shift-Manager").add(this);
         _branch = branch;
         minimalWorkers = new HashMap<>();
-        HeadOfBranchDTO hdto = new HeadOfBranchDTO();
+            HeadOfBranchDTO hdto = new HeadOfBranchDTO();
+            hdto.setID(id);
+            if(branch != null)
+                hdto.setBranchID(branch.getID());
+            else
+                hdto.setBranchID(-1);
+            hdto.setLastDayForPrefs(_lastdaytoSetConstraints);
+            HeadOfBranchDAO.addHeadOfBranch(hdto);
+
+    }
+
+    public HeadOfBranch(WorkerDTO w, HeadOfBranchDTO h) {
+        super(w);
+        if(w.getID()==0) {
+            allWorkers = new HashMap<>();
+            allShifts = new LinkedList<>();
+            roleList = new HashMap<>();
+        }
+        _lastdaytoSetConstraints = h.getLastDayForPrefs();
+        allWorkers.put(w.getID(),this);
+        currentShift = null;
+        _branch = Branch.getBranch(h.getBranchID(),this);
+        minimalWorkers = new HashMap<>();
+        for (Map.Entry<String,Integer> entry : HeadOfBranchDAO.getMinimalWorkers(_branch.getID()).entrySet()) {
+            minimalWorkers.put(entry.getKey(),entry.getValue());
+        }
+
     }
 
     public static Worker getWorker(int id) {
-        if(!allWorkers.containsKey(id))
-            return null;
+        if(!allWorkers.containsKey(id)) {
+            try {
+                Worker worker;
+                WorkerDTO w = WorkerDAO.getWorker(id);
+                HeadOfBranchDTO h = HeadOfBranchDAO.getHeadOfBranch(id);
+                if(h == null)
+                    worker = new Worker(w);
+                else
+                    worker = new HeadOfBranch(w,h);
+                if(worker != null) {
+                    allWorkers.put(id,worker);
+                    return worker;
+                }
+            } catch (Exception e) {
+                return null;
+            }
+        }
         return allWorkers.get(id);
     }
     
@@ -56,6 +100,7 @@ public class HeadOfBranch extends Worker {
 
     public static void removeWorkerFromRole(String role, Worker worker) {
         roleList.get(role).remove(worker);
+        HeadOfBranchDAO.deleteRoleList(role,worker.getID());
     }
 
     public Shift getCurrentShift() {
@@ -69,6 +114,7 @@ public class HeadOfBranch extends Worker {
                 return true;
             }
         }
+        HeadOfBranchDAO.getShift(date,dayShift,_branch.getID());
         return false;
     }
 
@@ -77,7 +123,15 @@ public class HeadOfBranch extends Worker {
     }
 
     public boolean contains(int id) {
-        return allWorkers.containsKey(id);
+        boolean cont =  allWorkers.containsKey(id);
+        if(cont)
+            return true;
+        try {
+            boolean b = WorkerDAO.getWorker(id) != null;
+            return b;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean hasRole(String role) {
@@ -112,6 +166,10 @@ public class HeadOfBranch extends Worker {
     protected void setBranch(Branch branch) {
         _branch = branch;
         this.branch = branch.getName();
+        HeadOfBranchDTO hdto = new HeadOfBranchDTO();
+        hdto.setID(this.getID());
+        hdto.setBranchID(branch.getID());
+        HeadOfBranchDAO.updateHeadOfBranchBID(hdto);
     }
 
     public Map<String, Integer> getMinimalWorkersForShift() {
@@ -121,6 +179,10 @@ public class HeadOfBranch extends Worker {
     public void takeOffBranch() {
         _branch = null;
         this.branch = "";
+        HeadOfBranchDTO hdto = new HeadOfBranchDTO();
+        hdto.setID(this.getID());
+        hdto.setBranchID(-1);
+        HeadOfBranchDAO.updateHeadOfBranchBID(hdto);
     }
 
     public void addShift(Shift shift) {
@@ -131,9 +193,14 @@ public class HeadOfBranch extends Worker {
 
     public static void addWorkerToRole(String role, Worker worker) {
         roleList.get(role).add(worker);
+        HeadOfBranchDAO.addRoleList(role,worker.getID());
     }
 
     public void setLastDayToSetConstraints(int day) {
         _lastdaytoSetConstraints = day;
+        HeadOfBranchDTO hdto = new HeadOfBranchDTO();
+        hdto.setID(this.getID());
+        hdto.setLastDayForPrefs(day);
+        HeadOfBranchDAO.updateHeadOfBranchLDP(hdto);
     }
 }

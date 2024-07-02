@@ -2,6 +2,7 @@ package workers.DataAcsessLayer;
 
 import workers.DomainLayer.Worker;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class BranchDTO {
@@ -19,9 +20,13 @@ public class BranchDTO {
         return id;
     }
     public List<Integer> getWorkers() {
+        if (workers == null)
+            workers = new LinkedList<>();
         return workers;
     }
     public List<Integer> getShifts() {
+        if (shifts == null)
+            shifts = new LinkedList<>();
         return shifts;
     }
     public String getAddress() {

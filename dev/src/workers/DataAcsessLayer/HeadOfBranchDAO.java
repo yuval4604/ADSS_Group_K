@@ -1,5 +1,7 @@
 package workers.DataAcsessLayer;
 
+import workers.DomainLayer.Shift;
+
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +20,7 @@ public class HeadOfBranchDAO {
              Statement stmt = conn.createStatement();
         ) {
 
-            String sql = "CREATE TABLE HeadOfBranch " +
+            String sql = "CREATE TABLE IF NOT EXISTS HeadOfBranch " +
                     "(ID INTEGER not NULL, " +
                     "BranchID INTEGER," +
                     "LastDayForPrefs INTEGER," +
@@ -36,7 +38,7 @@ public class HeadOfBranchDAO {
              Statement stmt = conn.createStatement();
         ) {
 
-            String sql = "CREATE TABLE minimalWorkers " +
+            String sql = "CREATE TABLE IF NOT EXISTS minimalWorkers " +
                     "(BranchID INTEGER," +
                     "Role VARCHAR(255)," +
                     "Amount INTEGER," +
@@ -53,7 +55,7 @@ public class HeadOfBranchDAO {
              Statement stmt = conn.createStatement();
         ) {
 
-            String sql = "CREATE TABLE RoleList " +
+            String sql = "CREATE TABLE IF NOT EXISTS RoleList " +
                     "(Role VARCHAR(255)," +
                     "WorkerID INTEGER," +
                     " PRIMARY KEY ( WorkerID, Role )," +
@@ -68,11 +70,26 @@ public class HeadOfBranchDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "INSERT INTO HeadOfBranch (ID, BranchID, LastDayForPrefs) VALUES (" +
-                    headOfBranch.getID() + "," +
-                    headOfBranch.getBranchID() + "," +
-                    headOfBranch.getLastDayForPrefs() + ")";
-            stmt.executeUpdate(sql);
+            if(headOfBranch.getID() == 0)
+            {
+                String sql = "INSERT OR IGNORE INTO HeadOfBranch (ID, LastDayForPrefs) VALUES (" +
+                        headOfBranch.getID() + "," +
+                        headOfBranch.getLastDayForPrefs() + ")";
+                stmt.executeUpdate(sql);
+            }
+            else if(headOfBranch.getBranchID() == -1) {
+                String sql = "INSERT INTO HeadOfBranch (ID, LastDayForPrefs) VALUES (" +
+                        headOfBranch.getID() + "," +
+                        headOfBranch.getLastDayForPrefs() + ")";
+                stmt.executeUpdate(sql);
+            }
+            else {
+                String sql = "INSERT INTO HeadOfBranch (ID, BranchID, LastDayForPrefs) VALUES (" +
+                        headOfBranch.getID() + "," +
+                        headOfBranch.getBranchID() + "," +
+                        headOfBranch.getLastDayForPrefs() + ")";
+                stmt.executeUpdate(sql);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,6 +161,11 @@ public class HeadOfBranchDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
+            if(headOfBranch.getBranchID() == -1) {
+                String sql = "UPDATE HeadOfBranch SET BranchID = NULL WHERE ID = " + headOfBranch.getID();
+                stmt.executeUpdate(sql);
+                return;
+            }
             String sql = "UPDATE HeadOfBranch SET BranchID = " + headOfBranch.getBranchID() + " WHERE ID = " + headOfBranch.getID();
             stmt.executeUpdate(sql);
         } catch (Exception e) {
@@ -189,9 +211,12 @@ public class HeadOfBranchDAO {
              Statement stmt = conn.createStatement();
         ) {
             String sql = "SELECT * FROM HeadOfBranch WHERE ID = " + id;
-            return new HeadOfBranchDTO(stmt.executeQuery(sql).getInt("ID"),
-                    stmt.executeQuery(sql).getInt("BranchID"),
-                    stmt.executeQuery(sql).getInt("LastDayForPrefs"));
+            ResultSet rs = stmt.executeQuery(sql);
+            HeadOfBranchDTO headOfBranch = new HeadOfBranchDTO();
+            headOfBranch.setID(rs.getInt("ID"));
+            headOfBranch.setBranchID(rs.getInt("BranchID"));
+            headOfBranch.setLastDayForPrefs(rs.getInt("LastDayForPrefs"));
+            return headOfBranch;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -288,5 +313,9 @@ public class HeadOfBranchDAO {
             e.printStackTrace();
         }
         return headOfBranches;
+    }
+
+    public static ShiftDTO getShift(String date, boolean dayShift, int id) {
+        return ShiftDAO.getShift(date, dayShift, id);
     }
 }

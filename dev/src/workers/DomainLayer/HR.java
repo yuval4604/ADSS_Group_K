@@ -12,10 +12,10 @@ public class HR extends HeadOfBranch {
 
     public HR(Branch ABranch) {
 
-        super("Admin",-1,0,0,0,"",true,0,0,ABranch);
+        super("Admin",0,0,0,0,"",true,0,0,ABranch);
 
         _branches = new HashMap<>();
-        _branches.put(-1,ABranch);
+        _branches.put(0,ABranch);
         firedWorkers = new HashMap<>();
 
     }

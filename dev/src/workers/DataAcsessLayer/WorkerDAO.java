@@ -13,7 +13,7 @@ public class WorkerDAO  {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "CREATE TABLE Workers " +
+            String sql = "CREATE TABLE IF NOT EXISTS Workers " +
                     "(ID INTEGER not NULL, " +
                     " Name VARCHAR(255), " +
                     " BankNumber INTEGER, " +
@@ -28,8 +28,9 @@ public class WorkerDAO  {
                     "BranchName VARCHAR(255)," +
                     "Licenses VARCHAR(255)," +
                     " FOREIGN KEY (BranchName) REFERENCES Branches(Name)," +
-                    " PRIMARY KEY ( id ))";
+                    " PRIMARY KEY ( ID ))";
             stmt.executeUpdate(sql);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,7 +41,7 @@ public class WorkerDAO  {
              Statement stmt = conn.createStatement();
         ) {
 
-            String sql = "CREATE TABLE Prefs " +
+            String sql = "CREATE TABLE IF NOT EXISTS Prefs " +
                     "(ID INTEGER not NULL, " +
                     " SUNDAY VARCHAR(255), " +
                     " MONDAY VARCHAR(255), " +
@@ -65,11 +66,37 @@ public class WorkerDAO  {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "INSERT INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, BranchName) " +
-                    "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", " + worker.getBranchName() + ")";
-            stmt.executeUpdate(sql);
+            if(worker.getBranchName() == null)
+                worker.setBranchName("");
+            if(worker.getID() == 0)
+            {
+                String sql = "INSERT OR IGNORE INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, BranchName, Licenses) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranchName() + "', '" + worker.getLicensesString() + "')";
+                stmt.executeUpdate(sql);
+            }
+            else {
+                String sql = "INSERT INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, BranchName, Licenses) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranchName() + "', '" + worker.getLicensesString() + "')";
+                stmt.executeUpdate(sql);
+            }
+            if(worker.getPref() == null)
+            {
+                String[][] pref = new String[6][2];
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        pref[i][j] = "can";
+                    }
+                }
+                worker.setPref(pref);
+            }
+            if(worker.getID() == 0){
+                String sql2 = "INSERT OR IGNORE INTO Prefs (ID, SUNDAY, MONDAY, TUEDAY, WEDDAY, THURDAY, FRIDAY, SUNNIGHT, MONNIGHT, TUENIGHT, WEDNIGHT, THURNIGHT, FRINIGHT) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getPref()[0][0] + "', '" + worker.getPref()[1][0] + "', '" + worker.getPref()[2][0] + "', '" + worker.getPref()[3][0] + "', '" + worker.getPref()[4][0] + "', '" + worker.getPref()[5][0] + "', '" + worker.getPref()[0][1] + "', '" + worker.getPref()[1][1] + "', '" + worker.getPref()[2][1] + "', '" + worker.getPref()[3][1] + "', '" + worker.getPref()[4][1] + "', '" + worker.getPref()[5][1] + "')";
+                stmt.executeUpdate(sql2);
+                return;
+            }
             String sql2 = "INSERT INTO Prefs (ID, SUNDAY, MONDAY, TUEDAY, WEDDAY, THURDAY, FRIDAY, SUNNIGHT, MONNIGHT, TUENIGHT, WEDNIGHT, THURNIGHT, FRINIGHT) " +
-                    "VALUES (" + worker.getID() + ", " + worker.getPref()[0][0] + ", " + worker.getPref()[1][0] + ", " + worker.getPref()[2][0] + ", " + worker.getPref()[3][0] + ", " + worker.getPref()[4][0] + ", " + worker.getPref()[5][0] + ", " + worker.getPref()[0][1] + ", " + worker.getPref()[1][1] + ", " + worker.getPref()[2][1] + ", " + worker.getPref()[3][1] + ", " + worker.getPref()[4][1] + ", " + worker.getPref()[5][1] + ")";
+                    "VALUES (" + worker.getID() + ", '" + worker.getPref()[0][0] + "', '" + worker.getPref()[1][0] + "', '" + worker.getPref()[2][0] + "', '" + worker.getPref()[3][0] + "', '" + worker.getPref()[4][0] + "', '" + worker.getPref()[5][0] + "', '" + worker.getPref()[0][1] + "', '" + worker.getPref()[1][1] + "', '" + worker.getPref()[2][1] + "', '" + worker.getPref()[3][1] + "', '" + worker.getPref()[4][1] + "', '" + worker.getPref()[5][1] + "')";
                     stmt.executeUpdate(sql2);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,7 +129,7 @@ public class WorkerDAO  {
             worker.setBankAccount(rs.getInt("BankNumber"));
             worker.setGWage(rs.getInt("GWage"));
             worker.setHWage(rs.getInt("HWage"));
-            worker.setStartDate(LocalDate.of(Integer.parseInt(rs.getString("DateOfStart").split("\\.")[2]), Integer.parseInt(rs.getString("DateOfStart").split("\\.")[1]), Integer.parseInt(rs.getString("DateOfStart").split("\\.")[0])));
+            worker.setStartDate(rs.getString("DateOfStart"));
             worker.setFTime(rs.getBoolean("FullTime"));
             worker.setTVDays(rs.getInt("TotalVacationDays"));
             worker.setCVDays(rs.getInt("CurrentVacationDays"));
@@ -251,7 +278,7 @@ public class WorkerDAO  {
                 licenses = licenses.substring(0, licenses.length() - 2);
             else
                 licenses = "None";
-            String sql = "UPDATE Workers SET Licenses = " + licenses + " WHERE ID = " + worker.getID();
+            String sql = "UPDATE Workers SET Licenses = '" + licenses + "' WHERE ID = " + worker.getID();
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();

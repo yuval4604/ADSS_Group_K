@@ -9,7 +9,7 @@ public class WorkerDTO {
     private int bankAccount;
     private int HWage;
     private int GWage;
-    private LocalDate startDate;
+    private String startDate;
     private boolean FTime;
     private int TVDays;
     private int CVDays;
@@ -34,7 +34,14 @@ public class WorkerDTO {
         return GWage;
     }
     public String getStartDate() {
-        return startDate.getDayOfMonth() + "/" + startDate.getMonthValue() + "/" + startDate.getYear();
+        return startDate;
+    }
+    public String getLicensesString() {
+        StringBuilder sb = new StringBuilder();
+        for (String license : licenses) {
+            sb.append(license).append(",");
+        }
+        return sb.toString();
     }
     public boolean getFTime() {
         return FTime;
@@ -72,7 +79,7 @@ public class WorkerDTO {
     public void setGWage(int GWage) {
         this.GWage = GWage;
     }
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
     public void setFTime(boolean FTime) {

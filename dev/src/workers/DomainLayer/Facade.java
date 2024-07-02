@@ -22,11 +22,11 @@ public class Facade {
     public Facade(String password) {
         _lastUpdate = LocalDate.now();
         loginInfos = new HashMap<>();
-        loginInfos.put(-1, password);
-        Branch ABranch = new Branch("Admin", -1, "Admin", null);
+        loginInfos.put(0, password);
+        Branch ABranch = new Branch("Admin", 0, "Admin", null);
         _worker = new HR(ABranch);
         ABranch.setHeadOfBranch(_worker);
-        HeadOfBranch.allWorkers.put(-1, _worker);
+        HeadOfBranch.allWorkers.put(0, _worker);
 
         WorkerDAO.createWorkerTable();
         ShiftDAO.createShiftTable();
@@ -246,9 +246,7 @@ public class Facade {
     }
 
     public void load() {
-        login(-1,"admin");
         loginInfos.put(22,"Benjamin");
-        ((HR)_worker).addBranch("Tel-Aviv",1,"Tel-Aviv",new HeadOfBranch("Benjamin",22,2,2,2,"02.02.2022",true,2,2,null));
         loginInfos.put(1,"Alfred");
         loginInfos.put(2,"Benjamin");
         loginInfos.put(3,"Casey");
@@ -264,65 +262,15 @@ public class Facade {
         loginInfos.put(13,"Margo");
         loginInfos.put(14,"Nathan");
         loginInfos.put(15,"Oliver");
-        ((HR)_worker).addWorker(new Worker("Alfred",1,1,1,1,"02.02.2022",true,1,1,false));
-        ((HR)_worker).addWorker(new Worker("Benjamin",2,2,2,2,"03.02.2022",true,2,2,false));
-        ((HR)_worker).addWorker(new Worker("Casey",3,3,3,3,"04.02.2022",true,3,3,false));
-        ((HR)_worker).addWorker(new Worker("Daniel",4,4,4,4,"05.02.2022",true,4,4,false));
-        ((HR)_worker).addWorker(new Worker("Emily",5,5,5,5,"02.02.2022",true,5,5,false));
-        ((HR)_worker).addWorker(new Worker("Francis",6,6,6,6,"02.02.2022",true,6,6,false));
-        ((HR)_worker).addWorker(new Worker("George",7,7,7,7,"02.02.2022",true,7,7,false));
-        ((HR)_worker).addWorker(new Worker("Hanna",8,8,8,8,"02.02.2022",true,8,8,false));
-        ((HR)_worker).addWorker(new Worker("Ian",9,9,9,9,"02.02.2022",true,9,9,false));
-        ((HR)_worker).addWorker(new Worker("John",10,10,10,10,"02.02.2022",true,10,10,false));
-        ((HR)_worker).addWorker(new Worker("Kelly",11,11,11,11,"02.02.2022",true,11,11,false));
-        ((HR)_worker).addWorker(new Worker("Louis",12,12,12,12,"02.02.2022",true,12,12,false));
-        ((HR)_worker).addWorker(new Worker("Margo",13,13,13,13,"02.02.2022",true,13,13,false));
-        ((HR)_worker).addWorker(new Worker("Nathan",14,14,14,14,"02.02.2022",true,14,14,false));
-        ((HR)_worker).addWorker(new Worker("Oliver",15,15,15,15,"02.02.2022",true,15,15,false));
-        logOut();
-        login(3, "Casey");
-        addLicense("C");
-        logOut();
-        login(10, "John");
-        addLicense("C");
-        logOut();
+
         login(22,"Benjamin");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 1,"Cashier");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 2,"Cashier");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 3,"Driver");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 4,"Cleaner");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 5,"Cleaner");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 6,"Quartermaster");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 7,"Quartermaster");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 8,"Packer");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 9,"Packer");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 10,"Driver");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 11,"Shift-Manager");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 12,"Butcher");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 13,"Delly-Man");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 14, "Guard");
-        HeadOfBranchManager.addRole(((HeadOfBranch)_worker), 15, "Guard");
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14));
-        HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15));
         int plus = 0;
         if(LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY)
             plus++;
         if(LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY)
             plus+=2;
-        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false,LocalDate.now().getDayOfWeek().getValue());
+        HeadOfBranch hb = (HeadOfBranch)_worker;
+        HeadOfBranchManager.createShift(hb, HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false,LocalDate.now().getDayOfWeek().getValue());
         HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true,LocalDate.now().getDayOfWeek().getValue());
         HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false,1);
         HeadOfBranchManager.setHalfDayShiftOff(((HeadOfBranch)_worker), (LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),true,1);
@@ -430,7 +378,7 @@ public class Facade {
 
         public void checkUpdateDay () {
             if (_lastUpdate.isBefore(LocalDate.now())) {
-                if (_worker.getID() == -1)
+                if (_worker.getID() == 0)
                     ((HR)_worker).checkUpdateDay();
                 else if (_worker.getIsBM())
                     HeadOfBranchManager.checkUpdateDay(_worker);
@@ -442,7 +390,7 @@ public class Facade {
 
         public boolean fireWorker( int id){
 
-            if(_worker.getID() == -1 && id != -1 && loginInfos.containsKey(id)) {
+            if(_worker.getID() == 0 && id != 0 && loginInfos.containsKey(id)) {
                 ((HR)_worker).fireWorker(id);
                 loginInfos.remove(id);
                 return true;
@@ -450,7 +398,7 @@ public class Facade {
             return false;
         }
         public boolean endContranct30DaysFromNow( int id){
-            if(_worker.getID() == -1 && id != -1 && loginInfos.containsKey(id)) {
+            if(_worker.getID() == 0 && id != 0 && loginInfos.containsKey(id)) {
                 ((HR)_worker).endContranct30DaysFromNow(id);
                 return true;
             }
@@ -484,7 +432,7 @@ public class Facade {
         }
 
         public boolean addBranch(String name, int id, String address, int headOfBranchID) {
-            if(_worker.getID() != -1) {
+            if(_worker.getID() != 0) {
                 return false;
             }
             HeadOfBranch headOfBranch = (HeadOfBranch) HeadOfBranch.getWorker(headOfBranchID);
@@ -492,7 +440,7 @@ public class Facade {
         }
 
         public boolean removeBranch(int id) {
-            if(_worker.getID() != -1) {
+            if(_worker.getID() != 0) {
                 return false;
             }
             return ((HR)_worker).removeBranch(id);
@@ -517,14 +465,14 @@ public class Facade {
         }
 
         public String showBranches () {
-            if(_worker.getID() != -1) {
+            if(_worker.getID() != 0) {
                 return "Error: no permission to do that";
             }
             return ((HR)_worker).showBranches();
         }
 
         public boolean setHeadOfBranch(int branchID, int ID){
-            if(_worker.getID() != -1) {
+            if(_worker.getID() != 0) {
                 return false;
             }
             Worker BM = HeadOfBranch.getWorker(ID);
@@ -545,7 +493,7 @@ public class Facade {
         }
 
     public boolean getIsHR() {
-        return _worker.getID() == -1;
+        return _worker.getID() == 0;
     }
 
     public String getBranch() {

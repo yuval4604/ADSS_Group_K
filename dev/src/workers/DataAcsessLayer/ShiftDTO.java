@@ -13,6 +13,8 @@ public class ShiftDTO {
     private Map<String, List<Integer>> workers; // map contains a role and a list of workers
     private int branchId;
 
+    private boolean needQuartermaster;
+
     public boolean getActive() {
         return active;
     }
@@ -34,6 +36,10 @@ public class ShiftDTO {
     public int getBranchId() {
         return branchId;
     }
+    public boolean getNeedQM() {
+        return needQuartermaster;
+    }
+
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -54,6 +60,9 @@ public class ShiftDTO {
     }
     public void setBranchId(int branchId) {
         this.branchId = branchId;
+    }
+    public void setNeedQM(boolean needQuartermaster) {
+        this.needQuartermaster = needQuartermaster;
     }
 
 }

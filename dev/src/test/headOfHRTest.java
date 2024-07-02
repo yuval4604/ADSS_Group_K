@@ -126,7 +126,7 @@ public class headOfHRTest {
     @Test
     void addWorker() {
         facade.logOut();
-        facade.login(-1,"1234");
+        facade.login(0,"1234");
         facade.addWorker("worker5",5,5,true,0,0,"11.11.11",10,10);
         Assertions.assertTrue(facade.login(5,"worker5"));
     }

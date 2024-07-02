@@ -1,5 +1,8 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.ShiftDAO;
+import workers.DataAcsessLayer.ShiftDTO;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,6 +31,15 @@ public class Shift {
         _localDate = LocalDate.of(Integer.parseInt(date.split("\\.")[2]), Integer.parseInt(date.split("\\.")[1]), Integer.parseInt(date.split("\\.")[0]));
         _branch = branch;
         needQuartermaster = false;
+        ShiftDTO shiftDTO = new ShiftDTO();
+        shiftDTO.setActive(active);
+        shiftDTO.setBranchId(branch.getID());
+        shiftDTO.setDate(date);
+        shiftDTO.setDayOfWeek(dayOfWeek);
+        shiftDTO.setDayShift(dayShift);
+        shiftDTO.setManagerId(sManager.getID());
+        shiftDTO.setNeedQM(needQuartermaster);
+        ShiftDAO.insertShift(shiftDTO);
     }
 
     public String getDate() {
@@ -45,6 +57,12 @@ public class Shift {
             workers.put(role, new LinkedList<>());
             workers.get(role).add(worker);
         }
+        ShiftDTO shiftDTO = new ShiftDTO();
+        shiftDTO.setDate(_date);
+        shiftDTO.setDayShift(_dayShift);
+        shiftDTO.setBranchId(_branch.getID());
+
+        ShiftDAO.insertWorkerToShift(shiftDTO, role, worker.getID());
     }
 
     public int getDayOfWeek() {
@@ -75,6 +93,12 @@ public class Shift {
 
     public void setNeedQuartermaster(boolean b) {
         needQuartermaster = b;
+        ShiftDTO shiftDTO = new ShiftDTO();
+        shiftDTO.setDate(_date);
+        shiftDTO.setDayShift(_dayShift);
+        shiftDTO.setBranchId(_branch.getID());
+        shiftDTO.setNeedQM(b);
+        ShiftDAO.updateNeedQM(shiftDTO);
     }
 
     public boolean getNeedQuartermaster() {
