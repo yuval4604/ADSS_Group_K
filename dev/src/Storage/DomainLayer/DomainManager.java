@@ -340,14 +340,7 @@ public class DomainManager {
             Product p = this.productMap.remove(catalogNumber);
             if(p == null) p = this.repo.getProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
-            for (int i = 0; i < inStore.length; i++) {
-                for(int j = 0; j < inStore[i]; j++)
-                    p.removeOne(false, expirationDate[i]);
-            }
-            for (int i = 0; i < inStorage.length; i++) {
-                for(int j = 0; j < inStorage[i]; j++)
-                    p.removeOne(true, expirationDate[i]);
-            }
+            p.moveToDamage(inStore, inStorage, expirationDate);
             this.productMap.put(catalogNumber, p);
             for (int i = 0; i < inStore.length; i++) {
                 this.repo.updateExpiration(p.getCatalogNumber(), expirationDate[i], p.getExpirationDates().get(expirationDate[i]).getKey(), p.getExpirationDates().get(expirationDate[i]).getValue());

@@ -21,7 +21,7 @@ public class CLI {
         Scanner scan = new Scanner(System.in);
         String choice = "";
         String info;
-        while(!choice.equals("21")){
+        while(!choice.equals("24")){
             if(!isDamageReportAlerted && LocalDate.now().getDayOfMonth() == DAY_OF_MONTH){
                 System.out.println("It is time to produce the damage report. Please choose option 18.");
                 isDamageReportAlerted = true;
