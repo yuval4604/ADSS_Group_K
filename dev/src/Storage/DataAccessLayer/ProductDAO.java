@@ -186,12 +186,14 @@ public class ProductDAO {
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product where (catalogNumber in (SELECT catalogNumber FROM expiredProducts)) OR (damagedQuantity > 0) ");
                 ResultSet rs = stmt.executeQuery();
                 List<Product> products = new ArrayList<>();
+                List<Integer> SNN = new ArrayList<>();
                 while (rs.next()) {
                     Product p = new Product(rs.getInt("catalogNumber"), rs.getString("name"), rs.getString("category"), rs.getString("subCategory"), rs.getString("size"), rs.getDouble("buyPrice"), rs.getDouble("salePrice"), rs.getDouble("discount"), rs.getDouble("supplierDiscount"), rs.getString("manufacturer"), rs.getString("aisle"), rs.getInt("minimalQuantity"));
                     p.setStorageQuantity(rs.getInt("storageQuantity"));
                     p.setStoreQuantity(rs.getInt("storeQuantity"));
                     p.setDamagedQuantity(rs.getInt("damagedQuantity"));
                     stmt = conn.prepareStatement("SELECT * FROM expirationDates WHERE catalogNumber = ?");
+                    SNN.add(rs.getInt("catalogNumber"));
                     stmt.setInt(1, rs.getInt("catalogNumber"));
                     ResultSet rs2 = stmt.executeQuery();
                     Map<LocalDate, Map.Entry<Integer, Integer>> expirationDates = new HashMap<>();
@@ -210,12 +212,31 @@ public class ProductDAO {
                     products.add(p);
                 }
                 conn.commit();
+                emptyExpiredAndDamagedProducts(SNN);
                 return products;
             }
         } catch (SQLException e) {
             throw e;
         }
         return null;
+    }
+
+    private void emptyExpiredAndDamagedProducts(List<Integer> snn) {
+        try {
+            if (conn != null) {
+                PreparedStatement stmt = conn.prepareStatement("DELETE FROM expiredProducts");
+                stmt.executeUpdate();
+                conn.commit();
+                stmt = conn.prepareStatement("UPDATE product SET damagedQuantity = 0 WHERE catalogNumber = ?");
+                for (int i : snn) {
+                    stmt.setInt(1, i);
+                    stmt.executeUpdate();
+                    conn.commit();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Map<Integer, Integer> expiredCount () throws SQLException {
