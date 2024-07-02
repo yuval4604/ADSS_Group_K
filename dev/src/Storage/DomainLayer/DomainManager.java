@@ -40,13 +40,6 @@ public class DomainManager {
         if(sizes == null ||  sizes.size() == 0) sizes = new ArrayList<>();
     }
 
-    public Repository getRepo() {
-        return repo;
-    }
-
-    public void setRepo(Repository repo) {
-        this.repo = repo;
-    }
 
     public void addProduct(Product product) throws Exception {
         try {
@@ -78,10 +71,6 @@ public class DomainManager {
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    public Map<Integer, Product> getProductMap() {
-        return this.productMap;
     }
 
     public void removeProduct(int catalogNumber) throws Exception {

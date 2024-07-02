@@ -18,10 +18,6 @@ public class PresentationController {
         this.serviceController = new ServiceController(productMap, repo);
     }
 
-    public PresentationController(ServiceController serviceController) {
-        this.serviceController = serviceController;
-    }
-
     private String addProduct(int catalogNumber, String name, String category, String subCategory, String size, double buyPrice, double salePrice, double discount, double supplierDiscount, String manufacturer, String aisle, int minimalQuantity) throws Exception {
         try {
             this.serviceController.addProduct(catalogNumber, name, category, subCategory, size, buyPrice, salePrice, discount, supplierDiscount, manufacturer, aisle, minimalQuantity);

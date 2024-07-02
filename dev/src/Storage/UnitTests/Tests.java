@@ -187,15 +187,15 @@ public class Tests {
 
         Assert.assertEquals(35, manager.getProduct(100).getStorageQuantity());
         Assert.assertEquals(1, manager.getProduct(100).getStoreQuantity());
-        Assert.assertEquals(0, manager.getProduct(100).getDamageQuantity());
+        Assert.assertEquals(17, manager.getProduct(100).getDamageQuantity());
 
         Assert.assertEquals(32, manager.getProduct(101).getStorageQuantity());
         Assert.assertEquals(2, manager.getProduct(101).getStoreQuantity());
-        Assert.assertEquals(0, manager.getProduct(101).getDamageQuantity());
+        Assert.assertEquals(5, manager.getProduct(101).getDamageQuantity());
 
         Assert.assertEquals(0, manager.getProduct(102).getStorageQuantity());
         Assert.assertEquals(10, manager.getProduct(102).getStoreQuantity());
-        Assert.assertEquals(0, manager.getProduct(102).getDamageQuantity());
+        Assert.assertEquals(10, manager.getProduct(102).getDamageQuantity());
     }
 
     @Test
@@ -228,7 +228,7 @@ public class Tests {
                 "Size: " + "Small" + "\n" +
                 "Aisle: " + 14 + "\n" +
                 "Expired quantity: " + 0 + "\n" +
-                "Damaged quantity: " + 0  + "\n", manager.getProduct(100).damagedReportToString());
+                "Damaged quantity: " + 17  + "\n", manager.getProduct(100).damagedReportToString());
     }
 
     @Test
