@@ -12,7 +12,7 @@ public class Repository {
 
     private ProductDAO dao;
 
-    public Repository() {
+    public Repository() throws SQLException {
         this.dao = new ProductDAO();
     }
 
@@ -103,5 +103,9 @@ public class Repository {
             report.append(product.toString()).append("\n");
         }
         return report.toString();
+    }
+
+    public void deleteAll() {
+        dao.deleteAll();
     }
 }

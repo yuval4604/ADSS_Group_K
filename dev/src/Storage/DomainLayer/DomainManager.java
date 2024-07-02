@@ -4,6 +4,7 @@ import Storage.DataAccessLayer.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,9 @@ public class DomainManager {
         categories = repo.getCategories();
         subCategories = repo.getSubCategories();
         sizes = repo.getSizes();
+        if(categories == null || categories.size() == 0) categories = new ArrayList<>();
+        if(subCategories == null || subCategories.size() == 0) subCategories = new ArrayList<>();
+        if(sizes == null ||  sizes.size() == 0) sizes = new ArrayList<>();
     }
 
     public DomainManager(Map<Integer, Product> productMap, Repository repo) {
@@ -43,7 +47,7 @@ public class DomainManager {
             if(categories == null || subCategories == null || sizes == null)
                 throw new IllegalArgumentException("Categories not initialized");
             if(product == null)
-                throw new IllegalArgumentException("Product does not exist");
+                throw new IllegalArgumentException("Product is null");
             if (this.productMap.containsKey(product.getCatalogNumber())) {
                 throw new IllegalArgumentException("Product with this catalog number already exists");
             }
@@ -89,30 +93,35 @@ public class DomainManager {
     // in the presentaion we will force the user to choose all the higher level categories of a chosen category
     public List<Product> getProductsByCategories(List<String> categoriesList) throws Exception {
         try {
-            for (String category : categoriesList) {
-                String[] divided = category.split(",");
-                switch (divided.length){
-                    case 1:
-                        if(!categories.contains(divided[0]))
-                            throw new IllegalArgumentException("Invalid category");
-                        break;
-                    case 2:
-                        if(!categories.contains(divided[0]) || !subCategories.contains(divided[1]))
-                            throw new IllegalArgumentException("Invalid category");
-                        break;
-                    case 3:
-                        if(!categories.contains(divided[0]) || !subCategories.contains(divided[1]) || !sizes.contains(divided[2]))
-                            throw new IllegalArgumentException("Invalid category");
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Invalid category");
-
-                }
-            }
+            checkGoodCategories(categoriesList);
             return this.repo.getProductsByCategories(categoriesList);
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public boolean checkGoodCategories(List<String> categoriesList) {
+        for (String category : categoriesList) {
+            String[] divided = category.split(",");
+            switch (divided.length){
+                case 1:
+                    if(!categories.contains(divided[0]))
+                        throw new IllegalArgumentException("Invalid category");
+                    break;
+                case 2:
+                    if(!categories.contains(divided[0]) || !subCategories.contains(divided[1]))
+                        throw new IllegalArgumentException("Invalid category");
+                    break;
+                case 3:
+                    if(!categories.contains(divided[0]) || !subCategories.contains(divided[1]) || !sizes.contains(divided[2]))
+                        throw new IllegalArgumentException("Invalid category");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid category");
+
+            }
+        }
+        return true;
     }
 
     public void moveProductToStore(int catalogNumber, LocalDate expirationDate, int quantity) throws Exception {
@@ -120,9 +129,15 @@ public class DomainManager {
             Product product = this.productMap.remove(catalogNumber);
             if(product == null) product = this.repo.getProduct(catalogNumber);
             if(product == null) throw new IllegalArgumentException("Product does not exist");
-            product.moveProductToStore(expirationDate, quantity);
-            this.productMap.put(catalogNumber, product);
-            this.repo.updateExpiration(product.getCatalogNumber(), expirationDate, product.getStoreQuantity(), product.getStorageQuantity());
+            try {
+                product.moveProductToStore(expirationDate, quantity);
+            } catch (Exception e) {
+                throw e;
+            }
+            finally {
+                this.productMap.put(catalogNumber, product);
+                this.repo.updateExpiration(product.getCatalogNumber(), expirationDate, product.getStoreQuantity(), product.getStorageQuantity());
+            }
         } catch (Exception e) {
             throw e;
         }
@@ -171,7 +186,8 @@ public class DomainManager {
             if(product == null) throw new IllegalArgumentException("Product does not exist");
             product.addByExpirationDate(inStore, inStorage, expirationDate);
             this.productMap.put(catalogNumber, product);
-            this.repo.updateExpiration(product.getCatalogNumber(), expirationDate, product.getStoreQuantity(), product.getStorageQuantity());
+            this.repo.updateProduct(catalogNumber, Map.of("storeQuantity", String.valueOf(product.getStoreQuantity()), "storageQuantity", String.valueOf(product.getStorageQuantity())));
+            this.repo.updateExpiration(product.getCatalogNumber(), expirationDate, product.getExpirationDates().get(expirationDate).getKey(), product.getExpirationDates().get(expirationDate).getValue());
         } catch (Exception e) {
             throw e;
         }
@@ -285,7 +301,6 @@ public class DomainManager {
 
     public void addCategory(String category) {
         try {
-            if(categories == null) categories = this.repo.getCategories();
             if(categories.contains(category)) throw new IllegalArgumentException("Category already exists");
             categories.add(category);
             this.repo.addCategory(category);
@@ -296,7 +311,6 @@ public class DomainManager {
 
     public void addSubCategory(String subCategory) {
         try {
-            if(subCategories == null) subCategories = this.repo.getSubCategories();
             if(subCategories.contains(subCategory)) throw new IllegalArgumentException("Sub Category already exists");
             subCategories.add(subCategory);
             this.repo.addSubCategory(subCategory);
@@ -307,7 +321,6 @@ public class DomainManager {
 
     public void addSize(String size) {
         try {
-            if(sizes == null) sizes = this.repo.getSizes();
             if(sizes.contains(size)) throw new IllegalArgumentException("Size already exists");
             sizes.add(size);
             this.repo.addSize(size);
@@ -340,6 +353,7 @@ public class DomainManager {
 
     public void updateDiscountForCategory(List<String> categories, double discount) {
         try {
+            checkGoodCategories(categories);
             for (Product p : this.repo.getProductsByCategories(categories)) {
                 p.setDiscount(discount);
                 this.repo.updateProduct(p.getCatalogNumber(), Map.of("discount", String.valueOf(discount)));
@@ -368,6 +382,18 @@ public class DomainManager {
             return sb.toString();
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    public void deleteAll() {
+        try {
+            this.repo.deleteAll();
+            this.productMap.clear();
+            this.categories = new ArrayList<>();
+            this.subCategories = new ArrayList<>();
+            this.sizes = new ArrayList<>();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 }

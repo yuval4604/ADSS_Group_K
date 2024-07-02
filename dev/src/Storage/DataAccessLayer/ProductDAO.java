@@ -13,22 +13,41 @@ import java.util.Map;
 
 public class ProductDAO {
     private final String URL = "jdbc:sqlite:" + Paths.get("data_layer.db").toAbsolutePath().toString().replace("\\", "/");
+    private Connection conn;
 
-    public void rollback() {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+    public ProductDAO() throws SQLException {
+        conn = DriverManager.getConnection(URL);
+        if(conn == null)
+            throw new SQLException("Connection failed");
+        conn.setAutoCommit(false);
+    }
+
+    public void rollback(Savepoint savePoint) throws SQLException {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
-                conn.rollback();
+                conn.rollback(savePoint);
+                conn.commit();
+                    conn.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Product getProduct(int catalogNumber) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+    public Savepoint setSavepoint() throws SQLException {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
+                return conn.setSavepoint();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Product getProduct(int catalogNumber) throws SQLException {
+        try {
+            if (conn != null) {
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product WHERE catalogNumber = ?");
                 stmt.setInt(1, catalogNumber);
                 ResultSet rs = stmt.executeQuery();
@@ -51,6 +70,7 @@ public class ProductDAO {
                         expiredProducts.put(LocalDate.parse(rs.getString("expiredDate")), rs.getInt("quantity"));
                     }
                     p.setExpiredProducts(expiredProducts);
+                    conn.commit();
                     return p;
                 }
                 return null;
@@ -62,9 +82,8 @@ public class ProductDAO {
     }
 
     public void addProduct(Product product) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO product (catalogNumber, name, category, " +
                         "subCategory, size, buyPrice, salePrice, discount, supplierDiscount, storageQuantity, storeQuantity," +
                         " damagedQuantity, manufacturer, minimalQuantity, aisle) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -84,6 +103,7 @@ public class ProductDAO {
                 stmt.setInt(14, product.getMinimalQuantity());
                 stmt.setString(15, product.getAisle());
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -91,9 +111,8 @@ public class ProductDAO {
     }
 
     public void updateProduct(int catalogNumber, Map<String, String> map) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 String query = "UPDATE product SET ";
                 for (Map.Entry<String, String> entry : map.entrySet()) {
                     query += entry.getKey() + " = " + entry.getValue() + ", ";
@@ -102,6 +121,7 @@ public class ProductDAO {
                 PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setInt(1, catalogNumber);
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -109,9 +129,8 @@ public class ProductDAO {
     }
 
     public void deleteProduct(int catalogNumber) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM product WHERE catalogNumber = ?");
                 stmt.setInt(1, catalogNumber);
                 stmt.executeUpdate();
@@ -121,6 +140,7 @@ public class ProductDAO {
                 stmt = conn.prepareStatement("DELETE FROM expiredProducts WHERE catalogNumber = ?");
                 stmt.setInt(1, catalogNumber);
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -128,9 +148,8 @@ public class ProductDAO {
     }
 
     public List<Product> getProductsByCategories(List<String[]> categories) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 String query = "SELECT * FROM product WHERE ";
                 for (String[] categoryList : categories) {
                     switch (categoryList.length) {
@@ -173,6 +192,7 @@ public class ProductDAO {
                     p.setExpiredProducts(expiredProducts);
                     products.add(p);
                 }
+                conn.commit();
                 return products;
             }
         } catch (SQLException e) {
@@ -182,9 +202,8 @@ public class ProductDAO {
     }
 
     public List<Product> getAllProducts() throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product");
                 ResultSet rs = stmt.executeQuery();
                 List<Product> products = new ArrayList<>();
@@ -209,6 +228,7 @@ public class ProductDAO {
                     p.setExpiredProducts(expiredProducts);
                     products.add(p);
                 }
+                conn.commit();
                 return products;
             }
         } catch (SQLException e) {
@@ -218,15 +238,15 @@ public class ProductDAO {
     }
 
     public Map<Integer, Integer> expiredCount () throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT catalogNumber, SUM(quantity) FROM expiredProducts GROUP BY catalogNumber");
                 ResultSet rs = stmt.executeQuery();
                 Map<Integer, Integer> expiredCount = new HashMap<>();
                 while (rs.next()) {
                     expiredCount.put(rs.getInt("catalogNumber"), rs.getInt("SUM(quantity)"));
                 }
+                conn.commit();
                 return expiredCount;
             }
         } catch (SQLException e) {
@@ -236,16 +256,16 @@ public class ProductDAO {
     }
 
     public String alertOnMinimalQuantity () throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT name FROM product WHERE storageQuantity + storeQuantity < minimalQuantity");
                 ResultSet rs = stmt.executeQuery();
                 String alert = "";
                 while (rs.next()) {
                     alert += rs.getString("name") + "\n";
                 }
-                return alert;
+                conn.commit();
+                return alert.substring(0, alert.length() - 1);
             }
         } catch (SQLException e) {
             throw e;
@@ -256,9 +276,8 @@ public class ProductDAO {
 
     public void updateExpiration ( int catalogNumber, LocalDate expirationDate,int storeQuantity,
     int storageQuantity) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM expirationDates WHERE catalogNumber = ? AND expirationDate = ?");
                 stmt.setInt(1, catalogNumber);
                 stmt.setString(2, expirationDate.toString());
@@ -278,6 +297,7 @@ public class ProductDAO {
                     stmt.setInt(2, storeQuantity);
                     stmt.executeUpdate();
                 }
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -285,15 +305,14 @@ public class ProductDAO {
     }
 
     public void updateExpired ( int catalogNumber, LocalDate expirationDate,int newAmount) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
-
                 PreparedStatement stmt = conn.prepareStatement("UPDATE expiredProducts SET quantity = ? WHERE catalogNumber = ? AND expiredDate = ?");
                 stmt.setInt(2, catalogNumber);
                 stmt.setString(3, expirationDate.toString());
                 stmt.setInt(1, newAmount);
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -301,15 +320,15 @@ public class ProductDAO {
     }
 
     public List<String> getCategories() throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM categories");
                 ResultSet rs = stmt.executeQuery();
                 List<String> categories = new ArrayList<>();
                 while (rs.next()) {
                     categories.add(rs.getString("category"));
                 }
+                conn.commit();
                 return categories;
             }
         } catch (SQLException e) {
@@ -319,12 +338,12 @@ public class ProductDAO {
     }
 
     public void addCategory(String category) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO categories (category) VALUES (?)");
                 stmt.setString(1, category);
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -332,15 +351,15 @@ public class ProductDAO {
     }
 
     public List<String> getSubCategories() throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM subCategories");
                 ResultSet rs = stmt.executeQuery();
                 List<String> subCategories = new ArrayList<>();
                 while (rs.next()) {
                     subCategories.add(rs.getString("subCategory"));
                 }
+                conn.commit();
                 return subCategories;
             }
         } catch (SQLException e) {
@@ -350,12 +369,12 @@ public class ProductDAO {
     }
 
     public void addSubCategory(String subCategory) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO subCategories (subCategory) VALUES (?)");
                 stmt.setString(1, subCategory);
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
@@ -363,15 +382,15 @@ public class ProductDAO {
     }
 
     public List<String> getSizes() throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM sizes");
                 ResultSet rs = stmt.executeQuery();
                 List<String> sizes = new ArrayList<>();
                 while (rs.next()) {
                     sizes.add(rs.getString("size"));
                 }
+                conn.commit();
                 return sizes;
             }
         } catch (SQLException e) {
@@ -381,15 +400,37 @@ public class ProductDAO {
     }
 
     public void addSize(String size) throws SQLException {
-        try (Connection conn = DriverManager.getConnection(URL)) {
+        try {
             if (conn != null) {
-                conn.setAutoCommit(false);
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO sizes (size) VALUES (?)");
                 stmt.setString(1, size);
                 stmt.executeUpdate();
+                conn.commit();
             }
         } catch (SQLException e) {
             throw e;
+        }
+    }
+
+    public void deleteAll() {
+        try {
+            if (conn != null) {
+                PreparedStatement stmt = conn.prepareStatement("DELETE FROM product");
+                stmt.executeUpdate();
+                stmt = conn.prepareStatement("DELETE FROM expirationDates");
+                stmt.executeUpdate();
+                stmt = conn.prepareStatement("DELETE FROM expiredProducts");
+                stmt.executeUpdate();
+                stmt = conn.prepareStatement("DELETE FROM categories");
+                stmt.executeUpdate();
+                stmt = conn.prepareStatement("DELETE FROM subCategories");
+                stmt.executeUpdate();
+                stmt = conn.prepareStatement("DELETE FROM sizes");
+                stmt.executeUpdate();
+                conn.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
