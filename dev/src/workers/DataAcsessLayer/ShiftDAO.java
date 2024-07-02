@@ -11,7 +11,7 @@ public class ShiftDAO {
     private ResultSet resultSet;
 
 
-    private static final String DB_URL = "jdbc:sqlite:workers/DataAcsessLayer/WorkersDB.db"; //+ Paths.get("workers/DataAcsessLayer/WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
+    private static final String DB_URL = "jdbc:sqlite:" + Paths.get("WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
 
 
     public static void createShiftTable() {

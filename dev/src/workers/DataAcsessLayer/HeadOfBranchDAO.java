@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HeadOfBranchDAO {
-    private static final String DB_URL = "jdbc:sqlite:"+ Paths.get("workers/DataAcsessLayer/WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
+    private static final String DB_URL = "jdbc:sqlite:" +  Paths.get("WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
 
     public static void createHeadOfBranchTable() {
         try (Connection conn = DriverManager.getConnection(DB_URL);

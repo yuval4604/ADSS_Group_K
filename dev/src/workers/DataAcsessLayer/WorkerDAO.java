@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDAO  {
-    private static final String DB_URL = "jdbc:sqlite:workers/DataAcsessLayer/WorkersDB.db"; //+ Paths.get("workers/DataAcsessLayer/WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
+    private static final String DB_URL = "jdbc:sqlite:" + Paths.get("WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
 
     public static void createWorkerTable() {
         try (Connection conn = DriverManager.getConnection(DB_URL);

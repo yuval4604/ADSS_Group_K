@@ -2,7 +2,6 @@ package workers.DataAcsessLayer;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class WorkerDTO {
     private int id;

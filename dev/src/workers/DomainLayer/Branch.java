@@ -1,8 +1,10 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.BranchDAO;
+import workers.DataAcsessLayer.BranchDTO;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class Branch {
     private String _name;
@@ -19,6 +21,12 @@ public class Branch {
         _shifts = new LinkedList<>();
         _address = address;
         _headOfBranch = headOfBranch;
+        BranchDTO bdto = new BranchDTO();
+        bdto.setName(name);
+        bdto.setId(id);
+        bdto.setAddress(address);
+        bdto.setHeadOfBranchId(headOfBranch.getID());
+        BranchDAO.insertBranch(bdto);
     }
 
     public String getName() {
@@ -47,14 +55,17 @@ public class Branch {
 
     public void addWorker(Worker worker) {
         _workers.add(worker);
+        BranchDAO.insertBranchWorker(_id, worker.getID());
     }
 
     public void addShift(Shift shift) {
         _shifts.add(shift);
+        BranchDAO.insertBranchShift(_id, shift.getDate(), shift.getDayShift());
     }
 
     public void removeWorker(Worker worker) {
         _workers.remove(worker);
+        BranchDAO.deleteBranchWorker(_id, worker.getID());
     }
     public void setHeadOfBranch(Worker headOfBranch) {
         ((HeadOfBranch)headOfBranch).takeOffBranch();

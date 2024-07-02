@@ -1,4 +1,6 @@
 package workers.DomainLayer;
+import workers.DataAcsessLayer.HeadOfBranchDTO;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -27,6 +29,7 @@ public class HeadOfBranch extends Worker {
         roleList.get("Shift-Manager").add(this);
         _branch = branch;
         minimalWorkers = new HashMap<>();
+        HeadOfBranchDTO hdto = new HeadOfBranchDTO();
     }
 
     public static Worker getWorker(int id) {
