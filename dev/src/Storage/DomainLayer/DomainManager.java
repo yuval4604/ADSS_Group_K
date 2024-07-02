@@ -74,15 +74,13 @@ public class DomainManager {
         return this.productMap;
     }
 
-    public void removeProduct(Product product) throws Exception {
+    public void removeProduct(int catalogNumber) throws Exception {
         try {
-            if(product == null)
-                throw new IllegalArgumentException("Product does not exist");
-            if (!this.productMap.containsKey(product.getCatalogNumber()) || this.repo.getProduct(product.getCatalogNumber()) == null) {
+            if (!this.productMap.containsKey(catalogNumber) || this.repo.getProduct(catalogNumber) == null) {
                 throw new IllegalArgumentException("Product with this catalog number does not exist");
             }
-            this.productMap.remove(product.getCatalogNumber());
-            this.repo.deleteProduct(product.getCatalogNumber());
+            this.productMap.remove(catalogNumber);
+            this.repo.deleteProduct(catalogNumber);
         } catch (Exception e) {
             throw e;
         }
@@ -195,10 +193,11 @@ public class DomainManager {
 
     public void setDiscount(int catalogNumber, double discount) throws SQLException {
         try {
-            Product p = this.productMap.remove(catalogNumber);
+            Product p = this.productMap.get(catalogNumber);
             if(p == null) p = this.repo.getProduct(catalogNumber);
             if(p == null) throw new IllegalArgumentException("Product does not exist");
             p.setDiscount(discount);
+            this.productMap.remove(catalogNumber);
             this.productMap.put(catalogNumber, p);
             this.repo.updateProduct(catalogNumber, Map.of("discount", String.valueOf(discount)));
         } catch (Exception e) {
@@ -314,6 +313,61 @@ public class DomainManager {
             this.repo.addSize(size);
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateDamageForProduct(int catalogNumber, int[] inStore, int[] inStorage, LocalDate[] expirationDate) {
+        try {
+            Product p = this.productMap.remove(catalogNumber);
+            if(p == null) p = this.repo.getProduct(catalogNumber);
+            if(p == null) throw new IllegalArgumentException("Product does not exist");
+            for (int i = 0; i < inStore.length; i++) {
+                for(int j = 0; j < inStore[i]; j++)
+                    p.removeOne(false, expirationDate[i]);
+            }
+            for (int i = 0; i < inStorage.length; i++) {
+                for(int j = 0; j < inStorage[i]; j++)
+                    p.removeOne(true, expirationDate[i]);
+            }
+            this.productMap.put(catalogNumber, p);
+            for (int i = 0; i < inStore.length; i++) {
+                this.repo.updateExpiration(p.getCatalogNumber(), expirationDate[i], p.getExpirationDates().get(expirationDate[i]).getKey(), p.getExpirationDates().get(expirationDate[i]).getValue());
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public void updateDiscountForCategory(List<String> categories, double discount) {
+        try {
+            for (Product p : this.repo.getProductsByCategories(categories)) {
+                p.setDiscount(discount);
+                this.repo.updateProduct(p.getCatalogNumber(), Map.of("discount", String.valueOf(discount)));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public String produceDamageReport() {
+        try {
+            return this.repo.produceDamageReport();
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public String produceProductReport(List<String> categories) throws Exception {
+        try {
+            List<Product> products = getProductsByCategories(categories);
+            StringBuilder sb = new StringBuilder();
+            for (Product p : products) {
+                sb.append(p.toString());
+                sb.append("\n");
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw e;
         }
     }
 }

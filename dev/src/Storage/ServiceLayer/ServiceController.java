@@ -5,7 +5,6 @@ import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -43,12 +42,7 @@ public class ServiceController {
     // returns a string with the properties of the products in the given categories
     public String produceProductReport(List<String> categories) throws Exception{
         try {
-            List<Product> info = manager.getProductsByCategories(categories);
-            String report = "";
-            for (Product product : info) {
-                report += product.productReportToString() + "\n";
-            }
-            return report;
+            return this.manager.produceProductReport(categories);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -57,13 +51,7 @@ public class ServiceController {
     // returns a string with the damage properties of the products in the given categories
     public String produceDamageReport() throws Exception{
         try {
-            Collection<Product> info = manager.getProductMap().values();
-            String report = "";
-            for (Product product : info) {
-                if(product.getDamageQuantity() > 0 || product.expiredCount() > 0)
-                    report += product.damagedReportToString() + "\n";
-            }
-            return report;
+            return this.manager.produceDamageReport();
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -72,8 +60,7 @@ public class ServiceController {
     // removes the product from the system
     public void removeProduct(int catalogNumber) throws Exception{
         try {
-            Product p = this.manager.getProduct(catalogNumber);
-            this.manager.removeProduct(p);
+            this.manager.removeProduct(catalogNumber);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -96,10 +83,7 @@ public class ServiceController {
     // updates the discount of all products in the given categories (the strings are like in getProductByCategories)
     public void updateDiscountForCategory(List<String> categories, double discount) throws Exception{
         try {
-            List<Product> info = manager.getProductsByCategories(categories);
-            for (Product product : info) {
-                product.setDiscount(discount);
-            }
+            this.manager.updateDiscountForCategory(categories, discount);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -108,10 +92,7 @@ public class ServiceController {
     // updates the damage amount of the given product
     public void updateDamageForProduct(int catalogNumber, int inStore[], int inStorage[], LocalDate expirationDate[]) throws Exception{
         try {
-            Product p = this.manager.getProduct(catalogNumber);
-            if (p == null)
-                throw new IllegalArgumentException("Product with this catalog number does not exist");
-            p.moveToDamage(inStore, inStorage, expirationDate);
+            this.manager.updateDamageForProduct(catalogNumber, inStore, inStorage, expirationDate);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

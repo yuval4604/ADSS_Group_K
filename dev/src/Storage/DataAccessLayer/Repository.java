@@ -95,4 +95,13 @@ public class Repository {
     public void addSize(String size) throws SQLException {
         dao.addSize(size);
     }
+
+    public String produceDamageReport() throws SQLException {
+        List<Product> products = dao.getAllProducts();
+        StringBuilder report = new StringBuilder();
+        for (Product product : products) {
+            report.append(product.toString()).append("\n");
+        }
+        return report.toString();
+    }
 }

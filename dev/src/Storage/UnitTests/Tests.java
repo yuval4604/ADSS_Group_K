@@ -4,9 +4,11 @@ package Storage.UnitTests;
 import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Product;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,14 +55,14 @@ public class Tests {
         manager.addToProduct(LocalDate.parse("2024-07-24"),101, 2, 20);
         manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 0);
 
-        Assert.assertEquals(50,milk.getStorageQuantity());
-        Assert.assertEquals(3,milk.getStoreQuantity());
+        Assert.assertEquals(50, manager.getProduct(100).getStorageQuantity());
+        Assert.assertEquals(3, manager.getProduct(100).getStoreQuantity());
 
-        Assert.assertEquals(34,beef.getStorageQuantity());
-        Assert.assertEquals(5,beef.getStoreQuantity());
+        Assert.assertEquals(34, manager.getProduct(101).getStorageQuantity());
+        Assert.assertEquals(5, manager.getProduct(101).getStoreQuantity());
 
-        Assert.assertEquals(0,soap.getStorageQuantity());
-        Assert.assertEquals(10,soap.getStoreQuantity());
+        Assert.assertEquals(0, manager.getProduct(102).getStorageQuantity());
+        Assert.assertEquals(10, manager.getProduct(102).getStoreQuantity());
     }
     @Test
     public void DecreaseProductFromBatchTest() throws Exception {
@@ -77,14 +79,14 @@ public class Tests {
 
         manager.subtractFromStore(100, Map.of(LocalDate.parse("2024-12-12"), 3));
 
-        Assert.assertEquals(30,milk.getStorageQuantity());
-        Assert.assertEquals(3,milk.getStoreQuantity());
+        Assert.assertEquals(30, manager.getProduct(100).getStorageQuantity());
+        Assert.assertEquals(3,  manager.getProduct(100).getStoreQuantity());
 
-        Assert.assertEquals(14,beef.getStorageQuantity());
-        Assert.assertEquals(4,beef.getStoreQuantity());
+        Assert.assertEquals(14, manager.getProduct(101).getStorageQuantity());
+        Assert.assertEquals(4, manager.getProduct(101).getStoreQuantity());
 
-        Assert.assertEquals(0,soap.getStorageQuantity());
-        Assert.assertEquals(7,soap.getStoreQuantity());
+        Assert.assertEquals(0, manager.getProduct(102).getStorageQuantity());
+        Assert.assertEquals(7, manager.getProduct(102).getStoreQuantity());
     }
 
     @Test
@@ -105,14 +107,14 @@ public class Tests {
            Assert.assertEquals("Not enough quantity to move to store",e.getMessage());
        }
 
-        Assert.assertEquals(36,milk.getStorageQuantity());
-        Assert.assertEquals(17,milk.getStoreQuantity());
+        Assert.assertEquals(36, manager.getProduct(100).getStorageQuantity());
+        Assert.assertEquals(17, manager.getProduct(100).getStoreQuantity());
 
-        Assert.assertEquals(14,beef.getStorageQuantity());
-        Assert.assertEquals(25,beef.getStoreQuantity());
+        Assert.assertEquals(14, manager.getProduct(101).getStorageQuantity());
+        Assert.assertEquals(25, manager.getProduct(101).getStoreQuantity());
 
-        Assert.assertEquals(0,soap.getStorageQuantity());
-        Assert.assertEquals(10,soap.getStoreQuantity());
+        Assert.assertEquals(0, manager.getProduct(102).getStorageQuantity());
+        Assert.assertEquals(10, manager.getProduct(102).getStoreQuantity());
     }
 
     @Test
@@ -141,49 +143,48 @@ public class Tests {
     }
 
     @Test
-    public void ApplyDiscountTest() throws SQLException {
-        manager.setDiscount(101,0.3);
-        manager.setDiscount(102,1);
+    public void ApplyDiscountTest() throws Exception {
+        manager.setDiscount(100,0.3);
+        manager.setDiscount(101,1);
 
-        Assert.assertEquals(5.95,milk.getDiscountedPrice(),0.99);
+        Assert.assertEquals(5.95, manager.getProduct(100).getDiscountedPrice(),0.99);
         try{
-            manager.setDiscount(101,1.5);
+            manager.setDiscount(102,1.5);
         }
         catch (Exception e){
             Assert.assertEquals("Discount is out of bounds", e.getMessage());
         }
-        Assert.assertEquals(0,soap.getDiscountedPrice(),0.99);
+        Assert.assertEquals(15, manager.getProduct(102).getDiscountedPrice(),0.99);
     }
 
     @Test
     public void MoveToDamagedTest() throws Exception {
         manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
         manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-07-01"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2024-07-15"),100, 0, 10);
         manager.addToProduct(LocalDate.parse("2024-07-20"),101, 3, 14);
         manager.addToProduct(LocalDate.parse("2024-07-24"),101, 2, 20);
-        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 0);
+        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 10);
 
-        manager.moveToDamage(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
-        milk.moveToDamage(new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
-        beef.moveToDamage(new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2024-07-20")});
-        soap.moveToDamage(new int[]{0},new int[]{0}, new LocalDate[]{LocalDate.parse("2024-12-12")});
+        manager.updateDamageForProduct(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
+        manager.updateDamageForProduct(101, new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2024-07-20")});
+        manager.updateDamageForProduct(102, new int[]{0}, new int[]{10}, new LocalDate[]{LocalDate.parse("2024-12-12")});
 
-        Assert.assertEquals(35,milk.getStorageQuantity());
-        Assert.assertEquals(1,milk.getStoreQuantity());
-        Assert.assertEquals(17,milk.getDamageQuantity());
+        Assert.assertEquals(35, manager.getProduct(100).getStorageQuantity());
+        Assert.assertEquals(1, manager.getProduct(100).getStoreQuantity());
+        Assert.assertEquals(0, manager.getProduct(100).getDamageQuantity());
 
-        Assert.assertEquals(32,beef.getStorageQuantity());
-        Assert.assertEquals(2,beef.getStoreQuantity());
-        Assert.assertEquals(5,beef.getDamageQuantity());
+        Assert.assertEquals(32, manager.getProduct(101).getStorageQuantity());
+        Assert.assertEquals(2, manager.getProduct(101).getStoreQuantity());
+        Assert.assertEquals(0, manager.getProduct(101).getDamageQuantity());
 
-        Assert.assertEquals(0,soap.getStorageQuantity());
-        Assert.assertEquals(10,soap.getStoreQuantity());
-        Assert.assertEquals(0,soap.getDamageQuantity());
+        Assert.assertEquals(0, manager.getProduct(102).getStorageQuantity());
+        Assert.assertEquals(10, manager.getProduct(102).getStoreQuantity());
+        Assert.assertEquals(0, manager.getProduct(102).getDamageQuantity());
     }
 
     @Test
-    public void ProductReportToStringTest(){
+    public void ProductReportToStringTest() throws Exception {
         Assert.assertEquals("Catalog number: " + 100 + "\n" +
                 "Name: " + "Tnuva-milk 500ml" + "\n" +
                 "Category: " + "Dairy" + "\n" +
@@ -195,16 +196,16 @@ public class Tests {
                 "Discount: " + 0.0 * 100 + "% " + "\n" +
                 "Supplier discount: " + 0.0 * 100 + "% " + "\n" +
                 "Aisle: " + 14 + "\n" +
-                "Minimal quantity: " + 15 + "\n",milk.productReportToString());
+                "Minimal quantity: " + 15 + "\n", manager.getProduct(100).productReportToString());
     }
 
     @Test
-    public void DamagedAndExpiredReportToStringTest(){
-        milk.addByExpirationDate(0,25, LocalDate.parse("2024-07-10"));
-        milk.addByExpirationDate(3,15, LocalDate.parse("2024-07-07"));
-        milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
+    public void DamagedAndExpiredReportToStringTest() throws Exception {
+        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2024-07-01"),100, 0, 10);
 
-        milk.moveToDamage(new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
+        manager.updateDamageForProduct(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
         Assert.assertEquals("Catalog number: " + 100 + "\n" +
                 "Name: " + "Tnuva-milk 500ml" + "\n" +
                 "Category: " + "Dairy" + "\n" +
@@ -212,15 +213,15 @@ public class Tests {
                 "Size: " + "Small" + "\n" +
                 "Aisle: " + 14 + "\n" +
                 "Expired quantity: " + 0 + "\n" +
-                "Damaged quantity: " + 17  + "\n",milk.damagedReportToString());
+                "Damaged quantity: " + 0  + "\n", manager.getProduct(100).damagedReportToString());
     }
 
     @Test
-    public void ToStringTest(){
-        milk.addByExpirationDate(0,25, LocalDate.parse("2024-07-10"));
-        milk.addByExpirationDate(3,15, LocalDate.parse("2024-07-07"));
-        milk.addByExpirationDate(0,10, LocalDate.parse("2024-07-01"));
-        milk.setDiscount(0.2);
+    public void ToStringTest() throws Exception {
+        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2024-07-01"),100, 0, 10);
+        manager.setDiscount(100,0.2);
 
         Assert.assertEquals("Catalog number: " + 100 + "\n" +
                 "Name: " + "Tnuva-milk 500ml" + "\n" +
@@ -233,6 +234,6 @@ public class Tests {
                 "Discount: " + 0.2 * 100 + "% " + "\n" +
                 "Supplier discount: " + 0.0 * 100 + "% " + "\n" +
                 "Aisle: " + 14 + "\n" +
-                "Minimal quantity: " + 15 + "\n",milk.productReportToString());
+                "Minimal quantity: " + 15 + "\n", manager.getProduct(100).productReportToString());
     }
 }

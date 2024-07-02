@@ -259,13 +259,25 @@ public class ProductDAO {
         try (Connection conn = DriverManager.getConnection(URL)) {
             if (conn != null) {
                 conn.setAutoCommit(false);
-
-                PreparedStatement stmt = conn.prepareStatement("UPDATE expirationDates SET storageQuantity = ?, storeQuantity = ? WHERE catalogNumber = ? AND expirationDate = ?");
-                stmt.setInt(3, catalogNumber);
-                stmt.setString(4, expirationDate.toString());
-                stmt.setInt(1, storageQuantity);
-                stmt.setInt(2, storeQuantity);
-                stmt.executeUpdate();
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM expirationDates WHERE catalogNumber = ? AND expirationDate = ?");
+                stmt.setInt(1, catalogNumber);
+                stmt.setString(2, expirationDate.toString());
+                ResultSet rs = stmt.executeQuery();
+                if (!rs.next()) {
+                    stmt = conn.prepareStatement("INSERT INTO expirationDates (catalogNumber, expirationDate, storageQuantity, storeQuantity) VALUES (?, ?, ?, ?)");
+                    stmt.setInt(1, catalogNumber);
+                    stmt.setString(2, expirationDate.toString());
+                    stmt.setInt(3, storageQuantity);
+                    stmt.setInt(4, storeQuantity);
+                    stmt.executeUpdate();
+                } else {
+                    stmt = conn.prepareStatement("UPDATE expirationDates SET storageQuantity = ?, storeQuantity = ? WHERE catalogNumber = ? AND expirationDate = ?");
+                    stmt.setInt(3, catalogNumber);
+                    stmt.setString(4, expirationDate.toString());
+                    stmt.setInt(1, storageQuantity);
+                    stmt.setInt(2, storeQuantity);
+                    stmt.executeUpdate();
+                }
             }
         } catch (SQLException e) {
             throw e;
