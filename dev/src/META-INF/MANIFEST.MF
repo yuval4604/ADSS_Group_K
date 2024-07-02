@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: workers.PresentationLayer.Main
+Main-Class: Workers.PresentationLayer.Main
 

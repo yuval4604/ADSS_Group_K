@@ -5,12 +5,6 @@ public class HeadOfBranchDTO {
     private int BranchID;
     private int LastDayForPrefs;
 
-    public HeadOfBranchDTO(int ID, int branchID, int lastDayForPrefs) {
-        this.ID = ID;
-        BranchID = branchID;
-        LastDayForPrefs = lastDayForPrefs;
-    }
-
     public int getID() {
         return ID;
     }
@@ -21,5 +15,17 @@ public class HeadOfBranchDTO {
 
     public int getLastDayForPrefs() {
         return LastDayForPrefs;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public void setBranchID(int BranchID) {
+        this.BranchID = BranchID;
+    }
+
+    public void setLastDayForPrefs(int LastDayForPrefs) {
+        this.LastDayForPrefs = LastDayForPrefs;
     }
 }

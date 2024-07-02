@@ -1,6 +1,5 @@
 package workers.DataAcsessLayer;
 
-import workers.DomainLayer.Shift;
 import workers.DomainLayer.Worker;
 
 import java.util.List;

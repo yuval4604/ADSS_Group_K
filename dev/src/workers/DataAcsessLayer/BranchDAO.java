@@ -9,7 +9,7 @@ public class BranchDAO {
     private ResultSet resultSet;
 
 
-    private static final String DB_URL = "jdbc:sqlite:workers/DataAcsessLayer/WorkersDB.db"; //+ Paths.get("workers/DataAcsessLayer/WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
+    private static final String DB_URL = "jdbc:sqlite:" + Paths.get("WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
     public static void createBranchTable() {
         try {
             Connection conn = DriverManager.getConnection(DB_URL);
@@ -148,5 +148,59 @@ public class BranchDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void insertBranchWorker(int branchId, int workerId) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "INSERT INTO branchWorkers (BranchID, WorkerID) " +
+                    "VALUES (" + branchId + ", " + workerId + ")";
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteBranchWorker(int branchId, int workerId) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "DELETE FROM branchWorkers WHERE BranchID = " + branchId + " AND WorkerID = " + workerId;
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertBranchShift(int branchId, String date, boolean dayShift) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "INSERT INTO branchShifts (BranchID, Date, DayShift) " +
+                    "VALUES (" + branchId + ", '" + date + "', " + dayShift + ")";
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteBranchShift(int branchId, String date, boolean dayShift) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "DELETE FROM branchShifts WHERE BranchID = " + branchId + " AND Date = " + date + " AND DayShift = " + dayShift;
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
