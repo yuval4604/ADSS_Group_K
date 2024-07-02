@@ -1,8 +1,10 @@
 package Storage.DomainLayer;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Product {
 
@@ -261,29 +263,6 @@ public class Product {
         this.expirationDates.put(expirationDate, new AbstractMap.SimpleEntry<Integer,Integer>(oldValues.getKey() - quantity, oldValues.getValue() + quantity));
         this.storageQuantity -= quantity;
         this.storeQuantity += quantity;
-    }
-
-    public int expiredCount(){
-        int count = 0;
-        LocalDate now;
-        if(LocalDateTime.now().getMonthValue() < 10 && LocalDateTime.now().getDayOfMonth() < 10)
-            now =  LocalDate.parse(LocalDateTime.now().getYear() + "-0" + LocalDateTime.now().getMonthValue() + "-0" + LocalDateTime.now().getDayOfMonth());
-        else{
-            if(LocalDateTime.now().getMonthValue() < 10)
-                now =  LocalDate.parse(LocalDateTime.now().getYear() + "-0" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
-            else{
-                if(LocalDateTime.now().getDayOfMonth() < 10)
-                    now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-0" + LocalDateTime.now().getDayOfMonth());
-                else
-                    now =  LocalDate.parse(LocalDateTime.now().getYear() + "-" + LocalDateTime.now().getMonthValue() + "-" + LocalDateTime.now().getDayOfMonth());
-            }
-        }
-
-        for(Map.Entry<LocalDate, Map.Entry<Integer,Integer>> entry : expirationDates.entrySet()){
-            if(entry.getKey().isBefore(now))
-                count += entry.getValue().getKey() + entry.getValue().getValue();
-        }
-        return count;
     }
 
     public void setSupplierDiscount(double supplierDiscount) {

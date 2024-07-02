@@ -19,8 +19,8 @@ public class DomainManager {
     public static List<String> sizes;
 
     public DomainManager(Repository repo) throws SQLException {
-        this.repo = repo;
         this.productMap = new HashMap<Integer, Product>();
+        this.repo = repo;
         categories = repo.getCategories();
         subCategories = repo.getSubCategories();
         sizes = repo.getSizes();
@@ -29,9 +29,15 @@ public class DomainManager {
         if(sizes == null ||  sizes.size() == 0) sizes = new ArrayList<>();
     }
 
-    public DomainManager(Map<Integer, Product> productMap, Repository repo) {
+    public DomainManager(Map<Integer, Product> productMap, Repository repo) throws SQLException {
         this.productMap = productMap;
         this.repo = repo;
+        categories = repo.getCategories();
+        subCategories = repo.getSubCategories();
+        sizes = repo.getSizes();
+        if(categories == null || categories.size() == 0) categories = new ArrayList<>();
+        if(subCategories == null || subCategories.size() == 0) subCategories = new ArrayList<>();
+        if(sizes == null ||  sizes.size() == 0) sizes = new ArrayList<>();
     }
 
     public Repository getRepo() {
@@ -376,7 +382,7 @@ public class DomainManager {
             List<Product> products = getProductsByCategories(categories);
             StringBuilder sb = new StringBuilder();
             for (Product p : products) {
-                sb.append(p.toString());
+                sb.append(p.productReportToString());
                 sb.append("\n");
             }
             return sb.toString();

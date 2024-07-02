@@ -4,6 +4,7 @@ import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Product;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
 public class ServiceController {
     private DomainManager manager;
 
-    public ServiceController(Map<Integer, Product> productMap, Repository repository) {
+    public ServiceController(Map<Integer, Product> productMap, Repository repository) throws SQLException {
         this.manager = new DomainManager(productMap, repository);
     }
 

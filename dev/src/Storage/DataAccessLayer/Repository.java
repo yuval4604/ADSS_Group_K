@@ -12,20 +12,8 @@ public class Repository {
 
     private ProductDAO dao;
 
-    public Repository() throws SQLException {
-        this.dao = new ProductDAO();
-    }
-
-    public Repository(ProductDAO dao) {
-        this.dao = dao;
-    }
-
-    public ProductDAO getDao() {
-        return dao;
-    }
-
-    public void setDao(ProductDAO dao) {
-        this.dao = dao;
+    public Repository(String dataBaseName) throws SQLException {
+        this.dao = new ProductDAO(dataBaseName);
     }
 
     public Product getProduct(int catalogNumber) throws SQLException {
@@ -52,9 +40,6 @@ public class Repository {
         return dao.getProductsByCategories(categoriesList);
     }
 
-    public List<Product> getAllProducts() throws SQLException {
-        return dao.getAllProducts();
-    }
 
     public Map<Integer, Integer> expiredCount() throws SQLException {
         return dao.expiredCount();
@@ -97,10 +82,10 @@ public class Repository {
     }
 
     public String produceDamageReport() throws SQLException {
-        List<Product> products = dao.getAllProducts();
+        List<Product> products = dao.getAllExpiredProducts();
         StringBuilder report = new StringBuilder();
         for (Product product : products) {
-            report.append(product.toString()).append("\n");
+            report.append(product.damagedReportToString()).append("\n");
         }
         return report.toString();
     }

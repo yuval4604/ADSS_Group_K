@@ -12,38 +12,17 @@ import java.util.Map;
 
 
 public class ProductDAO {
-    private final String URL = "jdbc:sqlite:" + Paths.get("data_layer.db").toAbsolutePath().toString().replace("\\", "/");
+    private String URL;
     private Connection conn;
 
-    public ProductDAO() throws SQLException {
+    public ProductDAO(String dataBaseName) throws SQLException {
+        URL = "jdbc:sqlite:" + Paths.get(dataBaseName).toAbsolutePath().toString().replace("\\", "/");
         conn = DriverManager.getConnection(URL);
         if(conn == null)
             throw new SQLException("Connection failed");
         conn.setAutoCommit(false);
     }
 
-    public void rollback(Savepoint savePoint) throws SQLException {
-        try {
-            if (conn != null) {
-                conn.rollback(savePoint);
-                conn.commit();
-                    conn.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Savepoint setSavepoint() throws SQLException {
-        try {
-            if (conn != null) {
-                return conn.setSavepoint();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public Product getProduct(int catalogNumber) throws SQLException {
         try {
@@ -201,10 +180,10 @@ public class ProductDAO {
         return null;
     }
 
-    public List<Product> getAllProducts() throws SQLException {
+    public List<Product> getAllExpiredProducts() throws SQLException {
         try {
             if (conn != null) {
-                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product");
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM product where (catalogNumber in (SELECT catalogNumber FROM expiredProducts)) OR (damagedQuantity > 0) ");
                 ResultSet rs = stmt.executeQuery();
                 List<Product> products = new ArrayList<>();
                 while (rs.next()) {
@@ -214,16 +193,18 @@ public class ProductDAO {
                     p.setDamagedQuantity(rs.getInt("damagedQuantity"));
                     stmt = conn.prepareStatement("SELECT * FROM expirationDates WHERE catalogNumber = ?");
                     stmt.setInt(1, rs.getInt("catalogNumber"));
+                    ResultSet rs2 = stmt.executeQuery();
                     Map<LocalDate, Map.Entry<Integer, Integer>> expirationDates = new HashMap<>();
-                    while (rs.next()) {
-                        expirationDates.put(LocalDate.parse(rs.getString("expirationDate")), Map.entry(rs.getInt("storageQuantity"), rs.getInt("storeQuantity")));
+                    while (rs2.next()) {
+                        expirationDates.put(LocalDate.parse(rs2.getString("expirationDate")), Map.entry(rs2.getInt("storageQuantity"), rs2.getInt("storeQuantity")));
                     }
                     p.setExpirationDates(expirationDates);
                     stmt = conn.prepareStatement("SELECT * FROM expiredProducts WHERE catalogNumber = ?");
                     stmt.setInt(1, rs.getInt("catalogNumber"));
+                    rs2 = stmt.executeQuery();
                     Map<LocalDate, Integer> expiredProducts = new HashMap<>();
-                    while (rs.next()) {
-                        expiredProducts.put(LocalDate.parse(rs.getString("expiredDate")), rs.getInt("quantity"));
+                    while (rs2.next()) {
+                        expiredProducts.put(LocalDate.parse(rs2.getString("expiredDate")), rs2.getInt("quantity"));
                     }
                     p.setExpiredProducts(expiredProducts);
                     products.add(p);
@@ -265,6 +246,8 @@ public class ProductDAO {
                     alert += rs.getString("name") + "\n";
                 }
                 conn.commit();
+                if(alert.equals(""))
+                    return "No products are below the minimal quantity";
                 return alert.substring(0, alert.length() - 1);
             }
         } catch (SQLException e) {

@@ -6,7 +6,8 @@ import Storage.DomainLayer.DomainManager;
 import Storage.DomainLayer.Product;
 import org.junit.*;
 
-import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.Savepoint;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,26 +18,19 @@ public class Tests {
     private static Product beef;
     private static Product soap;
     private static DomainManager manager;
-
-    static {
-        try {
-            manager = new DomainManager(new Repository());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    ;
-
+    private static Savepoint sv;
+    private static Connection conn;
     @BeforeClass
     public static void setUp() throws Exception {
+        manager = new DomainManager(new Repository("tests.db"));
         manager.deleteAll();
     }
 
     @After
     public void tearDown() throws Exception {
-        manager.deleteAll();
+         manager.deleteAll();
     }
+
     @Before
     public void initTest() throws Exception {
         milk = new Product(100,"Tnuva-milk 500ml", "Dairy", "Milk", "Small",6,8.5,0,0,"Tnuva","14",15);

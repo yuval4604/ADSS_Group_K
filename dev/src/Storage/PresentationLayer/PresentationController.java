@@ -5,6 +5,7 @@ import Storage.DataAccessLayer.Repository;
 import Storage.DomainLayer.Product;
 import Storage.ServiceLayer.ServiceController;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class PresentationController {
     private ServiceController serviceController;
 
-    public PresentationController(Map<Integer, Product> productMap, Repository repo) {
+    public PresentationController(Map<Integer, Product> productMap, Repository repo) throws SQLException {
         this.serviceController = new ServiceController(productMap, repo);
     }
 
@@ -345,111 +346,111 @@ public class PresentationController {
         }
     }
 
-    public boolean parseUpdateBuyPriceForProductMessage(String info) {
+    public String parseUpdateBuyPriceForProductMessage(String info) {
         try {
             String[] parts = info.split(",");
             int catalogNumber = Integer.parseInt(parts[0]);
             double buyPrice = Double.parseDouble(parts[1]);
             this.updateBuyPriceForProduct(catalogNumber, buyPrice);
-            return true;
+            return "Buy price was updated.";
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
     }
 
-    public boolean parseUpdateSalePriceForProductMessage(String info) {
+    public String parseUpdateSalePriceForProductMessage(String info) {
         try {
             String[] parts = info.split(",");
             int catalogNumber = Integer.parseInt(parts[0]);
             double salePrice = Double.parseDouble(parts[1]);
             this.updateSalePriceForProduct(catalogNumber, salePrice);
-            return true;
+            return "Sale price was updated.";
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
     }
 
-    public boolean parseUpdateSupplierDiscountForProductMessage(String info) {
+    public String parseUpdateSupplierDiscountForProductMessage(String info) {
         try {
             String[] parts = info.split(",");
             int catalogNumber = Integer.parseInt(parts[0]);
             double supplierDiscount = Double.parseDouble(parts[1]);
             this.updateSupplierDiscountForProduct(catalogNumber, supplierDiscount);
-            return true;
+            return "Supplier discount was updated.";
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
     }
 
-    public boolean parseUpdateManufacturerForProductMessage(String info) {
+    public String parseUpdateManufacturerForProductMessage(String info) {
         try {
             String[] parts = info.split(",");
             int catalogNumber = Integer.parseInt(parts[0]);
             String manufacturer = parts[1];
             this.updateManufacturerForProduct(catalogNumber, manufacturer);
-            return true;
+            return "Manufacturer was updated.";
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
     }
 
-    public boolean parseUpdateAisleForProductMessage(String info) {
+    public String parseUpdateAisleForProductMessage(String info) {
         try {
             String[] parts = info.split(",");
             int catalogNumber = Integer.parseInt(parts[0]);
             String aisle = parts[1];
             this.updateAisleForProduct(catalogNumber, aisle);
-            return true;
+            return "Aisle was updated.";
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
     }
 
-    public boolean parseUpdateMinimalQuantityForProductMessage(String info) {
+    public String parseUpdateMinimalQuantityForProductMessage(String info) {
         try {
             String[] parts = info.split(",");
             int catalogNumber = Integer.parseInt(parts[0]);
             int minimalQuantity = Integer.parseInt(parts[1]);
             this.updateMinimalQuantityForProduct(catalogNumber, minimalQuantity);
-            return true;
+            return "Minimal quantity was updated.";
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
     }
 
-    public boolean parseAddCategoryMessage(String info) {
+    public String parseAddCategoryMessage(String info) {
         try {
             addCategory(info);
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
-        return false;
+        return "Category was added.";
     }
 
     private void addCategory(String info) {
         this.serviceController.addCategory(info);
     }
 
-    public boolean parseAddSubCategoryMessage(String info) {
+    public String parseAddSubCategoryMessage(String info) {
         try {
             addSubCategory(info);
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
-        return false;
+        return "Sub-category was added.";
     }
 
     private void addSubCategory(String info) {
         this.serviceController.addSubCategory(info);
     }
 
-    public boolean parseAddSizeMessage(String info) {
+    public String parseAddSizeMessage(String info) {
         try {
             addSize(info);
         } catch (Exception e) {
-            return false;
+            return "give us good info please!";
         }
-        return false;
+        return "Size was added.";
     }
 
     private void addSize(String info) {

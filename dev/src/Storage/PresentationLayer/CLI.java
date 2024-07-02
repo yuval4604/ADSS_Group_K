@@ -20,14 +20,6 @@ public class CLI {
         resetFactory();
         Scanner scan = new Scanner(System.in);
         String choice = "";
-        while(!choice.equals("y") && !choice.equals("n")){
-            System.out.println("Do you want to load example data? (y/n)");
-            choice = scan.nextLine();
-            if(!choice.equals("y") && !choice.equals("n"))
-                System.out.println("Invalid choice, please choose again.");
-        }
-        if(choice.equals("y"))
-            productFactory();
         String info;
         while(!choice.equals("21")){
             if(!isDamageReportAlerted && LocalDate.now().getDayOfMonth() == DAY_OF_MONTH){
@@ -67,8 +59,8 @@ public class CLI {
                     "19. Check for products below minimal quantity.\n" +
                     "20. Check for expired products.\n" +
                     "21. Add category.\n" +
-                    "22. Add sub category" +
-                    "23. Add size" +
+                    "22. Add sub category.\n" +
+                    "23. Add size.\n" +
                     "24. Exit program.");
             choice = scan.nextLine();
             switch (choice){
@@ -365,28 +357,8 @@ public class CLI {
 
     public static void resetFactory() throws Exception{
         Map<Integer, Product> products = new HashMap<>();
-        Repository repo = new Repository();
+        Repository repo = new Repository("data_layer.db");
         presentationController = new PresentationController(products, repo);
     }
 
-    public static void productFactory() throws Exception{
-        presentationController.parseAddProductMessage("1,beef number 1 100g,Meat,Beef,Small,10,20,0,0,Tnuva,1,10");
-        presentationController.parseAddProductMessage("2,beef number 2 200g,Meat,Beef,Medium,20,40,0,0,Tnuva,1,10");
-        presentationController.parseAddProductMessage("3,beef number 3 300g,Meat,Beef,Large,30,60,0,0,Tnuva,1,10");
-        presentationController.parseAddProductMessage("4,chicken number 1 100g,Meat,Chicken,Small,10,20,0,0,Tnuva,1,10");
-        presentationController.parseAddProductMessage("5,chicken number 2 200g,Meat,Chicken,Medium,20,40,0,0,Tnuva,1,10");
-        presentationController.parseAddProductMessage("6,chicken number 3 300g,Meat,Chicken,Large,30,60,0,0,Tnuva,1,10");
-        presentationController.parseAddProductMessage("7,fish number 1 100g,Meat,Pork,Small,15,30,0,0.15,Tnuva,1,10");
-        presentationController.parseAddProductMessage("8,fish number 2 200g,Meat,Pork,Medium,30,60,0,0.15,Tnuva,1,10");
-        presentationController.parseAddProductMessage("9,fish number 3 300g,Meat,Pork,Large,45,90,0,0.15,Tnuva,1,10");
-        presentationController.parseAddProductMessage("10,grapes number 1 100g,Fruits,Grapes,Small,5,10,0,0,Tnuva,7,10");
-        presentationController.parseAddProductMessage("11,grapes number 2 200g,Fruits,Grapes,Medium,10,20,0,0,Tnuva,7,10");
-        presentationController.parseAddProductMessage("12,grapes number 3 300g,Fruits,Grapes,Large,15,30,0,0,Tnuva,7,10");
-        presentationController.parseAddProductMessage("13,apples number 1 100g,Fruits,Apples,Small,3,7,0,0,Tnuva,8,10");
-        presentationController.parseAddProductMessage("14,apples number 2 200g,Fruits,Apples,Medium,6,14,0,0,Tnuva,8,10");
-        presentationController.parseAddProductMessage("15,apples number 3 300g,Fruits,Apples,Large,9,21,0,0,Tnuva,8,10");
-        presentationController.parseAddProductMessage("16,bananas number 1 100g,Fruits,Bananas,Small,5,10,0,0,Tnuva,8,10");
-        presentationController.parseAddProductMessage("17,bananas number 2 200g,Fruits,Bananas,Medium,10,20,0,0,Tnuva,8,10");
-        presentationController.parseAddProductMessage("18,bananas number 3 300g,Fruits,Bananas,Large,15,30,0,0,Tnuva,8,10");
-    }
 }
