@@ -183,7 +183,7 @@ public class Worker {
         WorkerDTO workerDTO = new WorkerDTO();
         workerDTO.setID(_id);
         String[][] prefList = new String[7][2];
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 2; j++) {
                 prefList[i][j] = _prefList[i][j].toString();
             }

@@ -259,7 +259,7 @@ public class WorkerDAO  {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "UPDATE Prefs SET SUNDAY = " + worker.getPref()[0][0] + ", MONDAY = " + worker.getPref()[1][0] + ", TUEDAY = " + worker.getPref()[2][0] + ", WEDDAY = " + worker.getPref()[3][0] + ", THURDAY = " + worker.getPref()[4][0] + ", FRIDAY = " + worker.getPref()[5][0] + ", SUNNIGHT = " + worker.getPref()[0][1] + ", MONNIGHT = " + worker.getPref()[1][1] + ", TUENIGHT = " + worker.getPref()[2][1] + ", WEDNIGHT = " + worker.getPref()[3][1] + ", THURNIGHT = " + worker.getPref()[4][1] + ", FRINIGHT = " + worker.getPref()[5][1] + " WHERE ID = " + worker.getID();
+            String sql = "UPDATE Prefs SET SUNDAY = '" + worker.getPref()[0][0] + "', MONDAY = '" + worker.getPref()[1][0] + "', TUEDAY = '" + worker.getPref()[2][0] + "', WEDDAY = '" + worker.getPref()[3][0] + "', THURDAY = '" + worker.getPref()[4][0] + "', FRIDAY = '" + worker.getPref()[5][0] + "', SUNNIGHT = '" + worker.getPref()[0][1] + "', MONNIGHT = '" + worker.getPref()[1][1] + "', TUENIGHT = '" + worker.getPref()[2][1] + "', WEDNIGHT = '" + worker.getPref()[3][1] + "', THURNIGHT = '" + worker.getPref()[4][1] + "', FRINIGHT = '" + worker.getPref()[5][1] + "' WHERE ID = " + worker.getID();
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();

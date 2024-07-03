@@ -42,7 +42,7 @@ public class Branch {
         _shifts = new LinkedList<>();
     }
 
-    public static Branch getBranch(int branchID, Worker headOfBranch) {
+    public static Branch getBranch(int branchID) {
         try {
             BranchDTO bdto = BranchDAO.getBranch(branchID);
             return new Branch(bdto);

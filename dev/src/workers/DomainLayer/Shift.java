@@ -37,9 +37,35 @@ public class Shift {
         shiftDTO.setDate(date);
         shiftDTO.setDayOfWeek(dayOfWeek);
         shiftDTO.setDayShift(dayShift);
-        shiftDTO.setManagerId(sManager.getID());
+        if(sManager != null)
+            shiftDTO.setManagerId(sManager.getID());
+        else
+            shiftDTO.setManagerId(-1);
         shiftDTO.setNeedQM(needQuartermaster);
         ShiftDAO.insertShift(shiftDTO);
+    }
+
+    public Shift(ShiftDTO shift) {
+        _date = shift.getDate();
+        _dayShift = shift.getDayShift();
+        workers = new HashMap<>();
+        _dayOfWeek = shift.getDayOfWeek();
+        _active = shift.getActive();
+        _localDate = LocalDate.of(Integer.parseInt(_date.split("\\.")[2]), Integer.parseInt(_date.split("\\.")[1]), Integer.parseInt(_date.split("\\.")[0]));
+        _branch = Branch.getBranch(shift.getBranchId());
+        needQuartermaster = shift.getNeedQM();
+        if(shift.getManagerId() != -1)
+            shiftManager = HeadOfBranch.getWorker(shift.getManagerId());
+        else
+            shiftManager = null;
+        Map<String, List<Integer>> workersMap = shift.getWorkers();
+        for (Map.Entry<String, List<Integer>> entry : workersMap.entrySet()) {
+            List<Worker> workersList = new LinkedList<>();
+            for (int id : entry.getValue()) {
+                workersList.add(HeadOfBranch.getWorker(id));
+            }
+            workers.put(entry.getKey(), workersList);
+        }
     }
 
     public String getDate() {

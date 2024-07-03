@@ -53,7 +53,7 @@ public class HeadOfBranch extends Worker {
         _lastdaytoSetConstraints = h.getLastDayForPrefs();
         allWorkers.put(w.getID(),this);
         currentShift = null;
-        _branch = Branch.getBranch(h.getBranchID(),this);
+        _branch = Branch.getBranch(h.getBranchID());
         minimalWorkers = new HashMap<>();
         for (Map.Entry<String,Integer> entry : HeadOfBranchDAO.getMinimalWorkers(_branch.getID()).entrySet()) {
             minimalWorkers.put(entry.getKey(),entry.getValue());
@@ -114,7 +114,7 @@ public class HeadOfBranch extends Worker {
                 return true;
             }
         }
-        HeadOfBranchDAO.getShift(date,dayShift,_branch.getID());
+        currentShift = new Shift(HeadOfBranchDAO.getShift(date,dayShift,_branch.getID()));
         return false;
     }
 

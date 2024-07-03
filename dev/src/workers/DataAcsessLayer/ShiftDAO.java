@@ -50,9 +50,21 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, managerID, branchID, needQM) " +
-                    "VALUES ('" + shiftDTO.getDate() + "', " + shiftDTO.getDayShift() + ", " + shiftDTO.getActive() + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getManagerId() + ", " + shiftDTO.getBranchId() + shiftDTO.getNeedQM() +")";
-            stmt.executeUpdate(sql);
+            int needQM = shiftDTO.getNeedQM() ? 1 : 0;
+            int active = shiftDTO.getActive() ? 1 : 0;
+            int dayShift = shiftDTO.getDayShift() ? 1 : 0;
+            if(shiftDTO.getManagerId() == -1)
+            {
+                String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, branchID, needQM) " +
+                        "VALUES ('" + shiftDTO.getDate() + "', " + dayShift + ", " + active + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getBranchId() + ", " + needQM +")";
+                stmt.executeUpdate(sql);
+
+            }
+            else {
+                String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, managerID, branchID, needQM) " +
+                        "VALUES ('" + shiftDTO.getDate() + "', " + dayShift + ", " + active + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getManagerId() + ", " + shiftDTO.getBranchId() + ", " + needQM + ")";
+                stmt.executeUpdate(sql);
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -63,7 +75,7 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET active = " + shiftDTO.getActive() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            String sql = "UPDATE INTO SHIFT SET active = " + shiftDTO.getActive() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -76,7 +88,7 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET needQM = " + shiftDTO.getNeedQM() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            String sql = "UPDATE Shifts SET needQM = " + shiftDTO.getNeedQM() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -89,7 +101,7 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET managerID = " + shiftDTO.getManagerId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            String sql = "UPDATE INTO SHIFT SET managerID = " + shiftDTO.getManagerId() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -101,7 +113,7 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
+            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -113,7 +125,7 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "DELETE FROM Shifts WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
+            String sql = "DELETE FROM Shifts WHERE date = '" + date + "' AND dayShift = " + dayShift + " AND branchId = " + branchId;
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -125,7 +137,8 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "SELECT * FROM Shifts WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
+            int dayShiftInt = dayShift ? 1 : 0;
+            String sql = "SELECT * FROM Shifts WHERE date = '" + date + "' AND dayShift = " + dayShiftInt + " AND branchId = " + branchId;
             ResultSet rs = stmt.executeQuery(sql);
             ShiftDTO shiftDTO = new ShiftDTO();
             shiftDTO.setDate(rs.getString("date"));
@@ -135,7 +148,7 @@ public class ShiftDAO {
             shiftDTO.setManagerId(rs.getInt("managerID"));
             shiftDTO.setBranchId(rs.getInt("branchID"));
 
-            String sql1 = "SELECT * FROM Roles WHERE date = " + date + " AND dayShift = " + dayShift + " AND branchId = " + branchId;
+            String sql1 = "SELECT * FROM Roles WHERE date = '" + date + "' AND dayShift = " + dayShift + " AND branchId = " + branchId;
             ResultSet rs1 = stmt.executeQuery(sql1);
             Map<String, List<Integer>> workers = new HashMap<>();
             while (rs1.next()) {
@@ -163,7 +176,7 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = " + shiftDTO.getDate() + " AND dayShift = " + shiftDTO.getDayShift();
+            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift();
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -176,8 +189,9 @@ public class ShiftDAO {
              Statement stmt = conn.createStatement();
         )
         {
+            int dayShift = shiftDTO.getDayShift() ? 1 : 0;
             String sql = "INSERT INTO Roles (role, workerID, branchID, date, dayShift) " +
-                    "VALUES ('" + role + "', " + id + ", " + shiftDTO.getBranchId() + ", " + shiftDTO.getDate() + ", " + shiftDTO.getDayShift() + ")";
+                    "VALUES ('" + role + "', " + id + ", " + shiftDTO.getBranchId() + ", '" + shiftDTO.getDate() + "', " + dayShift + ")";
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {

@@ -269,14 +269,8 @@ public class Facade {
             plus++;
         if(LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY)
             plus+=2;
-        HeadOfBranch hb = (HeadOfBranch)_worker;
-        HeadOfBranchManager.createShift(hb, HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false,LocalDate.now().getDayOfWeek().getValue());
-        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true,LocalDate.now().getDayOfWeek().getValue());
-        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false,1);
-        HeadOfBranchManager.setHalfDayShiftOff(((HeadOfBranch)_worker), (LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),true,1);
-        HeadOfBranchManager.createShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(11),(LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true,2);
-        HeadOfBranchManager.setAllDayOff(((HeadOfBranch)_worker), (LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),3);
-        ((HeadOfBranch)_worker).selectShift((LocalDate.now().plusDays(plus + 1).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 1).getMonthValue() + "." + LocalDate.now().plusDays(plus + 1).getYear()),false);
+
+        ((HeadOfBranch)_worker).selectShift("05.07.2024",true);
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Driver");
@@ -291,7 +285,7 @@ public class Facade {
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
-        ((HeadOfBranch)_worker).selectShift((LocalDate.now().plusDays(plus + 2).getDayOfMonth() + "." + LocalDate.now().plusDays(plus + 2).getMonthValue() + "." + LocalDate.now().plusDays(plus + 2).getYear()),true);
+        ((HeadOfBranch)_worker).selectShift("03.07.2024",true);
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Driver");
@@ -306,22 +300,7 @@ public class Facade {
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
-        ((HeadOfBranch)_worker).selectShift((LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),true);
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Driver");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(4),"Cleaner");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(5),"Cleaner");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(6),"Quartermaster");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(7),"Quartermaster");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(8),"Packer");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(9),"Packer");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(10),"Driver");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(12),"Butcher");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(13),"Delly-Man");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(14),"Guard");
-        HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(15),"Guard");
-        ((HeadOfBranch)_worker).selectShift((LocalDate.now().getDayOfMonth() + "." + LocalDate.now().getMonthValue() + "." + LocalDate.now().getYear()),false);
+        ((HeadOfBranch)_worker).selectShift("03.07.2024",false);
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(1),"Cashier");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(2),"Cashier");
         HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker), HeadOfBranch.getWorker(3),"Driver");
