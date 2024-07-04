@@ -13,15 +13,9 @@ public class Main {
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Facade facade = new Facade("admin");
+        Facade facade = new Facade();
         LoginManager lm = new LoginManager(facade);
         ActionManager ac = new ActionManager(facade);
-        System.out.println("do you want to load the system with data? (y/n)");
-        String ans = scanner.nextLine();
-        if(ans.equals("y")) {
-            ac.load();
-            lm.logOut();
-        }
         boolean isLoggedIn = false;
         boolean terminated = false;
 

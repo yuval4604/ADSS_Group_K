@@ -6,19 +6,18 @@ public class headOfHRTest {
     private Facade facade;
     @BeforeEach
     void setUp() {
-        facade = new Facade("1234");
-        facade.createBM("a",0,1,true,10000,0,"11/11/11",10,10);
-        facade.addWorker("worker1",1,1,true,10000,0,"11/11/11",10,10);
-        facade.addWorker("worker2",2,2,false,10000,0,"11/11/11",10,10);
-        facade.addWorker("worker3",3,3,false,10000,0,"11/11/11",10,10);
-        facade.addWorker("worker4",4,4,true,10000,0,"11/11/11",10,10);
-        facade.addBranch("branch1",1,"a",0);
+        facade.createBM("a",500,1,true,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker1",100,1,true,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker2",200,2,false,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker3",300,3,false,10000,0,"11/11/11",10,10);
+        facade.addWorker("worker4",400,4,true,10000,0,"11/11/11",10,10);
+        facade.addBranch("branch1",200,"a",0);
 
-        facade.addRole(1,"Shift-Manager");
-        facade.addRole(2,"c");
-        facade.addRole(3,"b");
-        facade.addRole(4,"a");
-        facade.login(0,"a");
+        facade.addRole(100,"Shift-Manager");
+        facade.addRole(200,"c");
+        facade.addRole(300,"b");
+        facade.addRole(400,"a");
+        facade.login(500,"a");
         facade.addWorkerToBranch(1);
         facade.addWorkerToBranch(2);
         facade.addWorkerToBranch(3);
@@ -28,17 +27,42 @@ public class headOfHRTest {
 
     }
 
+    @AfterEach
+    void tearDown() {
+        facade.logOut();
+        facade.login(500,"a");
+        facade.removeRole(100,"Shift-Manager");
+        facade.removeRole(200,"c");
+        facade.removeRole(300,"b");
+        facade.removeRole(400,"a");
+        facade.removeWorkerFromBranch(1);
+        facade.removeWorkerFromBranch(2);
+        facade.removeWorkerFromBranch(3);
+        facade.removeWorkerFromBranch(4);
+        facade.logOut();
+        facade.login(0,"1234");
+        facade.fireWorker(100);
+        facade.fireWorker(200);
+        facade.fireWorker(300);
+        facade.fireWorker(400);
+        facade.fireWorker(500);
+        facade.removeBranch(200);
+        facade.deleteShift("01.01.2021",true,2);
+    }
+
 
     @Test
     void createShiftTest() {
         Assertions.assertTrue(facade.createShift(1,"12.12.21",true,1),"Shift added successfully");
         Assertions.assertFalse(facade.createShift(1,"12.12.21",true,1),"Shift already exist");
+        facade.deleteShift("12.12.21",true,200);
     }
     @Test
     void selectShiftTest() {
         facade.createShift(1,"12.12.21",true,1);
         Assertions.assertTrue(facade.selectShift("12.12.21",true),"Does exist");
         Assertions.assertFalse(facade.selectShift("11.12.21",true),"Does not exist");
+        facade.deleteShift("12.12.21",true,200);
     }
     @Test
     void setHourlyWage() {
@@ -105,6 +129,7 @@ public class headOfHRTest {
         Assertions.assertTrue(facade.showShift().contains("worker3"));
         facade.addWorkerToShift(4,"a");
         Assertions.assertTrue(facade.showShift().contains("worker4"));
+        facade.deleteShift("12.12.21",true,200);
     }
 
     @Test
@@ -120,22 +145,24 @@ public class headOfHRTest {
         Assertions.assertTrue(facade.getCons(1,true).equals(Constraints.inactive));
         facade.login(4,"a");
         Assertions.assertTrue(facade.getCons(1,true).equals(Constraints.inactive));
-
+        facade.deleteShift("02.01.21",true,200);
     }
 
     @Test
     void addWorker() {
         facade.logOut();
         facade.login(0,"1234");
-        facade.addWorker("worker5",5,5,true,0,0,"11.11.11",10,10);
-        Assertions.assertTrue(facade.login(5,"worker5"));
+        facade.addWorker("worker5",501,5,true,0,0,"11.11.11",10,10);
+        Assertions.assertTrue(facade.login(501,"worker5"));
+        facade.fireWorker(501);
     }
 
     @Test
     void addRole() {
-        facade.addRole(1,"d");
+        facade.addRole(100,"d");
         facade.selectShift("01.01.2021",true);
         Assertions.assertTrue(facade.getAvailableWorkersOfRole("d").contains("worker1"));
+        facade.removeRole(100,"d");
     }
 
     @Test
@@ -145,6 +172,8 @@ public class headOfHRTest {
         Assertions.assertTrue(facade.isInactive());
         facade.selectShift("03.01.2021",false);
         Assertions.assertTrue(facade.isInactive());
+        facade.deleteShift("03.01.2021",true,200);
+        facade.deleteShift("03.01.2021",false,200);
     }
 
     @Test

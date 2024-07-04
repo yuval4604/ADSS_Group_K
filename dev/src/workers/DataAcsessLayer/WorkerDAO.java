@@ -2,7 +2,6 @@ package workers.DataAcsessLayer;
 
 import java.nio.file.Paths;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,9 +24,9 @@ public class WorkerDAO  {
                     " CurrentVacationDays INTEGER, " +
                     " isBM BIT(1), " +
                     " Changed BIT(1), " +
-                    "BranchName VARCHAR(255)," +
+                    "Branch Integer," +
                     "Licenses VARCHAR(255)," +
-                    " FOREIGN KEY (BranchName) REFERENCES Branches(Name)," +
+                    " FOREIGN KEY (Branch) REFERENCES Branches(ID)," +
                     " PRIMARY KEY ( ID ))";
             stmt.executeUpdate(sql);
 
@@ -66,17 +65,17 @@ public class WorkerDAO  {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            if(worker.getBranchName() == null)
-                worker.setBranchName("");
+            if(worker.getBranch() == -1)
+                worker.setBranchID(-1);
             if(worker.getID() == 0)
             {
-                String sql = "INSERT OR IGNORE INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, BranchName, Licenses) " +
-                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranchName() + "', '" + worker.getLicensesString() + "')";
+                String sql = "INSERT OR IGNORE INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, Branch, Licenses) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranch() + "', '" + worker.getLicensesString() + "')";
                 stmt.executeUpdate(sql);
             }
             else {
-                String sql = "INSERT INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, BranchName, Licenses) " +
-                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranchName() + "', '" + worker.getLicensesString() + "')";
+                String sql = "INSERT INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, Branch, Licenses) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranch() + "', '" + worker.getLicensesString() + "')";
                 stmt.executeUpdate(sql);
             }
             if(worker.getPref() == null)
@@ -135,7 +134,7 @@ public class WorkerDAO  {
             worker.setCVDays(rs.getInt("CurrentVacationDays"));
             worker.setIsHeadOfBranch(rs.getBoolean("isBM"));
             worker.setChange(rs.getBoolean("Changed"));
-            worker.setBranchName(rs.getString("BranchName"));
+            worker.setBranchID((rs.getInt("Branch")));
             String[] licenses = rs.getString("Licenses").split(", ");
             List<String> licensesList = new LinkedList<>();
             for (String license : licenses) {
@@ -244,11 +243,11 @@ public class WorkerDAO  {
         }
     }
 
-    public static void updateWorkerBranchName(WorkerDTO worker) {
+    public static void updateWorkerBranch(WorkerDTO worker) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "UPDATE Workers SET BranchName = " + worker.getBranchName() + " WHERE ID = " + worker.getID();
+            String sql = "UPDATE Workers SET Branch = " + worker.getBranch() + " WHERE ID = " + worker.getID();
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -283,32 +282,6 @@ public class WorkerDAO  {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String[][] getPrefs(int id) {
-        String[][] prefs = new String[6][2];
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "SELECT * FROM Prefs WHERE ID = " + id;
-            ResultSet rs = stmt.executeQuery(sql);
-            prefs[0][0] = rs.getString("SUNDAY");
-            prefs[1][0] = rs.getString("MONDAY");
-            prefs[2][0] = rs.getString("TUEDAY");
-            prefs[3][0] = rs.getString("WEDDAY");
-            prefs[4][0] = rs.getString("THURDAY");
-            prefs[5][0] = rs.getString("FRIDAY");
-            prefs[0][1] = rs.getString("SUNNIGHT");
-            prefs[1][1] = rs.getString("MONNIGHT");
-            prefs[2][1] = rs.getString("TUENIGHT");
-            prefs[3][1] = rs.getString("WEDNIGHT");
-            prefs[4][1] = rs.getString("THURNIGHT");
-            prefs[5][1] = rs.getString("FRINIGHT");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return prefs;
     }
 
 }

@@ -16,14 +16,10 @@ public class Facade {
 
     private LocalDate _lastUpdate;
 
-    public Facade(String password) {
+    public Facade() {
         _lastUpdate = LocalDate.now();
         loginInfos = new HashMap<>();
-        loginInfos.put(0, password);
-        Branch ABranch = new Branch("Admin", 0, "Admin", null);
-        _worker = new HR(ABranch);
-        ABranch.setHeadOfBranch(_worker);
-        HeadOfBranch.allWorkers.put(0, _worker);
+        String password = LoginDAO.getPassword(0);
 
         WorkerDAO.createWorkerTable();
         ShiftDAO.createShiftTable();
@@ -33,6 +29,11 @@ public class Facade {
         HeadOfBranchDAO.createMinimalWorkersTable();
         HeadOfBranchDAO.createRoleListTable();
         LoginDAO.createTable();
+
+        if(password != null) {
+            loginInfos.put(0,password);
+        }
+        _worker = HeadOfBranch.getWorker(0);
     }
     public boolean login(int id,String password) {
         if(loginInfos.containsKey(id) && loginInfos.get(id).equals(password)) {
@@ -91,12 +92,12 @@ public class Facade {
         List<Worker>[] list = HeadOfBranchManager.getAvailableWorkersOfRole(((HeadOfBranch)_worker), role);
         res += "For the role, " + role + " , the workers who want to work this shift are: \n";
         for(Worker worker : list[0]) {
-            if (WorkerManager.inBranch(worker,((HeadOfBranch)_worker).getBranchO().getName()))
+            if (WorkerManager.inBranch(worker,((HeadOfBranch)_worker).getBranchO().getID()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         res += "For the role, " + role + " , the workers who can work this shift are: \n";
         for(Worker worker : list[1]) {
-            if (WorkerManager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
+            if (WorkerManager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getID()))
                 res += worker.getName() + ", " + worker.getID() + "\n";
         }
         return res;
@@ -106,7 +107,7 @@ public class Facade {
             return false;
         }
         Worker worker = HeadOfBranch.getWorker(id);
-        if (!WorkerManager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getName()))
+        if (!WorkerManager.inBranch(worker, ((HeadOfBranch)_worker).getBranchO().getID()))
             return false;
         return HeadOfBranchManager.addWorkerToShift(((HeadOfBranch)_worker),worker,role);
     }
@@ -117,7 +118,7 @@ public class Facade {
         if(!_worker.getIsBM())
             return false;
         Worker shiftManager = HeadOfBranch.getWorker(id);
-        if (!WorkerManager.inBranch(shiftManager, ((HeadOfBranch)_worker).getBranchO().getName()))
+        if (!WorkerManager.inBranch(shiftManager, ((HeadOfBranch)_worker).getBranchO().getID()))
             return false;
         return HeadOfBranchManager.createShift(((HeadOfBranch)_worker), shiftManager,date,dayShift,dayOfWeek);
     }
@@ -208,6 +209,7 @@ public class Facade {
             Worker worker = new Worker(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays,false);
             ((HR)_worker).addWorker(worker);
             loginInfos.put(id,name);
+            LoginDAO.insertUser(id,name);
             return true;
         }
 
@@ -280,6 +282,8 @@ public class Facade {
         }
 
         public int lastDayToSetConstraints () {
+            if (_worker.getID() == 0)
+                return ((HR)_worker).lastDayToSetConstraints();
             return ((HeadOfBranch)HR.getBranchO(_worker.getBranch()).getBM()).lastDayToSetConstraints();
         }
 
@@ -304,6 +308,7 @@ public class Facade {
             if(_worker.getID() == 0 && id != 0 && loginInfos.containsKey(id)) {
                 ((HR)_worker).fireWorker(id);
                 loginInfos.remove(id);
+                LoginDAO.deleteUser(id);
                 return true;
             }
             return false;
@@ -408,7 +413,7 @@ public class Facade {
     }
 
     public String getBranch() {
-        return _worker.getBranch();
+        return HR.getBranchO(_worker.getBranch()).getName();
     }
 
     public boolean createBM(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {
@@ -442,6 +447,10 @@ public class Facade {
         if(license.equals("D"))
             return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.D);
         return false;
+    }
+
+    public void deleteShift(String s, boolean b, int i) {
+        HeadOfBranchManager.deleteShift(s,b,i);
     }
 }
 

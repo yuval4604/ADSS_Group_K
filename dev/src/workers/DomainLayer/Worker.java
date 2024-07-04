@@ -20,7 +20,7 @@ public class Worker {
     private Constraints[][] _prefList;
     private List<Constraints[][]> _constraints;
     private boolean _changedPassword;
-    protected String branch;
+    protected int branch;
     private List<License> _licenses;
 
     public Worker(WorkerDTO worker)
@@ -78,7 +78,7 @@ public class Worker {
             WorkerDTO workerDTO = new WorkerDTO();
             workerDTO.setStartDate(_dateOfStart);
             workerDTO.setBankAccount(_bankNumber);
-            workerDTO.setBranchName(branch);
+            workerDTO.setBranchID(branch);
             workerDTO.setFTime(_fullTimeJob);
             workerDTO.setGWage(_globalWage);
             workerDTO.setHWage(_hourlyWage);
@@ -193,7 +193,7 @@ public class Worker {
         return true;
     }
 
-    public String getBranch() {
+    public int getBranch() {
         return branch;
     }
 
@@ -207,26 +207,16 @@ public class Worker {
         return _changedPassword;
     }
 
-    public void createNewConstraints()
-    {
-        _prefList = new Constraints[7][2];
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 2; j++) {
-                _prefList[i][j] = (i == 6) ? Constraints.inactive : Constraints.can;
-            }
-
-        }
-    }
     public void backupConstraints() {
         _constraints.add(_prefList);
     }
 
-    public void setBranch(String branch) {
+    public void setBranch(int branch) {
         this.branch = branch;
         WorkerDTO workerDTO = new WorkerDTO();
-        workerDTO.setBranchName(branch);
+        workerDTO.setBranchID(branch);
         workerDTO.setID(_id);
-        WorkerDAO.updateWorkerBranchName(workerDTO);
+        WorkerDAO.updateWorkerBranch(workerDTO);
     }
 
     public void setChangedPassword() {

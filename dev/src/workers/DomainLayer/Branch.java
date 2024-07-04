@@ -37,7 +37,10 @@ public class Branch {
         _name = bdto.getName();
         _id = bdto.getId();
         _address = bdto.getAddress();
-        _headOfBranch = HeadOfBranch.getWorker(bdto.getHeadOfBranchId());
+        if (bdto.getHeadOfBranchId() == 0)
+            _headOfBranch = null;
+        else
+            _headOfBranch = HeadOfBranch.getWorker(bdto.getHeadOfBranchId());
         _workers = new LinkedList<>();
         _shifts = new LinkedList<>();
     }

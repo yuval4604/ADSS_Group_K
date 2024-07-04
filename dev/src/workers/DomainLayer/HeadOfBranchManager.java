@@ -194,8 +194,10 @@ public class HeadOfBranchManager {
             if (worker != null) {
                 Map<String,List<Worker>> workers = currentShift.getWorkers();
                 List<Worker> workersList = workers.get(role);
-                if(workersList.contains(worker))
+                if(workersList.contains(worker)) {
                     currentShift.getWorkers().get(role).remove(worker);
+                    currentShift.removeWorker(worker);
+                }
                 else
                     return false;
                 if(role.equals("Driver") && !hb.getMinimalWorkers().containsKey("Driver") && !hb.getMinimalWorkers().containsKey("Quartermaster")) {
@@ -224,15 +226,22 @@ public class HeadOfBranchManager {
     public static void setMinimalAmount(HeadOfBranch hb, String role, int amount) {
         Map<String,Integer> minimalWorkers = hb.getMinimalWorkers();
         if(minimalWorkers.containsKey(role)) {
-            if(amount == 0)
+            if(amount == 0) {
                 minimalWorkers.remove(role);
-            else
-                minimalWorkers.replace(role,amount);
+                hb.removeAmount(role);
+            }
+            else {
+                minimalWorkers.replace(role, amount);
+                hb.replaceAmount(role, amount);
+            }
+
         }
         else if(amount == 0)
-            minimalWorkers.remove(role);
-        else if(amount > 0)
-            minimalWorkers.put(role,amount);
+            return;
+        else if(amount > 0) {
+            minimalWorkers.put(role, amount);
+            hb.addAmount(role, amount);
+        }
         if(role.equals("Driver") && amount > 0 && !minimalWorkers.containsKey("Quartermaster")) {
             setMinimalAmount(hb,"Quartermaster",1);
         }
@@ -243,7 +252,7 @@ public class HeadOfBranchManager {
         if(branch.getWorkers().contains(worker))
             return false;
         branch.addWorker(worker);
-        worker.setBranch(branch.getName());
+        worker.setBranch(branch.getID());
         return true;
     }
 
@@ -269,5 +278,9 @@ public class HeadOfBranchManager {
                 return false;
         }
         return true;
+    }
+
+    public static void deleteShift(String s, boolean b,int i) {
+        ShiftManager.deleteShift(s,b,i);
     }
 }

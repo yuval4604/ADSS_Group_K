@@ -1,5 +1,8 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.HeadOfBranchDTO;
+import workers.DataAcsessLayer.WorkerDTO;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,6 +21,14 @@ public class HR extends HeadOfBranch {
         _branches.put(0,ABranch);
         firedWorkers = new HashMap<>();
 
+    }
+
+    public HR(WorkerDTO w, HeadOfBranchDTO h) {
+        super(w,h);
+        _branches = new HashMap<>();
+        _branch.setHeadOfBranch(this);
+        _branches.put(_branch.getID(),_branch);
+        firedWorkers = new HashMap<>();
     }
 
     public void addWorker (Worker worker){
@@ -55,10 +66,10 @@ public class HR extends HeadOfBranch {
         return false;
     }
 
-    public static String showBranch(String branchName) {
+    public static String showBranch(int branch) {
         int id = -1000000000;
         for (Map.Entry<Integer, Branch> entry : _branches.entrySet()) {
-            if(entry.getValue().getName().equals(branchName)) {
+            if(entry.getValue().getID() == (branch)) {
                 id =  entry.getValue().getID();
             }
         }
@@ -94,7 +105,12 @@ public class HR extends HeadOfBranch {
 
     public boolean fireWorker(int id) {
         if(allWorkers.containsKey(id)) {
+            if(allWorkers.get(id).getIsBM()) {
+                HeadOfBranch headOfBranch = (HeadOfBranch) allWorkers.get(id);
+                headOfBranch.deleteHeadOfBranch();
+            }
             allWorkers.remove(id);
+            WorkerManager.removeWorker(id);
             return true;
         }
         for(Map.Entry<String, List<Worker>> entry : roleList.entrySet()) {
@@ -138,12 +154,13 @@ public class HR extends HeadOfBranch {
         }
     }
 
-    public static Branch getBranchO(String branch) {
+    public static Branch getBranchO(int branch) {
         for(Map.Entry<Integer, Branch> entry : _branches.entrySet()) {
-            if(entry.getValue().getName().equals(branch)) {
+            if(entry.getValue().getID() == (branch)) {
                 return entry.getValue();
             }
         }
+        BranchManager.getBranch(branch);
         return null;
     }
 }

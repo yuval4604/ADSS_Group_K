@@ -736,10 +736,6 @@ public class ActionManager {
         }
     }
 
-    public void load() {
-        _facade.load();
-    }
-
     public void showWorkerShifts() {
         try {
             System.out.println("Choose A starting date from this order: dd.mm.yyyy");

@@ -195,17 +195,6 @@ public class HeadOfBranchDAO {
         }
     }
 
-    public static void updateRoleList(String role, int workerID) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "UPDATE RoleList SET Role = '" + role + "' WHERE WorkerID = " + workerID;
-            stmt.executeUpdate(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static HeadOfBranchDTO getHeadOfBranch(int id) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -221,18 +210,6 @@ public class HeadOfBranchDAO {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static int getMinimalWorkersAmount(int branchID, String role) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "SELECT * FROM minimalWorkers WHERE BranchID = " + branchID + " AND Role = '" + role + "'";
-            return stmt.executeQuery(sql).getInt("Amount");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
     }
 
     public static List<Integer> getRoleListWorkerID(String role) {
@@ -267,21 +244,6 @@ public class HeadOfBranchDAO {
         return roles;
     }
 
-    public static List<String> getAllRoles() {
-        List<String> roles = new LinkedList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "SELECT DISTINCT Role FROM RoleList";
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                roles.add(rs.getString("Role"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return roles;
-    }
 
     public static Map<String, Integer> getMinimalWorkers(int branchID) {
         Map<String, Integer> minimalWorkers = new HashMap<>();
@@ -299,21 +261,6 @@ public class HeadOfBranchDAO {
         return minimalWorkers;
     }
 
-    public static List<Integer> getAllHeadOfBranch() {
-        List<Integer> headOfBranches = new LinkedList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        ) {
-            String sql = "SELECT ID FROM HeadOfBranch";
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                headOfBranches.add(rs.getInt("ID"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return headOfBranches;
-    }
 
     public static ShiftDTO getShift(String date, boolean dayShift, int id) {
         return ShiftDAO.getShift(date, dayShift, id);

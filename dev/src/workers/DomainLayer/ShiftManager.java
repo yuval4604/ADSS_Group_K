@@ -1,5 +1,7 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.ShiftDAO;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +21,15 @@ public class ShiftManager {
             for (Worker worker : entry.getValue()) {
                 if(worker.getID() == id) {
                     entry.getValue().remove(worker);
+                    shift.removeWorker(worker);
                     if(workers.containsKey(role)) {
                         workers.get(role).add(worker);
+                        shift.addWorker(worker,role);
                     }
                     else {
                         workers.put(role,new LinkedList<>());
                         workers.get(role).add(worker);
+                        shift.addWorker(worker,role);
                     }
                     return;
                 }
@@ -41,5 +46,9 @@ public class ShiftManager {
             }
         }
         return false;
+    }
+
+    public static void deleteShift(String s, boolean b,int i) {
+        ShiftDAO.deleteShift(s, b, i);
     }
 }

@@ -1,6 +1,5 @@
 package workers.DataAcsessLayer;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class WorkerDTO {
@@ -13,7 +12,7 @@ public class WorkerDTO {
     private boolean FTime;
     private int TVDays;
     private int CVDays;
-    private String branchName;
+    private int branchName;
     private boolean isHeadOfBranch;
     private boolean change;
     private String[][] pref;
@@ -52,7 +51,7 @@ public class WorkerDTO {
     public int getCVDays() {
         return CVDays;
     }
-    public String getBranchName() {
+    public int getBranch() {
         return branchName;
     }
     public boolean getIsHeadOfBranch() {
@@ -91,8 +90,8 @@ public class WorkerDTO {
     public void setCVDays(int CVDays) {
         this.CVDays = CVDays;
     }
-    public void setBranchName(String branchName) {
-        this.branchName = branchName;
+    public void setBranchID(int branch) {
+        this.branchName = branch;
     }
     public void setIsHeadOfBranch(boolean isHeadOfBranch) {
         this.isHeadOfBranch = isHeadOfBranch;

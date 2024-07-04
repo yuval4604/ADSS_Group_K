@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ShiftDAO {
-    private Connection connection;
-    private Statement statement;
-    private ResultSet resultSet;
 
 
     private static final String DB_URL = "jdbc:sqlite:" + Paths.get("WorkersDB.db").toAbsolutePath().toString().replace("\\", "/");
@@ -48,37 +45,21 @@ public class ShiftDAO {
     public static void insertShift(ShiftDTO shiftDTO) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
-        )
-        {
+        ) {
             int needQM = shiftDTO.getNeedQM() ? 1 : 0;
             int active = shiftDTO.getActive() ? 1 : 0;
             int dayShift = shiftDTO.getDayShift() ? 1 : 0;
-            if(shiftDTO.getManagerId() == -1)
-            {
+            if (shiftDTO.getManagerId() == -1) {
                 String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, branchID, needQM) " +
-                        "VALUES ('" + shiftDTO.getDate() + "', " + dayShift + ", " + active + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getBranchId() + ", " + needQM +")";
+                        "VALUES ('" + shiftDTO.getDate() + "', " + dayShift + ", " + active + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getBranchId() + ", " + needQM + ")";
                 stmt.executeUpdate(sql);
 
-            }
-            else {
+            } else {
                 String sql = "INSERT INTO Shifts (date, dayShift, active, dayOfWeek, managerID, branchID, needQM) " +
                         "VALUES ('" + shiftDTO.getDate() + "', " + dayShift + ", " + active + ", " + shiftDTO.getDayOfWeek() + ", " + shiftDTO.getManagerId() + ", " + shiftDTO.getBranchId() + ", " + needQM + ")";
                 stmt.executeUpdate(sql);
             }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void updateShiftActive(ShiftDTO shiftDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE INTO SHIFT SET active = " + shiftDTO.getActive() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -96,36 +77,22 @@ public class ShiftDAO {
         }
     }
 
-    public static void updateShiftManager(ShiftDTO shiftDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE INTO SHIFT SET managerID = " + shiftDTO.getManagerId() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void updateShiftBranch(ShiftDTO shiftDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift() + " AND branchId = " + shiftDTO.getBranchId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     public static void deleteShift(String date, boolean dayShift, int branchId) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         )
         {
             String sql = "DELETE FROM Shifts WHERE date = '" + date + "' AND dayShift = " + dayShift + " AND branchId = " + branchId;
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "DELETE FROM Roles WHERE date = '" + date + "' AND dayShift = " + dayShift + " AND branchId = " + branchId;
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
@@ -171,18 +138,6 @@ public class ShiftDAO {
         }
         return null;
     }
-    public static  void setBranchID(ShiftDTO shiftDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE INTO SHIFT SET branchID = " + shiftDTO.getBranchId() + " WHERE date = '" + shiftDTO.getDate() + "' AND dayShift = " + shiftDTO.getDayShift();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void insertWorkerToShift(ShiftDTO shiftDTO, String role, int id) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
@@ -192,6 +147,20 @@ public class ShiftDAO {
             int dayShift = shiftDTO.getDayShift() ? 1 : 0;
             String sql = "INSERT INTO Roles (role, workerID, branchID, date, dayShift) " +
                     "VALUES ('" + role + "', " + id + ", " + shiftDTO.getBranchId() + ", '" + shiftDTO.getDate() + "', " + dayShift + ")";
+            stmt.executeUpdate(sql);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteWorkerFromShift(String date, boolean dayShift, int bID, int wID) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            int dayShiftInt = dayShift ? 1 : 0;
+            String sql = "DELETE FROM Roles WHERE date = '" + date + "' AND dayShift = " + dayShiftInt + " AND workerID = " + wID + " AND branchID = " + bID;
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {

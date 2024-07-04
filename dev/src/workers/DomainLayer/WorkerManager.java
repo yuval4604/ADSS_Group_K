@@ -1,5 +1,7 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.WorkerDAO;
+
 public class WorkerManager {
     public static boolean useVacationDays(Worker worker, int days) {
         if (days < worker.getCurrVacationDays()) {
@@ -13,13 +15,12 @@ public class WorkerManager {
         worker.setCurrvacationDays(worker.getTotalVacationDays());
     }
 
-    public static boolean inBranch(Worker worker, String name) {
-        return worker.getBranch().equals(name);
+    public static boolean inBranch(Worker worker, int id) {
+        return worker.getBranch()  == id;
     }
 
     public static void checkUpdateDay(Worker worker) {
         worker.backupConstraints();
-        //worker.createNewConstraints();
     }
 
     public static String getWorkerLicense(Worker worker) {
@@ -38,4 +39,7 @@ public class WorkerManager {
         return worker.addLicense(license);
     }
 
+    public static void removeWorker(int id) {
+        WorkerDAO.deleteWorker(id);
+    }
 }

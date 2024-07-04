@@ -55,4 +55,14 @@ public class LoginDAO {
         }
     }
 
+    public static String getPassword(int i) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery("SELECT password FROM Users WHERE ID = '" + i + "'");
+            return rs.getString("password");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -6,4 +6,8 @@ public class BranchManager {
     public static Map<String, Integer> getMinimalWorkersForShift(Branch branch) {
         return ((HeadOfBranch)branch.getHeadOfBranch()).getMinimalWorkersForShift();
     }
+
+    public static void getBranch(int branch) {
+        Branch.getBranch(branch);
+    }
 }
