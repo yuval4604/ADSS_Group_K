@@ -36,7 +36,7 @@ public class ShiftDAO {
                     "branchID INTEGER," +
                     "date VARCHAR(30), " +
                     " dayShift BIT(1), " +
-                    "PRIMARY KEY(role,workerID), " +
+                    "PRIMARY KEY(role,workerID, date, dayShift, branchID), " +
                     "FOREIGN KEY(date,dayShift,branchID) REFERENCES Shifts(date, dayShift,branchID))";
             stmt.executeUpdate(sql1);
 

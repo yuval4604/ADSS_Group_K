@@ -1,8 +1,5 @@
 package workers.DomainLayer;
-import workers.DataAcsessLayer.HeadOfBranchDAO;
-import workers.DataAcsessLayer.HeadOfBranchDTO;
-import workers.DataAcsessLayer.WorkerDAO;
-import workers.DataAcsessLayer.WorkerDTO;
+import workers.DataAcsessLayer.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -114,6 +111,9 @@ public class HeadOfBranch extends Worker {
                 return true;
             }
         }
+        ShiftDTO sdto = HeadOfBranchDAO.getShift(date,dayShift,_branch.getID());
+        if(sdto.getDate() == null)
+            return false;
         currentShift = new Shift(HeadOfBranchDAO.getShift(date,dayShift,_branch.getID()));
         return false;
     }
