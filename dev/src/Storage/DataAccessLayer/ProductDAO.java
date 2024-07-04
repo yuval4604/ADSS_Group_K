@@ -16,7 +16,7 @@ public class ProductDAO {
     private Connection conn;
 
     public ProductDAO(String dataBaseName) throws SQLException {
-        URL = "jdbc:sqlite:" + Paths.get(dataBaseName).toAbsolutePath().toString().replace("\\", "/");
+        URL = "jdbc:sqlite:" + Paths.get("dev\\"+dataBaseName).toAbsolutePath().toString().replace("\\", "/");
         conn = DriverManager.getConnection(URL);
         if(conn == null)
             throw new SQLException("Connection failed");
