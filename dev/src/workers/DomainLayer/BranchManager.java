@@ -8,6 +8,6 @@ public class BranchManager {
     }
 
     public static void getBranch(int branch) {
-        Branch.getBranch(branch);
+        Branch.getBranch(branch, null);
     }
 }

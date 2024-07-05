@@ -81,14 +81,14 @@ public class Main {
                     case 12 -> ac.addLicense();
                     case 13 -> {
                         if (isBM) {
-                            ac.setWage();
+                            ac.setWage(-1);
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
                     case 14 -> {
                         if (isBM) {
-                            ac.setHWage();
+                            ac.setHWage(-1);
                         } else {
                             System.out.println("Error: no permission to do that");
                         }

@@ -52,7 +52,7 @@ public class Shift {
         _dayOfWeek = shift.getDayOfWeek();
         _active = shift.getActive();
         _localDate = LocalDate.of(Integer.parseInt(_date.split("\\.")[2]), Integer.parseInt(_date.split("\\.")[1]), Integer.parseInt(_date.split("\\.")[0]));
-        _branch = Branch.getBranch(shift.getBranchId());
+        _branch = Branch.getBranch(shift.getBranchId(), null);
         needQuartermaster = shift.getNeedQM();
         if(shift.getManagerId() != -1)
             shiftManager = HeadOfBranch.getWorker(shift.getManagerId());

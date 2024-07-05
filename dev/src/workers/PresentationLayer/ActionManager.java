@@ -35,18 +35,18 @@ public class ActionManager {
         _facade.setBank(bankNum);
 
     }
-    public void setWage() {
-        System.out.println("Enter Worker's id:");
-        int id;
-        try {
-            id = scanner.nextInt();
-        }
-        catch (Exception e) {
-            System.out.println("Invalid id");
+    public void setWage(int id) {
+        if(id == -1) {
+            System.out.println("Enter Worker's id:");
+            try {
+                id = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid id");
+                scanner.nextLine();
+                return;
+            }
             scanner.nextLine();
-            return;
         }
-        scanner.nextLine();
         if(!_facade.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is not full time");
             return;
@@ -75,18 +75,18 @@ public class ActionManager {
             _facade.setHourlyWage(id,0);
         }
     }
-    public void setHWage() {
-        System.out.println("Enter Worker's id: ");
-        int id;
-        try {
-            id = scanner.nextInt();
-        }
-        catch (Exception e) {
-            System.out.println("Invalid id");
+    public void setHWage(int id) {
+        if(id == -1) {
+            System.out.println("Enter Worker's id: ");
+            try {
+                id = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid id");
+                scanner.nextLine();
+                return;
+            }
             scanner.nextLine();
-            return;
         }
-        scanner.nextLine();
         if(_facade.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is full time");
             return;
@@ -134,12 +134,12 @@ public class ActionManager {
         if(c.equals("t")) {
             res = _facade.setFullTimeJob(id,true);
             System.out.println("update the global wage of this employee: ");
-            setWage();
+            setWage(id);
         }
         else if(c.equals("f")){
             res = _facade.setFullTimeJob(id,false);
             System.out.println("update the hourly wage of this employee: ");
-            setHWage();
+            setHWage(id);
         }
         else {
             System.out.println("Didnt enter information correctly");
@@ -347,11 +347,11 @@ public class ActionManager {
             System.out.println("Didnt choose one of the options");
             return false;
         }
-        System.out.println("day of week?: choose 1 to 7");
+        System.out.println("day of week?: choose 1 to 6");
         int dayOfWeek;
         try {
-            dayOfWeek = scanner.nextInt() - 1;
-            if(dayOfWeek < 0 || dayOfWeek > 6) {
+            dayOfWeek = scanner.nextInt();
+            if(dayOfWeek < 1 || dayOfWeek > 7) {
                 throw new Exception();
             }
         }

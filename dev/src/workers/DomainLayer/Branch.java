@@ -33,22 +33,24 @@ public class Branch {
 
     }
 
-    public Branch(BranchDTO bdto) {
+    public Branch(BranchDTO bdto, Worker headOfBranch) {
         _name = bdto.getName();
         _id = bdto.getId();
         _address = bdto.getAddress();
         if (bdto.getHeadOfBranchId() == 0)
             _headOfBranch = null;
-        else
+        else if(headOfBranch == null)
             _headOfBranch = HeadOfBranch.getWorker(bdto.getHeadOfBranchId());
+        else
+            _headOfBranch = headOfBranch;
         _workers = new LinkedList<>();
         _shifts = new LinkedList<>();
     }
 
-    public static Branch getBranch(int branchID) {
+    public static Branch getBranch(int branchID, Worker headOfBranch) {
         try {
             BranchDTO bdto = BranchDAO.getBranch(branchID);
-            return new Branch(bdto);
+            return new Branch(bdto, headOfBranch);
         }
         catch (Exception e) {
             return null;

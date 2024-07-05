@@ -34,7 +34,7 @@ public class Worker {
         _fullTimeJob = worker.getFTime();
         _totalVacationDays = worker.getTVDays();
         _currentVacationDays = worker.getCVDays();
-        _prefList = new Constraints[7][2];
+        _prefList = new Constraints[6][2];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 2; j++) {
                 _prefList[i][j] = Constraints.valueOf(worker.getPref()[i][j]);
@@ -61,15 +61,13 @@ public class Worker {
         _dateOfStart = dateOfStart;
         _totalVacationDays = totalVacationDays;
         _currentVacationDays = currentVacationDays;
-        _prefList = new Constraints[7][2];
+        _prefList = new Constraints[6][2];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 2; j++) {
                 _prefList[i][j] = Constraints.can;
             }
 
         }
-        _prefList[6][0] = Constraints.inactive;
-        _prefList[6][1] = Constraints.inactive;
         _isBM = isBM;
         _changedPassword = false;
         _licenses = new LinkedList<License>();

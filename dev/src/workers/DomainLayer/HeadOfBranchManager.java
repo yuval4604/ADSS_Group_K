@@ -59,7 +59,7 @@ public class HeadOfBranchManager {
         }
         Shift currentShift = hb.getCurrentShift();
         for(Worker worker : roleWorkerList) {
-            Constraints con = worker.getCons(currentShift.getDayOfWeek(), currentShift.getDayShift());
+            Constraints con = worker.getCons(currentShift.getDayOfWeek() - 1, currentShift.getDayShift());
             if(con.equals(Constraints.want)) {
                 availableWorker[0].add(worker);
             }

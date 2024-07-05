@@ -140,19 +140,19 @@ public class Facade {
 
     public String showWorkerInfo() {
         String GRes = "Worker's info: \n" + "name: " + _worker.getName() + "\n"
-                + "Bank number:" + _worker.getBankNum() + "\n"
-                + "Global wage:" + _worker.getGWage() + "\n"
-                + "Date of start:" + _worker.getDateOfStart() + "\n"
-                + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
-                + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
+                + "Bank number: " + _worker.getBankNum() + "\n"
+                + "Global wage: " + _worker.getGWage() + "\n"
+                + "Date of start: " + _worker.getDateOfStart() + "\n"
+                + "Total vacation days: " + _worker.getTotalVacationDays() + "\n"
+                + "Current vacation days: " + _worker.getCurrVacationDays() + "\n"
                 + "Branch: " + _worker.getBranch() + "\n"
                 + "Licenses: " + WorkerManager.getWorkerLicense(_worker);
         String HRes = "Worker's info: \n" + "name: " + _worker.getName() + "\n"
-                + "Bank number:" + _worker.getBankNum() + "\n"
-                + "Hourly wage:" + _worker.getHWage() + "\n"
-                + "Date of start:" + _worker.getDateOfStart() + "\n"
-                + "Total vacation days:" + _worker.getTotalVacationDays() + "\n"
-                + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
+                + "Bank number: " + _worker.getBankNum() + "\n"
+                + "Hourly wage: " + _worker.getHWage() + "\n"
+                + "Date of start: " + _worker.getDateOfStart() + "\n"
+                + "Total vacation days: " + _worker.getTotalVacationDays() + "\n"
+                + "Current vacation days: " + _worker.getCurrVacationDays() + "\n"
                 + "Branch: " + _worker.getBranch() + "\n"
                 + "Licenses: " + WorkerManager.getWorkerLicense(_worker);
         return _worker.getFullTimeJob() ? GRes : HRes;
@@ -259,7 +259,10 @@ public class Facade {
     }
 
     public boolean isFullTime(int id) {
-        return _worker.getFullTimeJob();
+        Worker worker = HeadOfBranch.getWorker(id);
+        if(worker == null)
+            return false;
+        return worker.getFullTimeJob();
     }
 
     public String showShift() {
@@ -382,6 +385,9 @@ public class Facade {
                 return false;
             }
             Worker worker = HeadOfBranch.getWorker(workerID);
+            if(worker == null) {
+                return false;
+            }
             HeadOfBranchManager.addWorkerToBranch(((HeadOfBranch)_worker), worker);
             return true;
         }
@@ -444,7 +450,7 @@ public class Facade {
 
     public String getShiftManagers() {
         String res = "";
-        List<Worker> workers = HeadOfBranch.roleList.get("Shift-Manager");
+        List<Worker> workers = HeadOfBranch.getRole("Shift-Manager");
         for(Worker worker : workers) {
             res += worker.getName() + ", " + worker.getID() + "\n";
         }
