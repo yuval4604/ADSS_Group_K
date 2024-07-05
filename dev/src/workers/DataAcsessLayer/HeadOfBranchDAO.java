@@ -201,11 +201,14 @@ public class HeadOfBranchDAO {
         ) {
             String sql = "SELECT * FROM HeadOfBranch WHERE ID = " + id;
             ResultSet rs = stmt.executeQuery(sql);
-            HeadOfBranchDTO headOfBranch = new HeadOfBranchDTO();
-            headOfBranch.setID(rs.getInt("ID"));
-            headOfBranch.setBranchID(rs.getInt("BranchID"));
-            headOfBranch.setLastDayForPrefs(rs.getInt("LastDayForPrefs"));
-            return headOfBranch;
+            if(rs.next()) {
+                HeadOfBranchDTO headOfBranch = new HeadOfBranchDTO();
+                headOfBranch.setID(rs.getInt("ID"));
+                headOfBranch.setBranchID(rs.getInt("BranchID"));
+                headOfBranch.setLastDayForPrefs(rs.getInt("LastDayForPrefs"));
+                return headOfBranch;
+            }
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
         }

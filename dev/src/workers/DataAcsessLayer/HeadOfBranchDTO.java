@@ -5,6 +5,7 @@ public class HeadOfBranchDTO {
     private int BranchID;
     private int LastDayForPrefs;
 
+
     public int getID() {
         return ID;
     }

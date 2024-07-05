@@ -9,7 +9,7 @@ public class BranchDTO {
     private String name;
     private int id;
     private List<Integer> workers;
-    private List<Integer> shifts;
+    private List<String> shifts;
     private String address;
     private int headOfBranchId;
 
@@ -24,7 +24,7 @@ public class BranchDTO {
             workers = new LinkedList<>();
         return workers;
     }
-    public List<Integer> getShifts() {
+    public List<String> getShifts() {
         if (shifts == null)
             shifts = new LinkedList<>();
         return shifts;
@@ -55,7 +55,7 @@ public class BranchDTO {
     public void setWorkers(List<Integer> workers) {
         this.workers = workers;
     }
-    public void setShifts(List<Integer> lshifts) {
+    public void setShifts(List<String> lshifts) {
         this.shifts = lshifts;
     }
 }

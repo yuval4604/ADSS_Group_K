@@ -145,7 +145,10 @@ public class BranchDAO {
             String sql2 = "SELECT * FROM branchShifts WHERE BranchID = " + id;
             ResultSet rs2 = stmt.executeQuery(sql2);
             while (rs2.next()) {
-                branchDTO.getShifts().add(rs2.getInt("BranchID"));
+                String shift = rs2.getString("Date");
+                shift += ","  + rs2.getBoolean("DayShift");
+                shift += "," + rs2.getInt("BranchID");
+                branchDTO.getShifts().add(shift);
             }
 
             return branchDTO;

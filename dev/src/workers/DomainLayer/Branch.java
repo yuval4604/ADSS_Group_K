@@ -48,8 +48,8 @@ public class Branch {
             _workers.add(HeadOfBranch.getWorker(workerID));
         }
         _shifts = new LinkedList<>();
-        for(int shift : bdto.getShifts()) {
-            _shifts.add(HeadOfBranch.getShift(shift));
+        for(String shift : bdto.getShifts()) {
+            _shifts.add(HeadOfBranch.getShift(shift, this));
         }
     }
 

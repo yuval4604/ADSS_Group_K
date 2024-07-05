@@ -71,10 +71,10 @@ public class HeadOfBranch extends Worker {
                 WorkerDTO w = WorkerDAO.getWorker(id);
                 HeadOfBranchDTO h = HeadOfBranchDAO.getHeadOfBranch(id);
                 List<String> l = HeadOfBranchDAO.getRoleListRole(id);
-                if(h == null)
-                    worker = new Worker(w);
-                else if(w.getID() == 0)
+                if(id == 0)
                     worker = new HR(w,h);
+                else if(h == null)
+                    worker = new Worker(w);
                 else
                     worker = new HeadOfBranch(w,h);
                 for (String role : l) {
@@ -126,6 +126,21 @@ public class HeadOfBranch extends Worker {
         HeadOfBranchDAO.deleteRoleList(role,worker.getID());
     }
 
+    public static Shift getShift(String shift, Branch branch) {
+        String[] s = shift.split(",");
+        for (Shift sh : allShifts) {
+            if(sh.getDate().equals(s[0]) && sh.getDayShift() == Boolean.parseBoolean(s[1])) {
+                return sh;
+            }
+        }
+        ShiftDTO sdto = HeadOfBranchDAO.getShift(s[0],Boolean.parseBoolean(s[1]),Integer.parseInt(s[2]));
+        if(sdto.getDate() == null)
+            return null;
+        Shift sh = new Shift(sdto,branch);
+        allShifts.add(sh);
+        return sh;
+    }
+
     public void removeAmount(String role) {
         HeadOfBranchDAO.deleteMinimalWorkers(this.branch, role);
     }
@@ -144,7 +159,7 @@ public class HeadOfBranch extends Worker {
         ShiftDTO sdto = HeadOfBranchDAO.getShift(date,dayShift,_branch.getID());
         if(sdto.getDate() == null)
             return false;
-        currentShift = new Shift(HeadOfBranchDAO.getShift(date,dayShift,_branch.getID()));
+        currentShift = new Shift(HeadOfBranchDAO.getShift(date,dayShift,_branch.getID()),_branch);
         return true;
     }
 

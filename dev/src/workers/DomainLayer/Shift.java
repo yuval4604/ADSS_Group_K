@@ -45,17 +45,24 @@ public class Shift {
         ShiftDAO.insertShift(shiftDTO);
     }
 
-    public Shift(ShiftDTO shift) {
+    public Shift(ShiftDTO shift, Branch branch) {
         _date = shift.getDate();
         _dayShift = shift.getDayShift();
         workers = new HashMap<>();
         _dayOfWeek = shift.getDayOfWeek();
         _active = shift.getActive();
         _localDate = LocalDate.of(Integer.parseInt(_date.split("\\.")[2]), Integer.parseInt(_date.split("\\.")[1]), Integer.parseInt(_date.split("\\.")[0]));
-        _branch = Branch.getBranch(shift.getBranchId(), null);
+        if(branch == null)
+            _branch = Branch.getBranch(shift.getBranchId(), null);
+        else
+            _branch = branch;
         needQuartermaster = shift.getNeedQM();
-        if(shift.getManagerId() != -1)
-            shiftManager = HeadOfBranch.getWorker(shift.getManagerId());
+        if(shift.getManagerId() != -1) {
+            if(branch != null)
+                shiftManager = branch.getHeadOfBranch();
+            else
+                shiftManager = HeadOfBranch.getWorker(shift.getManagerId());
+        }
         else
             shiftManager = null;
         Map<String, List<Integer>> workersMap = shift.getWorkers();
