@@ -392,6 +392,9 @@ public class Facade {
             }
             Worker worker = HeadOfBranch.getWorker(workerID);
             HeadOfBranchManager.removeWorkerFromBranch(((HeadOfBranch)_worker), worker);
+            if (worker != null) {
+                worker.setBranchNull();
+            }
             return true;
         }
 

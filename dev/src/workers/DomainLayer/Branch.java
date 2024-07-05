@@ -92,6 +92,7 @@ public class Branch {
     public void removeWorker(Worker worker) {
         _workers.remove(worker);
         BranchDAO.deleteBranchWorker(_id, worker.getID());
+
     }
     public void setHeadOfBranch(Worker headOfBranch) {
         if(headOfBranch.getBranch() != _id)

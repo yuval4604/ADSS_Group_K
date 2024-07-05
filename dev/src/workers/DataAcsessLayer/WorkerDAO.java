@@ -284,5 +284,14 @@ public class WorkerDAO  {
             e.printStackTrace();
         }
     }
-
+    public static void removeInfoAboutBranchFromWorker(int id) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "UPDATE Workers SET Branch = NULL WHERE ID = " + id;
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

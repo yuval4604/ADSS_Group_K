@@ -1,6 +1,7 @@
 package workers.PresentationLayer;
 import workers.DomainLayer.Facade;
 import workers.DomainLayer.Constraints;
+import workers.DomainLayer.HeadOfBranch;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -87,6 +88,7 @@ public class ActionManager {
             return;
         }
         scanner.nextLine();
+
         if(_facade.isFullTime(id)) {
             System.out.println("Can't do that...\nWorker is full time");
             return;

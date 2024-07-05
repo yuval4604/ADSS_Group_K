@@ -262,6 +262,8 @@ public class HeadOfBranchManager {
         if(!branch.getWorkers().contains(worker))
             return false;
         branch.removeWorker(worker);
+
+
         return true;
     }
 
