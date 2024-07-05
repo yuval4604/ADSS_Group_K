@@ -44,7 +44,13 @@ public class Branch {
         else
             _headOfBranch = headOfBranch;
         _workers = new LinkedList<>();
+        for(int workerID : bdto.getWorkers()) {
+            _workers.add(HeadOfBranch.getWorker(workerID));
+        }
         _shifts = new LinkedList<>();
+        for(int shift : bdto.getShifts()) {
+            _shifts.add(HeadOfBranch.getShift(shift));
+        }
     }
 
     public static Branch getBranch(int branchID, Worker headOfBranch) {

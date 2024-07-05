@@ -68,6 +68,7 @@ public class Shift {
         }
     }
 
+
     public String getDate() {
         return _date;
     }
