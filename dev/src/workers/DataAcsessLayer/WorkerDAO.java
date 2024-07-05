@@ -138,7 +138,8 @@ public class WorkerDAO  {
             String[] licenses = rs.getString("Licenses").split(", ");
             List<String> licensesList = new LinkedList<>();
             for (String license : licenses) {
-                licensesList.add(license);
+                if(!license.equals(""))
+                    licensesList.add(license);
             }
             worker.setLicenses(licensesList);
             String sql2 = "SELECT * " +

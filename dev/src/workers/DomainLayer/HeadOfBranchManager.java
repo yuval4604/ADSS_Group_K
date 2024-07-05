@@ -28,6 +28,7 @@ public class HeadOfBranchManager {
             return false;
         }
         worker.setVacationDays(days);
+        Worker worker1 = HeadOfBranch.getWorker(id);
         return true;
     }
 

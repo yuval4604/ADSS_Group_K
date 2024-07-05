@@ -64,7 +64,7 @@ public class HeadOfBranch extends Worker {
     }
 
     public static Worker getWorker(int id) {
-        if(id == 0 || !allWorkers.containsKey(id)) {
+        if(!HR.getLoaded() || !allWorkers.containsKey(id)) {
             try {
                 Worker worker;
                 WorkerDTO w = WorkerDAO.getWorker(id);
@@ -88,7 +88,6 @@ public class HeadOfBranch extends Worker {
                 }
             } catch (Exception e) {
                 return null;
-                dsadas
             }
         }
         return allWorkers.get(id);

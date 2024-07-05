@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class HR extends HeadOfBranch {
     private static Map<Integer,Branch> _branches;
+    private static boolean loaded = false;
     private Map<LocalDate,List<Worker>> firedWorkers;
 
     public HR(Branch ABranch) {
@@ -20,6 +21,7 @@ public class HR extends HeadOfBranch {
         _branches = new HashMap<>();
         _branches.put(0,ABranch);
         firedWorkers = new HashMap<>();
+        HR.setLoaded();
 
     }
 
@@ -29,6 +31,15 @@ public class HR extends HeadOfBranch {
         _branch.setHeadOfBranch(this);
         _branches.put(_branch.getID(),_branch);
         firedWorkers = new HashMap<>();
+    }
+
+    public static boolean getLoaded() {
+        return loaded;
+    }
+
+    public static void setLoaded()
+    {
+        loaded = true;
     }
 
     public void addWorker (Worker worker){

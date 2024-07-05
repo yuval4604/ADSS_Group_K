@@ -55,31 +55,46 @@ public class Facade {
     }
     public boolean setGlobalWage(int id,int wage){
         if(_worker.getIsBM()) {
-            return HeadOfBranchManager.setWorkerGlobal(id,wage);
+            boolean ans = HeadOfBranchManager.setWorkerGlobal(id,wage);
+            if(_worker.getID() == id)
+                _worker = HeadOfBranch.getWorker(id);
+            return ans;
         }
         return false;
     }
     public boolean setHourlyWage(int id,int wage){
         if(_worker.getIsBM()) {
-            return HeadOfBranchManager.setWorkerHourly(id,wage);
+            boolean ans = HeadOfBranchManager.setWorkerHourly(id,wage);
+            if(_worker.getID() == id)
+                _worker = HeadOfBranch.getWorker(id);
+            return ans;
         }
         return false;
     }
     public boolean setFullTimeJob(int id,boolean full){
         if(_worker.getIsBM()) {
-            return HeadOfBranchManager.setFullTime(id,full);
+            boolean ans = HeadOfBranchManager.setFullTime(id,full);
+            if(_worker.getID() == id)
+                _worker = HeadOfBranch.getWorker(id);
+            return ans;
         }
         return false;
     }
     public boolean setVacationDays(int id, int days){
         if(_worker.getIsBM()) {
-            return HeadOfBranchManager.setVacation(id,days);
+            boolean ans = HeadOfBranchManager.setVacation(id,days);
+            if(_worker.getID() == id)
+                _worker = HeadOfBranch.getWorker(id);
+            return ans;
         }
         return false;
     }
     public boolean ResetVacationDays(int id){
         if(_worker.getIsBM()) {
-            return HeadOfBranchManager.ResetVacationDays(id);
+            boolean ans = HeadOfBranchManager.ResetVacationDays(id);
+            if(_worker.getID() == id)
+                _worker = HeadOfBranch.getWorker(id);
+            return ans;
         }
         return false;
     }
@@ -124,7 +139,7 @@ public class Facade {
     }
 
     public String showWorkerInfo() {
-        String GRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
+        String GRes = "Worker's info: \n" + "name: " + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Global wage:" + _worker.getGWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
@@ -132,7 +147,7 @@ public class Facade {
                 + "Current vacation days:" + _worker.getCurrVacationDays() + "\n"
                 + "Branch: " + _worker.getBranch() + "\n"
                 + "Licenses: " + WorkerManager.getWorkerLicense(_worker);
-        String HRes = "Worker's info: \n" + "name" + _worker.getName() + "\n"
+        String HRes = "Worker's info: \n" + "name: " + _worker.getName() + "\n"
                 + "Bank number:" + _worker.getBankNum() + "\n"
                 + "Hourly wage:" + _worker.getHWage() + "\n"
                 + "Date of start:" + _worker.getDateOfStart() + "\n"
@@ -439,13 +454,13 @@ public class Facade {
     public boolean addLicense(String license) {
         int id = _worker.getID();
         if(license.equals("A"))
-            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.A);
+            return WorkerManager.addLicense(_worker,License.A);
         if(license.equals("B"))
-            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.B);
+            return WorkerManager.addLicense(_worker,License.B);
         if(license.equals("C"))
-            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.C);
+            return WorkerManager.addLicense(_worker,License.C);
         if(license.equals("D"))
-            return WorkerManager.addLicense(HeadOfBranch.getWorker(id),License.D);
+            return WorkerManager.addLicense(_worker,License.D);
         return false;
     }
 
