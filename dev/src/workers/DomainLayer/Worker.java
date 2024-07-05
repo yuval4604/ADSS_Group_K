@@ -216,6 +216,9 @@ public class Worker {
         workerDTO.setID(_id);
         WorkerDAO.updateWorkerBranch(workerDTO);
     }
+    public void setBranchNull() {
+        WorkerDAO.removeInfoAboutBranchFromWorker(_id);
+    }
 
     public void setChangedPassword() {
         _changedPassword = true;
