@@ -45,10 +45,11 @@ public class Worker {
         _changedPassword = worker.getChange();
         _licenses = new LinkedList<License>();
         for (String l : worker.getLicenses()) {
-            if(l.equals(""))
+            if(l.equals("") || l.equals("None"))
                 continue;
             _licenses.add(License.valueOf(l));
         }
+        branch = worker.getBranch();
     }
 
     public Worker(String name,int id,int bankNum,int globalWage,int hourlyWage,String dateOfStart,boolean fullTimeJob,int totalVacationDays,int currentVacationDays,boolean isBM) {

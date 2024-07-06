@@ -42,4 +42,16 @@ public class HRModuleTests {
         Assertions.assertTrue(worker.getLicenses().contains(license));
         WorkerManager.removeLicense(worker, license);
     }
+
+    @Test
+    public void testSetConstraints() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        Constraints oldConstraint = worker.getCons(1, true);
+        worker.addConstraints(1,true,Constraints.want);
+        Assertions.assertEquals(worker.getCons(1,true), Constraints.want);
+        worker.addConstraints(1,true,oldConstraint);
+    }
+
+    @Test
+    
 }
