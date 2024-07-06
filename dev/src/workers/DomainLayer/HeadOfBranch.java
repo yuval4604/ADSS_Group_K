@@ -129,7 +129,7 @@ public class HeadOfBranch extends Worker {
     public static Shift getShift(String shift, Branch branch) {
         String[] s = shift.split(",");
         for (Shift sh : allShifts) {
-            if(sh.getDate().equals(s[0]) && sh.getDayShift() == Boolean.parseBoolean(s[1])) {
+            if(sh.getDate().equals(s[0]) && sh.getDayShift() == Boolean.parseBoolean(s[1]) && sh.getBranch().getID() == Integer.parseInt(s[2])){
                 return sh;
             }
         }

@@ -397,11 +397,11 @@ public class Facade {
                 return false;
             }
             Worker worker = HeadOfBranch.getWorker(workerID);
-            HeadOfBranchManager.removeWorkerFromBranch(((HeadOfBranch)_worker), worker);
+            boolean b = HeadOfBranchManager.removeWorkerFromBranch(((HeadOfBranch)_worker), worker);
             if (worker != null) {
                 worker.setBranchNull();
             }
-            return true;
+            return b;
         }
 
         public String showBranches () {

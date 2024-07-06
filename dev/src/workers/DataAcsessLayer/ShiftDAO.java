@@ -2,6 +2,7 @@ package workers.DataAcsessLayer;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -114,6 +115,8 @@ public class ShiftDAO {
             shiftDTO.setDayOfWeek(rs.getInt("dayOfWeek"));
             shiftDTO.setManagerId(rs.getInt("managerID"));
             shiftDTO.setBranchId(rs.getInt("branchID"));
+            shiftDTO.setNeedQM(rs.getBoolean("needQM"));
+
 
             String sql1 = "SELECT * FROM Roles WHERE date = '" + date + "' AND dayShift = " + dayShift + " AND branchId = " + branchId;
             ResultSet rs1 = stmt.executeQuery(sql1);
@@ -125,7 +128,8 @@ public class ShiftDAO {
                     workers.get(role).add(workerId);
                 }
                 else {
-                    workers.put(role, List.of(workerId));
+                    workers.put(role, new LinkedList<>());
+                    workers.get(role).add(workerId);
                 }
             }
             shiftDTO.setWorkers(workers);
