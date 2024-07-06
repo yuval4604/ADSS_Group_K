@@ -1,7 +1,7 @@
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
-!**/src/headOfHRTest/**/out/
+!**/src/HRModuleTests/**/out/
 
 ### Eclipse ###
 .apt_generated
@@ -13,7 +13,7 @@ out/
 .sts4-cache
 bin/
 !**/src/main/**/bin/
-!**/src/headOfHRTest/**/bin/
+!**/src/HRModuleTests/**/bin/
 
 ### NetBeans ###
 /nbproject/private/

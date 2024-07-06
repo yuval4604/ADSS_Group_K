@@ -29,6 +29,7 @@ public class Facade {
         HeadOfBranchDAO.createMinimalWorkersTable();
         HeadOfBranchDAO.createRoleListTable();
         LoginDAO.createTable();
+        HeadOfBranchDAO.createNoticeTable();
 
         if(password != null) {
             loginInfos.put(0,password);
@@ -323,7 +324,7 @@ public class Facade {
 
         public boolean fireWorker( int id){
 
-            if(_worker.getID() == 0 && id != 0 && loginInfos.containsKey(id)) {
+            if(_worker.getID() == 0 && id != 0 && HeadOfBranch.getWorker(id) != null){
                 ((HR)_worker).fireWorker(id);
                 loginInfos.remove(id);
                 LoginDAO.deleteUser(id);
@@ -332,7 +333,7 @@ public class Facade {
             return false;
         }
         public boolean endContranct30DaysFromNow( int id){
-            if(_worker.getID() == 0 && id != 0 && loginInfos.containsKey(id)) {
+            if(_worker.getID() == 0 && id != 0 && HeadOfBranch.getWorker(id) != null){
                 ((HR)_worker).endContranct30DaysFromNow(id);
                 return true;
             }

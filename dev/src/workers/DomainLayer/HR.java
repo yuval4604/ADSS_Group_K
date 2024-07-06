@@ -1,5 +1,6 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.HeadOfBranchDAO;
 import workers.DataAcsessLayer.HeadOfBranchDTO;
 import workers.DataAcsessLayer.WorkerDTO;
 
@@ -31,6 +32,16 @@ public class HR extends HeadOfBranch {
         _branch.setHeadOfBranch(this);
         _branches.put(_branch.getID(),_branch);
         firedWorkers = new HashMap<>();
+        HR.setLoaded();
+        Map<Integer,String> branches = HeadOfBranchDAO.getNotices();
+        for(Map.Entry<Integer,String> entry : branches.entrySet()) {
+            String[] date = entry.getValue().split("\\.");
+            LocalDate localDate = LocalDate.of(Integer.parseInt(date[2]),Integer.parseInt(date[1]),Integer.parseInt(date[0]));
+            if(!firedWorkers.containsKey(localDate)) {
+                firedWorkers.put(localDate,new LinkedList<>());
+            }
+            firedWorkers.get(localDate).add(HeadOfBranch.getWorker(entry.getKey()));
+        }
     }
 
     public static boolean getLoaded() {
@@ -63,6 +74,11 @@ public class HR extends HeadOfBranch {
 
     public String showBranches() {
         StringBuilder sb = new StringBuilder();
+        List<Branch> branches;
+        branches = BranchManager.getRestOfBranches(_branches.keySet());
+        for (Branch branch : branches) {
+            _branches.put(branch.getID(),branch);
+        }
         for (Map.Entry<Integer, Branch> entry : _branches.entrySet()) {
             sb.append("Branch ID: ").append(entry.getKey()).append(" Branch Name: ").append(entry.getValue().getName()).append("\n");
         }
@@ -122,6 +138,7 @@ public class HR extends HeadOfBranch {
             }
             allWorkers.remove(id);
             WorkerManager.removeWorker(id);
+            HeadOfBranchDAO.deleteRoles(id);
             return true;
         }
         for(Map.Entry<String, List<Worker>> entry : roleList.entrySet()) {
@@ -141,6 +158,7 @@ public class HR extends HeadOfBranch {
             if(entry.getKey().isBefore(LocalDate.now())||entry.getKey().isEqual(LocalDate.now()) ){
                 for(Worker worker : entry.getValue()) {
                     fireWorker(worker.getID());
+                    HeadOfBranchDAO.deleteNotice(worker.getID());
                 }
                 firedWorkers.remove(entry.getKey());
             }
@@ -155,11 +173,16 @@ public class HR extends HeadOfBranch {
             if (!firedWorkers.containsKey(_30DaysFromNow)) {
                 firedWorkers.put(_30DaysFromNow, new LinkedList<>());
                 firedWorkers.get(_30DaysFromNow).add(worker);
+                String noticeDate = _30DaysFromNow.getDayOfMonth() + "." + _30DaysFromNow.getMonthValue() + "." + _30DaysFromNow.getYear();
+                HeadOfBranchDAO.addNotice(worker.getID(),noticeDate);
                 return true;
             } else {
                 firedWorkers.get(_30DaysFromNow).add(worker);
+                String noticeDate = _30DaysFromNow.getDayOfMonth() + "." + _30DaysFromNow.getMonthValue() + "." + _30DaysFromNow.getYear();
+                HeadOfBranchDAO.addNotice(worker.getID(),noticeDate);
                 return true;
             }
+
         } else {
             return false;
         }

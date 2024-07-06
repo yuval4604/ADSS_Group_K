@@ -42,4 +42,8 @@ public class WorkerManager {
     public static void removeWorker(int id) {
         WorkerDAO.deleteWorker(id);
     }
+
+    public static void removeLicense(Worker worker, License license) {
+        worker.removeLicense(license);
+    }
 }

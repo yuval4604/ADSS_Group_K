@@ -63,6 +63,10 @@ public class Branch {
         }
     }
 
+    public static List<Integer> getAllBranchesIDs() {
+        return BranchDAO.getAllBranchesIDs();
+    }
+
     public String getName() {
         return _name;
     }

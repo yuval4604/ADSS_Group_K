@@ -2,6 +2,8 @@ package workers.DataAcsessLayer;
 
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BranchDAO {
     private Connection connection;
@@ -211,5 +213,24 @@ public class BranchDAO {
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static List<Integer> getAllBranchesIDs() {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        )
+        {
+            String sql = "SELECT id FROM Branches";
+            ResultSet rs = stmt.executeQuery(sql);
+            List<Integer> ids = new LinkedList<>();
+            while (rs.next()) {
+                ids.add(rs.getInt("id"));
+            }
+            return ids;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

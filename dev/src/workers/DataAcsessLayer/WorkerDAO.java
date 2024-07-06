@@ -26,6 +26,7 @@ public class WorkerDAO  {
                     " Changed BIT(1), " +
                     "Branch Integer," +
                     "Licenses VARCHAR(255)," +
+                    " Fired BIT(1), " +
                     " FOREIGN KEY (Branch) REFERENCES Branches(ID)," +
                     " PRIMARY KEY ( ID ))";
             stmt.executeUpdate(sql);
@@ -69,13 +70,13 @@ public class WorkerDAO  {
                 worker.setBranchID(-1);
             if(worker.getID() == 0)
             {
-                String sql = "INSERT OR IGNORE INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, Branch, Licenses) " +
-                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranch() + "', '" + worker.getLicensesString() + "')";
+                String sql = "INSERT OR IGNORE INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, Branch, Licenses, Fired) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranch() + "', '" + worker.getLicensesString() + "', 0)";
                 stmt.executeUpdate(sql);
             }
             else {
-                String sql = "INSERT INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, Branch, Licenses) " +
-                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranch() + "', '" + worker.getLicensesString() + "')";
+                String sql = "INSERT INTO Workers (ID, Name, BankNumber, GWage, HWage, DateOfStart, FullTime, TotalVacationDays, CurrentVacationDays, isBM, Changed, Branch, Licenses, Fired) " +
+                        "VALUES (" + worker.getID() + ", '" + worker.getName() + "', " + worker.getBankAccount() + ", " + worker.getGWage() + ", " + worker.getHWage() + ", '" + worker.getStartDate() + "', " + worker.getFTime() + ", " + worker.getTVDays() + ", " + worker.getCVDays() + ", " + worker.getIsHeadOfBranch() + ", " + worker.getChange() + ", '" + worker.getBranch() + "', '" + worker.getLicensesString() + "', 0)";
                 stmt.executeUpdate(sql);
             }
             if(worker.getPref() == null)
@@ -107,7 +108,7 @@ public class WorkerDAO  {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
         ) {
-            String sql = "DELETE FROM Workers WHERE ID = " + id;
+            String sql = "UPDATE Workers SET Fired = 1 WHERE ID = " + id;
             stmt.executeUpdate(sql);
             String sql2 = "DELETE FROM Prefs WHERE ID = " + id;
             stmt.executeUpdate(sql2);
@@ -122,6 +123,8 @@ public class WorkerDAO  {
         ) {
             String sql = "SELECT * FROM Workers WHERE ID = " + id;
             ResultSet rs = stmt.executeQuery(sql);
+            if(rs.getInt("Fired") == 1)
+                return null;
             WorkerDTO worker = new WorkerDTO();
             worker.setID(rs.getInt("ID"));
             worker.setName(rs.getString("Name"));

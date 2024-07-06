@@ -250,4 +250,16 @@ public class Worker {
         }
         return b;
     }
+
+    public void removeLicense(License license) {
+        _licenses.remove(license);
+        WorkerDTO workerDTO = new WorkerDTO();
+        workerDTO.setID(_id);
+        List<String> licenses = new LinkedList<String>();
+        for (License l : _licenses) {
+            licenses.add(l.name());
+        }
+        workerDTO.setLicenses(licenses);
+        WorkerDAO.updateWorkerLicenses(workerDTO);
+    }
 }

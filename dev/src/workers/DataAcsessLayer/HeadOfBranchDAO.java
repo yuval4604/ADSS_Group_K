@@ -66,6 +66,61 @@ public class HeadOfBranchDAO {
         }
     }
 
+    public static void createNoticeTable() {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+
+            String sql = "CREATE TABLE IF NOT EXISTS Notice " +
+                    "(WorkerID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "Date VARCHAR(255)," +
+                    " FOREIGN KEY (WorkerID) REFERENCES Workers(ID))";
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addNotice(int workerID, String date) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "INSERT INTO Notice (WorkerID, Date) VALUES (" +
+                    workerID + ",'" +
+                    date + "')";
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteNotice(int workerID) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "DELETE FROM Notice WHERE WorkerID = " + workerID;
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Map<Integer, String> getNotices() {
+        Map<Integer, String> notices = new HashMap<>();
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "SELECT * FROM Notice";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                notices.put(rs.getInt("WorkerID"), rs.getString("Date"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return notices;
+    }
+
     public static void addHeadOfBranch(HeadOfBranchDTO headOfBranch) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -267,5 +322,16 @@ public class HeadOfBranchDAO {
 
     public static ShiftDTO getShift(String date, boolean dayShift, int id) {
         return ShiftDAO.getShift(date, dayShift, id);
+    }
+
+    public static void deleteRoles(int id) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "DELETE FROM RoleList WHERE WorkerID = " + id;
+            stmt.executeUpdate(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
