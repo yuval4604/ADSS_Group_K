@@ -45,6 +45,16 @@ public class HRModuleTests {
     }
 
     @Test
+    public void testremoveLicense() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        License license = License.D;
+        WorkerManager.addLicense(worker, license);
+        WorkerManager.removeLicense(worker, license);
+        Assertions.assertFalse(worker.getLicenses().contains(license));
+    }
+
+
+    @Test
     public void testSetConstraints() {
         Worker worker = HeadOfBranch.getWorker(1);
         Constraints oldConstraint = worker.getCons(1, true);
@@ -228,4 +238,7 @@ public class HRModuleTests {
         }
         WorkerDAO.rdeleteWorker(10000);
     }
+=======
+
+>>>>>>> d304ed821d5c1f90b75dd5d8a1593bfce26e908b
 }
