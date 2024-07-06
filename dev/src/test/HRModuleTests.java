@@ -42,4 +42,19 @@ public class HRModuleTests {
         Assertions.assertTrue(worker.getLicenses().contains(license));
         WorkerManager.removeLicense(worker, license);
     }
+    @Test
+    public void testremoveLicense() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        License license = License.D;
+        WorkerManager.addLicense(worker, license);
+        WorkerManager.removeLicense(worker, license);
+        Assertions.assertFalse(worker.getLicenses().contains(license));
+    }
+    @Test
+    public void testSetHourlyWage() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        int wage = 50;
+        worker.setHWage(wage);
+        Assertions.assertEquals(worker.getHWage(), wage);
+    }
 }
