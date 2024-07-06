@@ -297,4 +297,17 @@ public class WorkerDAO  {
             e.printStackTrace();
         }
     }
+
+    public static void rdeleteWorker(int id) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "DELETE FROM Workers WHERE ID = " + id;
+            stmt.executeUpdate(sql);
+            String sql2 = "DELETE FROM Prefs WHERE ID = " + id;
+            stmt.executeUpdate(sql2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

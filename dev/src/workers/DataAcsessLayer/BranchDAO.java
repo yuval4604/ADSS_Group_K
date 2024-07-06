@@ -132,12 +132,17 @@ public class BranchDAO {
         {
             String sql = "SELECT * FROM Branches WHERE id = " + id;
             ResultSet rs = stmt.executeQuery(sql);
-            BranchDTO branchDTO = new BranchDTO();
-            branchDTO.setId(rs.getInt("id"));
-            branchDTO.setName(rs.getString("Name"));
-            branchDTO.setAddress(rs.getString("Address"));
-            branchDTO.setHeadOfBranchId(rs.getInt("HeadOfBranchId"));
-
+            BranchDTO branchDTO = null;
+            while (rs.next()) {
+                branchDTO = new BranchDTO();
+                branchDTO.setId(rs.getInt("id"));
+                branchDTO.setName(rs.getString("Name"));
+                branchDTO.setAddress(rs.getString("Address"));
+                branchDTO.setHeadOfBranchId(rs.getInt("HeadOfBranchId"));
+            }
+            if(branchDTO == null) {
+                return null;
+            }
             String sql1 = "SELECT * FROM branchWorkers WHERE BranchID = " + id;
             ResultSet rs1 = stmt.executeQuery(sql1);
             while (rs1.next()) {
@@ -207,7 +212,7 @@ public class BranchDAO {
              Statement stmt = conn.createStatement();
         )
         {
-            String sql = "DELETE FROM branchShifts WHERE BranchID = " + branchId + " AND Date = " + date + " AND DayShift = " + dayShift;
+            String sql = "DELETE FROM branchShifts WHERE BranchID = " + branchId + " AND Date = '" + date + "' AND DayShift = " + dayShift;
             stmt.executeUpdate(sql);
         }
         catch (SQLException e) {
