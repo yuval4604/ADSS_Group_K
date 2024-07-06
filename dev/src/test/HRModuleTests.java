@@ -238,7 +238,4 @@ public class HRModuleTests {
         }
         WorkerDAO.rdeleteWorker(10000);
     }
-=======
-
->>>>>>> d304ed821d5c1f90b75dd5d8a1593bfce26e908b
 }
