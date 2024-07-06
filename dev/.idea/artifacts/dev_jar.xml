@@ -12,9 +12,12 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/jupiter/junit-jupiter-engine/5.10.2/junit-jupiter-engine-5.10.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-engine/1.10.2/junit-platform-engine-1.10.2.jar" path-in-jar="/" />
       <element id="module-test-output" name="dev" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/workers/DataAcsessLayer/slf4j-api-1.7.32.jar" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/workers/DataAcsessLayer/slf4j-simple-1.7.32.jar" />
       <element id="file-copy" path="$PROJECT_DIR$/src/workers/DataAcsessLayer/sqlite-jdbc-3.46.0.0.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/WorkersDB.db" />
+      <element id="library" level="project" name="slf4j-api-1.7.32" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/workers/DataAcsessLayer/slf4j-simple-1.7.32.jar" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/workers/DataAcsessLayer/slf4j-api-1.7.32.jar" />
+      <element id="library" level="project" name="sqlite-jdbc-3.46.0.0" />
     </root>
   </artifact>
 </component>
