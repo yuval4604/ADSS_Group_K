@@ -370,6 +370,9 @@ public class Facade {
             if(_worker.getID() != 0) {
                 return false;
             }
+            if((HeadOfBranch.getWorker(headOfBranchID) != null && !(HeadOfBranch.getWorker(headOfBranchID).getIsBM()))) {
+                return false;
+            }
             HeadOfBranch headOfBranch = (HeadOfBranch) HeadOfBranch.getWorker(headOfBranchID);
             return ((HR)_worker).addBranch(name, id, address, headOfBranch);
         }
@@ -446,6 +449,7 @@ public class Facade {
             HeadOfBranch worker = new HeadOfBranch(name,id,bankNum,globalWage,hourlyWage,dateOfStart,fullTime,totalVacationDays,currentVacationDays,null);
             ((HR)_worker).addWorker(worker);
             loginInfos.put(id,name);
+            LoginDAO.insertUser(id,name);
             return true;
         }
 
