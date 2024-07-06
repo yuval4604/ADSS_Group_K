@@ -93,6 +93,8 @@ public class Worker {
             workerDTO.setLicenses(licenses);
             WorkerDAO.addWorker(workerDTO);
 
+
+
     }
     public String getName() {
         return _name;
@@ -249,5 +251,10 @@ public class Worker {
             WorkerDAO.updateWorkerLicenses(workerDTO);
         }
         return b;
+    }
+
+    public void takeWorkerOffBranch() {
+        branch = 0;
+        WorkerDAO.removeInfoAboutBranchFromWorker(_id);
     }
 }

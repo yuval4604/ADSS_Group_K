@@ -1,5 +1,7 @@
 package workers.DomainLayer;
 
+import workers.DataAcsessLayer.BranchDAO;
+import workers.DataAcsessLayer.BranchDTO;
 import workers.DataAcsessLayer.HeadOfBranchDTO;
 import workers.DataAcsessLayer.WorkerDTO;
 
@@ -47,6 +49,9 @@ public class HR extends HeadOfBranch {
     }
 
     public boolean addBranch(String name, int id, String address, Worker headOfBranch) {
+        if(!headOfBranch.getIsBM()) {
+            return false;
+        }
         Branch branch = new Branch(name, id, address, headOfBranch);
         ((HeadOfBranch)headOfBranch).setBranch(branch);
         _branches.put(id,branch);
@@ -54,9 +59,19 @@ public class HR extends HeadOfBranch {
     }
 
     public boolean removeBranch(int id) {
+
         if(_branches.containsKey(id)) {
+            BranchDAO.deleteBranch(id);
             _branches.remove(id);
             return true;
+        }
+        else {
+            Branch b = Branch.getBranch(id,null);
+            if(b != null) {
+                b.cleanData();
+                BranchDAO.deleteBranch(id);
+                return true;
+            }
         }
         return false;
     }
@@ -73,6 +88,13 @@ public class HR extends HeadOfBranch {
         if(_branches.containsKey(branchID)) {
             _branches.get(branchID).setHeadOfBranch(headOfBranch);
             return true;
+        }
+        else {
+            Branch b = Branch.getBranch(branchID,null);
+            if(b != null) {
+                b.setHeadOfBranch(headOfBranch);
+                return true;
+            }
         }
         return false;
     }

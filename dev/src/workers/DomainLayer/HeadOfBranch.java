@@ -208,6 +208,7 @@ public class HeadOfBranch extends Worker {
         return _branch;
     }
 
+
     protected void setBranch(Branch branch) {
         _branch = branch;
         this.branch = branch.getID();

@@ -143,6 +143,10 @@ public class Shift {
         ShiftDAO.deleteWorkerFromShift(_date, _dayShift, _branch.getID(), worker.getID());
     }
 
+    public void removeShift() {
+        ShiftDAO.deleteShift(_date, _dayShift, _branch.getID());
+    }
+
 //    public boolean isWorkerInShift(int id) {
 //        for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
 //            for (Worker worker : entry.getValue()) {

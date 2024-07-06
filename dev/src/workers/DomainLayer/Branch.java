@@ -1,7 +1,6 @@
 package workers.DomainLayer;
 
-import workers.DataAcsessLayer.BranchDAO;
-import workers.DataAcsessLayer.BranchDTO;
+import workers.DataAcsessLayer.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -105,14 +104,28 @@ public class Branch {
     public void setHeadOfBranch(Worker headOfBranch) {
         if(headOfBranch.getBranch() != _id)
             ((HeadOfBranch)headOfBranch).takeOffBranch();
-        _headOfBranch = headOfBranch;
-    }
 
-//    public Map<String, Integer> getMinimalWorkersForShift() {
-//        return ((HeadOfBranch) _headOfBranch).getMinimalWorkersForShift();
-//    }
+        HeadOfBranchDTO headOfBranchDTO = new HeadOfBranchDTO();
+        headOfBranchDTO.setID(headOfBranch.getID());
+        headOfBranchDTO.setBranchID(_id);
+        HeadOfBranchDAO.updateHeadOfBranchBID(headOfBranchDTO);
+        _headOfBranch = headOfBranch;
+
+
+    }
 
     public Worker getBM() {
         return _headOfBranch;
+    }
+
+    public void cleanData() {
+        for (Worker worker : _workers) {
+            worker.takeWorkerOffBranch();
+
+        }
+        for (Shift shift : _shifts) {
+            shift.removeShift();
+        }
+        ((HeadOfBranch)_headOfBranch).takeOffBranch();
     }
 }
