@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="DataAcsessLayer1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/dev/workers/DataAcsessLayer/slf4j-api-1.7.32.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/dev/workers/DataAcsessLayer/sqlite-jdbc-3.46.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/dev/workers/DataAcsessLayer/slf4j-simple-1.7.32.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
