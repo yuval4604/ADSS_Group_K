@@ -64,54 +64,7 @@ public class BranchDAO {
         }
     }
 
-    public static void updateBranchId(BranchDTO branchDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE Branches SET id = " + branchDTO.getId() + " WHERE id = " + branchDTO.getId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void updateBranchName(BranchDTO branchDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE Branches SET Name = '" + branchDTO.getName() + "' WHERE id = " + branchDTO.getId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void updateBranchAddress(BranchDTO branchDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE Branches SET Address = '" + branchDTO.getAddress() + "' WHERE id = " + branchDTO.getId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void updateBranchHeadOfBranchId(BranchDTO branchDTO) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "UPDATE Branches SET HeadOfBranchId = " + branchDTO.getHeadOfBranchId() + " WHERE id = " + branchDTO.getId();
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
     public static void deleteBranch(int id) {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -202,18 +155,6 @@ public class BranchDAO {
         }
     }
 
-    public static void deleteBranchShift(int branchId, String date, boolean dayShift) {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-        )
-        {
-            String sql = "DELETE FROM branchShifts WHERE BranchID = " + branchId + " AND Date = " + date + " AND DayShift = " + dayShift;
-            stmt.executeUpdate(sql);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static List<Integer> getAllBranchesIDs() {
         try (Connection conn = DriverManager.getConnection(DB_URL);

@@ -69,5 +69,25 @@ public class HRModuleTests {
         worker.addConstraints(1,true,oldConstraint);
     }
 
+    @Test
+    public void setFullTimeJob() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        worker.setFullTimeJob(true);
+        Assertions.assertTrue(worker.getFullTimeJob());
+    }
+    @Test
+    public void testSetVacationDays() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        int days = 10;
+        worker.setVacationDays(days);
+        Assertions.assertEquals(worker.getCurrVacationDays(), days);
+    }
+    @Test
+    public void testSetBankNum() {
+        Worker worker = HeadOfBranch.getWorker(1);
+        int bankNum = 123456;
+        worker.setBankNum(bankNum);
+        Assertions.assertEquals(worker.getBankNum(), bankNum);
+    }
 
 }
