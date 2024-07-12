@@ -233,8 +233,8 @@ public class Tests {
 
     @Test
     public void ToStringTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
-        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2024-08-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2024-08-07"),100, 3, 15);
         manager.addToProduct(LocalDate.parse("2024-08-01"),100, 0, 10);
         manager.setDiscount(100,0.2);
 
