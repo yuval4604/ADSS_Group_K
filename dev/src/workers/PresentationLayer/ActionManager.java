@@ -16,6 +16,16 @@ public class ActionManager {
     }
 
 
+    public void storage()
+    {
+        int BID = _facade.getBranchID();
+        if(BID == -1) {
+            System.out.println("You are not connected to a branch");
+            return;
+        }
+        CLI.run(BID);
+    }
+
     public void setBankNumber() {
 
         System.out.println("Enter new bank number:");

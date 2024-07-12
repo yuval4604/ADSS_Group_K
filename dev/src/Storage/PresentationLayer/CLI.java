@@ -16,7 +16,7 @@ public class CLI {
     private static final int DAY_OF_MONTH = 1;
     private static boolean isDamageReportAlerted = false;
     private static boolean isProductReportAlerted = false;
-    public static void main(String[] args) throws Exception {
+    public static void run(int BID) throws Exception {
         resetFactory();
         Scanner scan = new Scanner(System.in);
         String choice = "";
@@ -283,6 +283,7 @@ public class CLI {
                     break;
                 }
                 case "24":
+                    System.out.println("Moving Back to main menu.");
                     break;
                 default:
                     System.out.println("Invalid choice, please choose again.");

@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void printCommands(boolean isHR, boolean isBM) {
-        System.out.println("commands:\n-1) Exit\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\n8) show your roles\n9) show branch\n10)show your shifts\n11)altar on going shift\n12) add license");
+        System.out.println("commands:\n-1) Exit\n0) command list \n1) logout\n2) change password\n3) Show your information\n4) Show your Constraints \n5) Set bank number\n6) use vacation days\n7) set your Constraints\n8) show your roles\n9) show branch\n10)show your shifts\n11)altar on going shift\n12) add license\n13) file storage reports and logs");
         if(isBM)
-            System.out.println("BM and HR Only Commands:\n13) Set a worker's global wage\n14) Set a worker's hourly wage\n15) Set if a worker is full time job employee or not\n16) Set a worker's vacation days\n17) Reset a worker's vacation days\n18) add a worker to your branch\n19) work on shift of your branch\n20) change a worker's optional roles\n21) set half a day off for your branch\n22) set a full day off for your branch\n23) set the deadline for your branch workers constraints\n24) set your branch's minimal workers for a shift\n25) show your branch's information\n26) remove a worker from your branch");
+            System.out.println("BM and HR Only Commands:\n14) Set a worker's global wage\n15) Set a worker's hourly wage\n16) Set if a worker is full time job employee or not\n17) Set a worker's vacation days\n18) Reset a worker's vacation days\n19) add a worker to your branch\n20) work on shift of your branch\n21) change a worker's optional roles\n22) set half a day off for your branch\n23) set a full day off for your branch\n24) set the deadline for your branch workers constraints\n25) set your branch's minimal workers for a shift\n26) show your branch's information\n27) remove a worker from your branch");
         if(isHR)
-            System.out.println("HR Only Commands:\n27) add a worker\n28) show branches\n29) add branch\n30) remove branch\n31) enter a worker's resignation\n32) fire s worker\n33) create a head of branch\n34)set the head of branch  ");
+            System.out.println("HR Only Commands:\n28) add a worker\n29) add branch\n30) remove branch\n31) enter a worker's resignation\n32) fire s worker\n33) create a head of branch\n34)set the head of branch\n35) show branches  ");
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -79,114 +79,109 @@ public class Main {
                     case 10 ->ac.showWorkerShifts();
                     case 11 -> ac.altarOnGoingShift();
                     case 12 -> ac.addLicense();
-                    case 13 -> {
+                    case 13 -> ac.storage();
+                    case 14 -> {
                         if (isBM) {
                             ac.setWage(-1);
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 14 -> {
+                    case 15 -> {
                         if (isBM) {
                             ac.setHWage(-1);
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 15 -> {
+                    case 16 -> {
                         if (isBM) {
                             ac.setFullTimeJob();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 16 -> {
+                    case 17 -> {
                         if (isBM) {
                             ac.setVacationDays();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 17 -> {
+                    case 18 -> {
                         if (isBM) {
                             ac.ResetVacationDays();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 18 -> {
+                    case 19 -> {
                         if(isBM)
                             ac.addWorkerToBranch();
                         else
                             System.out.println("Error: no permission to do that");
                     }
-                    case 19 -> {
+                    case 20 -> {
                         if (isBM) {
                             ac.workOnShift();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 20 -> {
+                    case 21 -> {
                         if (isBM) {
                             ac.changeWorkerRoles();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 21 -> {
+                    case 22 -> {
                         if (isBM) {
                             ac.setHalfDayOff();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 22 -> {
+                    case 23 -> {
                         if (isBM) {
                             ac.setAllDayOff();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 23 -> {
+                    case 24 -> {
                         if (isBM) {
                             ac.setLastDayForConstraints();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 24 -> {
+                    case 25 -> {
                         if (isBM) {
                             ac.setMinimalWorkers();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 25 -> {
+                    case 26 -> {
                         if (isBM) {
                             ac.showBranch();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
                     }
-                    case 26 ->{
+                    case 27 ->{
                         if(isBM)
                             ac.removeWorkerFromBranch();
                         else
                             System.out.println("Error: no permission to do that");
                     }
-                    case 27 -> {
+                    case 28 -> {
                         if (isHR) {
                             ac.addAWorker();
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
-                    }
-                    case 28 -> {
-                        if(isHR)
-                            ac.showBranches();
-                        else
-                            System.out.println("Error: no permission to do that");
                     }
                     case 29 -> {
                         if(isHR)
@@ -224,6 +219,12 @@ public class Main {
                         } else {
                             System.out.println("Error: no permission to do that");
                         }
+                    }
+                    case 35 -> {
+                        if(isHR)
+                            ac.showBranches();
+                        else
+                            System.out.println("Error: no permission to do that");
                     }
                     case -1 -> terminated = true;
                     default -> System.out.println("Invalid command");

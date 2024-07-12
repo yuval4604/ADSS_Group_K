@@ -443,6 +443,9 @@ public class Facade {
     public String getBranch() {
         return HR.getBranchO(_worker.getBranch()).getName();
     }
+    public int getBranchID() {
+        return HR.getBranchO(_worker.getBranch()).getID();
+    }
 
     public boolean createBM(String name, int id, int bankNum, boolean fullTime, int globalWage, int hourlyWage, String dateOfStart, int totalVacationDays, int currentVacationDays) {
         if(!((HeadOfBranch)_worker).contains(id)) {
