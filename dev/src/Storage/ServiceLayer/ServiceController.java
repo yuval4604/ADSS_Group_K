@@ -1,8 +1,8 @@
-package Storage.ServiceLayer;
+package src.Storage.ServiceLayer;
 
-import Storage.DataAccessLayer.Repository;
-import Storage.DomainLayer.DomainManager;
-import Storage.DomainLayer.Product;
+import src.Storage.DataAccessLayer.Repository;
+import src.Storage.DomainLayer.DomainManager;
+import src.Storage.DomainLayer.Product;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

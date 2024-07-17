@@ -1,7 +1,7 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
-import workers.DataAcsessLayer.ShiftDAO;
-import workers.DataAcsessLayer.ShiftDTO;
+import src.workers.DataAcsessLayer.ShiftDAO;
+import src.workers.DataAcsessLayer.ShiftDTO;
 
 import java.time.LocalDate;
 import java.util.HashMap;

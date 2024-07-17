@@ -1,7 +1,9 @@
+package src.test;
+
 import org.junit.jupiter.api.*;
 
-import workers.DataAcsessLayer.*;
-import workers.DomainLayer.*;
+import src.workers.DataAcsessLayer.*;
+import src.workers.DomainLayer.*;
 
 import java.util.List;
 

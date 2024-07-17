@@ -1,8 +1,8 @@
-package Storage.PresentationLayer;
+package src.Storage.PresentationLayer;
 
-import Storage.DataAccessLayer.Repository;
-import Storage.DomainLayer.DomainManager;
-import Storage.DomainLayer.Product;
+import src.Storage.DataAccessLayer.Repository;
+import src.Storage.DomainLayer.DomainManager;
+import src.Storage.DomainLayer.Product;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -17,11 +17,10 @@ public class CLI {
     private static boolean isDamageReportAlerted = false;
     private static boolean isProductReportAlerted = false;
 
-    public CLI(int BID) throws Exception {
-        run(BID);
+    public CLI() {
     }
 
-    public static void run(int BID) throws Exception {
+    public void run() throws Exception {
         resetFactory();
         Scanner scan = new Scanner(System.in);
         String choice = "";

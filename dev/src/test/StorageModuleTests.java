@@ -1,9 +1,9 @@
-package Storage.UnitTests;
+package src.test;
 
 
-import Storage.DataAccessLayer.Repository;
-import Storage.DomainLayer.DomainManager;
-import Storage.DomainLayer.Product;
+import src.Storage.DataAccessLayer.Repository;
+import src.Storage.DomainLayer.DomainManager;
+import src.Storage.DomainLayer.Product;
 import org.junit.*;
 
 import java.sql.Connection;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Tests {
+public class StorageModuleTests {
     private static Product milk;
     private static Product beef;
     private static Product soap;

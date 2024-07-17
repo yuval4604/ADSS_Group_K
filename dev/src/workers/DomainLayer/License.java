@@ -1,4 +1,4 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
 public enum License {
     A,

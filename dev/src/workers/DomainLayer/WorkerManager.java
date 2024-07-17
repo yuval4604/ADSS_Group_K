@@ -1,6 +1,6 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
-import workers.DataAcsessLayer.WorkerDAO;
+import src.workers.DataAcsessLayer.WorkerDAO;
 
 public class WorkerManager {
     public static boolean useVacationDays(Worker worker, int days) {

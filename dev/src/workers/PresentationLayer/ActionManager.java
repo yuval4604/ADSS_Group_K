@@ -1,7 +1,8 @@
-package workers.PresentationLayer;
-import workers.DomainLayer.Facade;
-import workers.DomainLayer.Constraints;
-import workers.DomainLayer.HeadOfBranch;
+package src.workers.PresentationLayer;
+import src.Storage.PresentationLayer.CLI;
+import src.workers.DomainLayer.Facade;
+import src.workers.DomainLayer.Constraints;
+import src.workers.DomainLayer.HeadOfBranch;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -16,14 +17,16 @@ public class ActionManager {
     }
 
 
-    public void storage()
+    public boolean storage()
     {
-        int BID = _facade.getBranchID();
-        if(BID == -1) {
-            System.out.println("You are not connected to a branch");
-            return;
+        try {
+            CLI cli = new CLI();
+            cli.run();
+        } catch (Exception e) {
+            System.out.println("Error: Something went wrong :(");
+            return false;
         }
-        CLI cli = new CLI(BID);
+        return true;
     }
 
     public void setBankNumber() {

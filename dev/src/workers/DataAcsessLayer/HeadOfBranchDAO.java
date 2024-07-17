@@ -1,6 +1,6 @@
-package workers.DataAcsessLayer;
+package src.workers.DataAcsessLayer;
 
-import workers.DomainLayer.Shift;
+import src.workers.DomainLayer.Shift;
 
 import java.nio.file.Paths;
 import java.sql.Connection;

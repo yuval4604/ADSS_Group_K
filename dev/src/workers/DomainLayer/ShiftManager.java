@@ -1,6 +1,6 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
-import workers.DataAcsessLayer.ShiftDAO;
+import src.workers.DataAcsessLayer.ShiftDAO;
 
 import java.util.LinkedList;
 import java.util.List;

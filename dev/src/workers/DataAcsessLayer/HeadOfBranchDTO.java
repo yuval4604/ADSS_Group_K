@@ -1,4 +1,4 @@
-package workers.DataAcsessLayer;
+package src.workers.DataAcsessLayer;
 
 public class HeadOfBranchDTO {
     private int ID;

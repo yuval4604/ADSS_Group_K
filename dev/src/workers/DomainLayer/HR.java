@@ -1,10 +1,10 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
 
-import workers.DataAcsessLayer.HeadOfBranchDAO;
-import workers.DataAcsessLayer.BranchDAO;
-import workers.DataAcsessLayer.HeadOfBranchDTO;
-import workers.DataAcsessLayer.WorkerDTO;
+import src.workers.DataAcsessLayer.HeadOfBranchDAO;
+import src.workers.DataAcsessLayer.BranchDAO;
+import src.workers.DataAcsessLayer.HeadOfBranchDTO;
+import src.workers.DataAcsessLayer.WorkerDTO;
 
 import java.time.LocalDate;
 import java.util.HashMap;

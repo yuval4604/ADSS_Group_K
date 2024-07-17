@@ -1,6 +1,6 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
-import workers.DataAcsessLayer.*;
+import src.workers.DataAcsessLayer.*;
 
 import java.util.LinkedList;
 import java.util.List;

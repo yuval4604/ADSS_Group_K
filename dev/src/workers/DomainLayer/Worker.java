@@ -1,7 +1,7 @@
-package workers.DomainLayer;
+package src.workers.DomainLayer;
 
-import workers.DataAcsessLayer.WorkerDAO;
-import workers.DataAcsessLayer.WorkerDTO;
+import src.workers.DataAcsessLayer.WorkerDAO;
+import src.workers.DataAcsessLayer.WorkerDTO;
 
 import java.util.LinkedList;
 import java.util.List;
