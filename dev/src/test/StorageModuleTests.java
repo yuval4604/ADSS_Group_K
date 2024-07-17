@@ -54,12 +54,12 @@ public class StorageModuleTests {
 
     @Test
     public void AddProductToBatchTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
-        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-08-01"),100, 0, 10);
-        manager.addToProduct(LocalDate.parse("2024-07-20"),101, 3, 14);
-        manager.addToProduct(LocalDate.parse("2024-07-24"),101, 2, 20);
-        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 0);
+        manager.addToProduct(LocalDate.parse("2025-07-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2025-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2025-08-01"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2025-07-20"),101, 3, 14);
+        manager.addToProduct(LocalDate.parse("2025-07-24"),101, 2, 20);
+        manager.addToProduct(LocalDate.parse("2025-12-12"),102, 10, 0);
 
         Assert.assertEquals(50, manager.getProduct(100).getStorageQuantity());
         Assert.assertEquals(3, manager.getProduct(100).getStoreQuantity());
@@ -72,16 +72,16 @@ public class StorageModuleTests {
     }
     @Test
     public void DecreaseProductFromBatchTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 25, 25);
-        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-08-01"),100, 0, 10);
-        manager.addToProduct(LocalDate.parse("2024-07-20"),101, 3, 14);
-        manager.addToProduct(LocalDate.parse("2024-07-24"),101, 22, 20);
-        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 0);
+        manager.addToProduct(LocalDate.parse("2025-07-10"),100, 25, 25);
+        manager.addToProduct(LocalDate.parse("2025-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2025-08-01"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2025-07-20"),101, 3, 14);
+        manager.addToProduct(LocalDate.parse("2025-07-24"),101, 22, 20);
+        manager.addToProduct(LocalDate.parse("2025-12-12"),102, 10, 0);
 
-        manager.subtractFromStore(100, Map.of(LocalDate.parse("2024-07-10"), 20));
-        manager.subtractFromStore(101, Map.of(LocalDate.parse("2024-07-24"), 20));
-        manager.subtractFromStore(102, Map.of(LocalDate.parse("2024-12-12"), 1));
+        manager.subtractFromStore(100, Map.of(LocalDate.parse("2025-07-10"), 20));
+        manager.subtractFromStore(101, Map.of(LocalDate.parse("2025-07-24"), 20));
+        manager.subtractFromStore(102, Map.of(LocalDate.parse("2025-12-12"), 1));
 
         Assert.assertEquals(50, manager.getProduct(100).getStorageQuantity());
         Assert.assertEquals(8,  manager.getProduct(100).getStoreQuantity());
@@ -95,9 +95,9 @@ public class StorageModuleTests {
 
     @Test
     public void FailMoveBatchToStore() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 0);
+        manager.addToProduct(LocalDate.parse("2025-12-12"),102, 10, 0);
         try{
-            manager.moveProductToStore(102, LocalDate.parse("2024-12-12"), 1);
+            manager.moveProductToStore(102, LocalDate.parse("2025-12-12"), 1);
         }
         catch (Exception e){
             Assert.assertEquals("Not enough quantity to move to store",e.getMessage());
@@ -108,14 +108,14 @@ public class StorageModuleTests {
 
     @Test
     public void MoveBatchToStoreTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
-        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-08-01"),100, 0, 10);
-        manager.addToProduct(LocalDate.parse("2024-07-20"),101, 3, 14);
-        manager.addToProduct(LocalDate.parse("2024-07-24"),101, 2, 20);
+        manager.addToProduct(LocalDate.parse("2025-07-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2025-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2025-08-01"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2025-07-20"),101, 3, 14);
+        manager.addToProduct(LocalDate.parse("2025-07-24"),101, 2, 20);
 
-        manager.moveProductToStore(100, LocalDate.parse("2024-07-10"), 14);
-        manager.moveProductToStore(101, LocalDate.parse("2024-07-24"), 20);
+        manager.moveProductToStore(100, LocalDate.parse("2025-07-10"), 14);
+        manager.moveProductToStore(101, LocalDate.parse("2025-07-24"), 20);
 
         Assert.assertEquals(36, manager.getProduct(100).getStorageQuantity());
         Assert.assertEquals(17, manager.getProduct(100).getStoreQuantity());
@@ -129,9 +129,9 @@ public class StorageModuleTests {
 
     @Test
     public void CheckMinimalQuantityTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-20"),101, 3, 14);
-        manager.addToProduct(LocalDate.parse("2024-07-24"),101, 2, 20);
-        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 0);
+        manager.addToProduct(LocalDate.parse("2025-07-20"),101, 3, 14);
+        manager.addToProduct(LocalDate.parse("2025-07-24"),101, 2, 20);
+        manager.addToProduct(LocalDate.parse("2025-12-12"),102, 10, 0);
 
         Assert.assertEquals("Tnuva-milk 500ml\nHand-Soap 200ml",manager.alertOnMinimalQuantity());
     }
@@ -174,16 +174,16 @@ public class StorageModuleTests {
 
     @Test
     public void MoveToDamagedTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
-        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-07-15"),100, 0, 10);
-        manager.addToProduct(LocalDate.parse("2024-07-20"),101, 3, 14);
-        manager.addToProduct(LocalDate.parse("2024-07-24"),101, 2, 20);
-        manager.addToProduct(LocalDate.parse("2024-12-12"),102, 10, 10);
+        manager.addToProduct(LocalDate.parse("2025-07-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2025-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2025-07-15"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2025-07-20"),101, 3, 14);
+        manager.addToProduct(LocalDate.parse("2025-07-24"),101, 2, 20);
+        manager.addToProduct(LocalDate.parse("2025-12-12"),102, 10, 10);
 
-        manager.updateDamageForProduct(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
-        manager.updateDamageForProduct(101, new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2024-07-20")});
-        manager.updateDamageForProduct(102, new int[]{0}, new int[]{10}, new LocalDate[]{LocalDate.parse("2024-12-12")});
+        manager.updateDamageForProduct(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2025-07-07")});
+        manager.updateDamageForProduct(101, new int[]{3}, new int[]{2}, new LocalDate[]{LocalDate.parse("2025-07-20")});
+        manager.updateDamageForProduct(102, new int[]{0}, new int[]{10}, new LocalDate[]{LocalDate.parse("2025-12-12")});
 
         Assert.assertEquals(35, manager.getProduct(100).getStorageQuantity());
         Assert.assertEquals(1, manager.getProduct(100).getStoreQuantity());
@@ -216,11 +216,11 @@ public class StorageModuleTests {
 
     @Test
     public void DamagedAndExpiredReportToStringTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-07-10"),100, 0, 25);
-        manager.addToProduct(LocalDate.parse("2024-07-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-08-01"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2025-07-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2025-07-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2025-08-01"),100, 0, 10);
 
-        manager.updateDamageForProduct(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2024-07-07")});
+        manager.updateDamageForProduct(100, new int[]{2}, new int[]{15}, new LocalDate[]{LocalDate.parse("2025-07-07")});
         Assert.assertEquals("Catalog number: " + 100 + "\n" +
                 "Name: " + "Tnuva-milk 500ml" + "\n" +
                 "Category: " + "Dairy" + "\n" +
@@ -233,9 +233,9 @@ public class StorageModuleTests {
 
     @Test
     public void ToStringTest() throws Exception {
-        manager.addToProduct(LocalDate.parse("2024-08-10"),100, 0, 25);
-        manager.addToProduct(LocalDate.parse("2024-08-07"),100, 3, 15);
-        manager.addToProduct(LocalDate.parse("2024-08-01"),100, 0, 10);
+        manager.addToProduct(LocalDate.parse("2025-08-10"),100, 0, 25);
+        manager.addToProduct(LocalDate.parse("2025-08-07"),100, 3, 15);
+        manager.addToProduct(LocalDate.parse("2025-08-01"),100, 0, 10);
         manager.setDiscount(100,0.2);
 
         Assert.assertEquals("Catalog number: " + 100 + "\n" +
@@ -301,7 +301,7 @@ public class StorageModuleTests {
     @Test
     public void FailUpdateProduct() throws Exception {
         try{
-            manager.updateDamageForProduct(103, new int[]{0}, new int[]{0}, new LocalDate[]{LocalDate.parse("2024-07-07")});
+            manager.updateDamageForProduct(103, new int[]{0}, new int[]{0}, new LocalDate[]{LocalDate.parse("2025-07-07")});
         }
         catch (Exception e){
             Assert.assertEquals("Product does not exist", e.getMessage());
