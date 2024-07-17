@@ -23,7 +23,7 @@ public class ActionManager {
             System.out.println("You are not connected to a branch");
             return;
         }
-        CLI.run(BID);
+        CLI cli = new CLI(BID);
     }
 
     public void setBankNumber() {

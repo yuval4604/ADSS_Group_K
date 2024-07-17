@@ -16,6 +16,11 @@ public class CLI {
     private static final int DAY_OF_MONTH = 1;
     private static boolean isDamageReportAlerted = false;
     private static boolean isProductReportAlerted = false;
+
+    public CLI(int BID) throws Exception {
+        run(BID);
+    }
+
     public static void run(int BID) throws Exception {
         resetFactory();
         Scanner scan = new Scanner(System.in);
