@@ -37,6 +37,8 @@ public class ShiftManager {
         }
     }
     public static boolean isWorkerInShift(Shift shift,int id) {
+        if(shift.getShiftManager().getID() == id)
+            return true;
         Map<String,List<Worker>> workers = shift.getWorkers();
         for (Map.Entry<String, List<Worker>> entry : workers.entrySet()) {
             for (Worker worker : entry.getValue()) {

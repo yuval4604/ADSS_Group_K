@@ -484,5 +484,13 @@ public class Facade {
     public void deleteShift(String s, boolean b, int i) {
         HeadOfBranchManager.deleteShift(s,b,i);
     }
+
+    public boolean isInShift(String date) {
+        String shift1 = date + "," + true + "," + _worker.getBranch();
+        String shift2 = date + "," + false + "," + _worker.getBranch();
+        Shift s1 = HeadOfBranch.getShift(shift1, HeadOfBranch.getBranchByID(_worker.getBranch()));
+        Shift s2 = HeadOfBranch.getShift(shift2, ((HeadOfBranch)_worker).getBranchO());
+        return ShiftManager.isWorkerInShift(s1, _worker.getID()) | ShiftManager.isWorkerInShift(s2, _worker.getID());
+    }
 }
 

@@ -20,6 +20,15 @@ public class ActionManager {
     public boolean storage()
     {
         try {
+            String day = "" + LocalDate.now().getDayOfMonth();
+            String month = "" + LocalDate.now().getMonthValue();
+            String date = (day.length() == 1) ? ("0" + day) : day + ".";
+            date += (month.length() == 1) ? ("0" + month) : month;
+            date += "." + LocalDate.now().getYear();
+            if(!_facade.isInShift(date)) {
+                System.out.println("You must be in a current shift to do that");
+                return false;
+            }
             CLI cli = new CLI();
             cli.run();
         } catch (Exception e) {

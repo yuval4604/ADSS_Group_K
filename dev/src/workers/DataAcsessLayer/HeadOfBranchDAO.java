@@ -1,6 +1,8 @@
 package src.workers.DataAcsessLayer;
 
+import src.workers.DomainLayer.HeadOfBranch;
 import src.workers.DomainLayer.Shift;
+import src.workers.DomainLayer.Worker;
 
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -333,5 +335,25 @@ public class HeadOfBranchDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static HeadOfBranchDTO getHeadOfBranchByBranch(int branch) {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+        ) {
+            String sql = "SELECT * FROM HeadOfBranch WHERE BranchID = " + branch;
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()) {
+                HeadOfBranchDTO headOfBranch = new HeadOfBranchDTO();
+                headOfBranch.setID(rs.getInt("ID"));
+                headOfBranch.setBranchID(rs.getInt("BranchID"));
+                headOfBranch.setLastDayForPrefs(rs.getInt("LastDayForPrefs"));
+                return headOfBranch;
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

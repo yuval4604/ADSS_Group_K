@@ -137,8 +137,14 @@ public class HeadOfBranch extends Worker {
         if(sdto.getDate() == null)
             return null;
         Shift sh = new Shift(sdto,branch);
+
         allShifts.add(sh);
         return sh;
+    }
+
+    public static Branch getBranchByID(int branch) {
+        Worker w = HeadOfBranch.getWorker(HeadOfBranchDAO.getHeadOfBranchByBranch(branch).getID());
+        return new Branch(BranchDAO.getBranch(branch),w);
     }
 
     public void removeAmount(String role) {
